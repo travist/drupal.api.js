@@ -4,87 +4,106 @@ var drupal = drupal || {};
 (function($) {
 
   /**
-   * A static object that represents the drupal API.
+   * @class The base Drupal API class.
    */
-  drupal.api = {
+  drupal.api = function() {
 
-    /** The drupal API path */
-    path: 'http://rest/rest',
+    /** The Services URL */
+    this.url = 'http://rest';
 
-    /**
-     * API function to get any results from the drupal API.
-     *
-     * @param {string} type The content type returned from the API
-     * (groups, events, resources, etc).
-     *
-     * @param {object} params The additional params for this API.
-     * <ul>
-     * <li><strong>uuid</strong> - The universal unique ID.</li>
-     * <li><strong>filter</strong> - Additional content type filter.</li>
-     * <li><strong>query</strong> - key-value pairs to add to query string.</li>
-     * </ul>
-     *
-     * @param {function} callback The callback function.
-     */
-    get: function(type, params, callback) {
-      var path = drupal.api.path + '/' + type;
-      path += params.uuid ? ('/' + params.uuid) : '';
-      path += params.filter ? ('/' + params.filter) : '';
-      path += '.jsonp?';
-      path += params.query ? (jQuery.param(params.query) + '&') : '';
-      $.ajax({
-        url: path,
-        dataType: 'jsonp',
-        success: function(data, textStatus) {
-          if (textStatus == 'success') {
-            callback(data);
-          }
-          else {
-            console.log('Error: ' + textStatus);
-          }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          console.log(xhr.responseText);
-          callback(null);
+    /** The Services API endpoint */
+    this.endpoint = 'rest';
+
+    /** The resource within this endpoint */
+    this.resource = '';
+  };
+
+  /**
+   * Helper function to get the Services URL for this resource.
+   *
+   * @param {object} object The object involved with in this request.
+   */
+  drupal.api.prototype.getURL = function(object) {
+    var path = this.url;
+    path += this.endpoint ? ('/' + this.endpoint) : '';
+    path += this.resource ? ('/' + this.resource) : '';
+    path += object.id ? ('/' + object.id) : '';
+    return path;
+  };
+
+  /**
+   * API function to act as a generic request for all Service calls.
+   *
+   * @param {string} url The URL where the request will go.
+   * @param {string} dataType The type of request.  json or jsonp.
+   * @param {string} type The type of HTTP request.  GET, POST, PUT, etc.
+   * @param {object} data The data to send to the server.
+   * @param {function} callback The function callback.
+   */
+  drupal.api.prototype.call = function(url, dataType, type, data, callback) {
+    var request = {
+      url: url,
+      dataType: dataType,
+      type: type,
+      success: function(data, textStatus) {
+        if (textStatus == 'success') {
+          callback(data);
         }
-      });
-    },
-
-    /**
-     * API function to save any object on the drupal server.  If the object
-     * already has a UUID, then this is a simple update, otherwise it will
-     * create a new object.
-     *
-     * @param {string} type The content type returned from the API
-     * (groups, events, resources, etc).
-     *
-     * @param {object} object The object you wish to update on the server.
-     * @param {function} callback The function to be called when the entity has
-     * finished updating.
-     */
-    save: function(type, object, callback) {
-      var path = drupal.api.path + '/' + type;
-      path += object.uuid ? ('/' + object.uuid) : '';
-      path += '.json';
-      $.ajax({
-        url: path,
-        dataType: 'json',
-        type: (object.uuid) ? 'PUT' : 'POST',
-        data: object,
-        success: function(data, textStatus) {
-          if (textStatus == 'success') {
-            callback(data);
-          }
-          else {
-            console.log('Error: ' + textStatus);
-          }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          console.log(xhr.responseText);
-          callback(null);
+        else {
+          console.log('Error: ' + textStatus);
         }
-      });
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(xhr.responseText);
+        callback(null);
+      }
+    };
+
+    if (data) {
+      request['data'] = data;
     }
+
+    // Make the request.
+    $.ajax(request);
+  };
+
+  /**
+   * API function to get any results from the drupal API.
+   *
+   * @param {object} object The object of the item we are getting..
+   * @param {object} query key-value pairs to add to the query of the URL.
+   * @param {function} callback The callback function.
+   */
+  drupal.api.prototype.get = function(object, query, callback) {
+    var url = this.getURL(object);
+    url += '.jsonp';
+    url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
+    this.call(url, 'jsonp', 'GET', null, callback);
+  };
+
+  /**
+   * API function to save the value of an object using Services.
+   *
+   * @param {object} entity The entity object to set.  If the object does not
+   * have an ID, then this will create a new entity, otherwise, it will simply
+   * update the existing resource.
+   *
+   * @param {function} callback The callback function.
+   *
+   **/
+  drupal.api.prototype.save = function(object, callback) {
+    var type = object.id ? 'PUT' : 'POST';
+    this.call(this.getURL(object), 'json', type, object, callback);
+  };
+
+  /**
+   * API function to remove an object on the server.
+   *
+   * @param {object} entity The entity object to delete.
+   * @param {function} callback The callback function.
+   */
+  drupal.api.prototype.remove = function(object, callback) {
+    this.call(this.getURL(object), 'json', 'DELETE', null, callback);
   };
 }(jQuery));
 

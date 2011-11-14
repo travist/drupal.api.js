@@ -19,13 +19,12 @@
 #
 
 # Create the list of files
-files =	js/src/allplayers.api.js\
-	js/src/allplayers.entity.js\
-	js/src/allplayers.date.js\
-	js/src/allplayers.event.js\
-	js/src/allplayers.group.js\
-	js/src/allplayers.location.js\
-	js/src/allplayers.calendar.js
+files =	src/drupal.api.js\
+	src/drupal.entity.js\
+	src/drupal.node.js\
+	src/drupal.node.api.js\
+	src/drupal.user.js\
+	src/drupal.user.api.js
 
 .DEFAULT_GOAL := all
 
@@ -37,10 +36,10 @@ jslint: ${files}
 
 # Create an aggregated js file and a compressed js file.
 js: ${files}
-	@echo "Generating aggregated js/allplayers.js file"
-	@cat > js/allplayers.js $^
-	@echo "Generating compressed js/allplayers.compressed file"
-	@java -jar tools/compiler.jar --js js/allplayers.js --js_output_file js/allplayers.compressed.js
+	@echo "Generating aggregated bin/drupal.js file"
+	@cat > bin/drupal.js $^
+	@echo "Generating compressed bin/drupal.compressed.js file"
+	@java -jar tools/compiler.jar --js bin/drupal.js --js_output_file bin/drupal.compressed.js
 
 # Create the documentation from source code.
 jsdoc: ${files}
