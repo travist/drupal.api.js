@@ -139,6 +139,14 @@ var drupal = drupal || {};
   };
 
   /**
+   *
+   */
+  drupal.entity.prototype.find = function(callback) {
+
+
+  };
+
+  /**
    * Get's an object from the drupal API.
    *
    * @param {function} callback The callback function when the object is
@@ -150,7 +158,19 @@ var drupal = drupal || {};
     if (this.api) {
 
       // Call the API.
-      this.api.get(this.getObject(), this.getQuery(), callback);
+      var _this = this;
+      this.api.get(this.getObject(), this.getQuery(), function(object) {
+
+        // If this is an array, then just return the results.
+        if (object[0]) {
+          callback(object);
+        }
+        else {
+          // Update the object, then call the callback.
+          _this.update(object);
+          callback(_this);
+        }
+      });
     }
   };
 
@@ -165,7 +185,13 @@ var drupal = drupal || {};
     if (this.api) {
 
       // Call the API.
-      this.api.save(this.getObject(), callback);
+      var _this = this;
+      this.api.save(this.getObject(), function(object) {
+
+        // Update the object, then call the callback.
+        _this.update(object);
+        callback(_this);
+      });
     }
   };
 
@@ -280,14 +306,22 @@ var drupal = drupal || {};
 
     // Call the base class.
     drupal.entity.call(this, object, callback);
-
-    // Make sure to also accept "nid" as the ID.
-    this.id = object.nid || this.id;
   };
 
   // Derive from entity.
   drupal.node.prototype = new drupal.entity();
   drupal.node.prototype.constructor = drupal.node;
+
+  /**
+   * Override the update routine.
+   */
+  drupal.node.prototype.update = function(object) {
+
+    drupal.entity.prototype.update.call(this, object);
+
+    // Make sure to also set the ID the same as nid.
+    this.id = object.nid || this.id;
+  };
 
   /**
    * Returns the object to send to Services.
@@ -360,14 +394,22 @@ var drupal = drupal || {};
 
     // Call the base class.
     drupal.entity.call(this, object, callback);
-
-    // Make sure to also accept "uid" as the ID.
-    this.id = object.uid || this.id;
   };
 
   // Derive from entity.
   drupal.user.prototype = new drupal.entity();
   drupal.user.prototype.constructor = drupal.user;
+
+  /**
+   * Override the update routine.
+   */
+  drupal.user.prototype.update = function(object) {
+
+    drupal.entity.prototype.update.call(this, object);
+
+    // Make sure to also set the ID the same as uid.
+    this.id = object.uid || this.id;
+  };
 
   /**
    * Returns the object to send to Services.
