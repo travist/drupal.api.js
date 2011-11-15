@@ -138,31 +138,54 @@ var updateUser = function(user, callback) {
   });
 };
 
-var logout_register_login = function(user, callback) {
-  new drupal.system(function(system) {
+var userRegisterLogoutLogin = function(user, callback) {
 
-    // Logout of the current user.
-    system.user.logout(function() {
+  asyncTest("User Register, Logout, and Login", function() {
+    new drupal.system(function(system) {
 
-      var rand = Math.floor(Math.random()*10000000000000);
-      var randomUser = "user_" + rand;
-      var randomMail = randomUser + '@example.com';
+      // Logout of the current user.
+      system.user.logout(function() {
 
-      // Register a new user.
-      var newUser = new drupal.user({
-        name:randomUser,
-        pass:'testing123',
-        mail:randomMail
-      }).register(function(user) {
+        var rand = Math.floor(Math.random()*10000000000000);
+        var randomUser = "user_" + rand;
+        var randomMail = randomUser + '@example.com';
 
-        // Logout of the current user.
-        user.logout(function() {
+        // Register a new user.
+        var newUser = new drupal.user({
+          name:randomUser,
+          pass:'testing123',
+          mail:randomMail
+        }).register(function(user) {
 
-          // Login to the registered user.
+          var test1 = user.name == randomUser;
+          var test2 = user.mail == randomMail;
+          var test3 = !!user.id;
+          var userID = user.id;
+
+          // Logout of the current user.
+          user.logout(function() {
+
+            // Login to the registered user.
+            new drupal.user({name:randomUser,pass:'testing123'}).login(function(user) {
+
+              start();
+              expect(6);
+
+              ok(test1, "User name was set correctly");
+              ok(test2, "User mail was set correctly");
+              ok(test3, "User ID was set.");
+              ok(user.name == randomUser, "User name was verified.");
+              ok(user.mail == randomMail, "User mail was verified.");
+              ok(user.id == userID, "User ID was verified.");
+
+              if (callback) {
+                callback();
+              }
+            });
+          });
         });
       });
     });
-
   });
 };
 
@@ -170,7 +193,9 @@ var logout_register_login = function(user, callback) {
 createUser(function(user) {
   updateUser(user, function(updatedUser) {
     listUsers(function() {
-      deleteUser(updatedUser);
+      deleteUser(updatedUser, function() {
+        userRegisterLogoutLogin();
+      });
     });
   });
 });
