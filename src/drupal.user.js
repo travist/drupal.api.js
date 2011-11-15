@@ -23,6 +23,15 @@ var drupal = drupal || {};
     /** The password of the user. */
     this.pass = '';
 
+    /** The status of the user. */
+    this.status = 1;
+
+    /** The session ID of the user. */
+    this.sessid = '';
+
+    /** The session name of the user */
+    this.session_name = '';
+
     // Declare the api.
     this.api = new drupal.user.api();
 
@@ -51,8 +60,12 @@ var drupal = drupal || {};
     var _this = this;
     this.api.execute('login', object, function(user) {
 
+      // Set the session ID and session name.
+      _this.sessid = user.sessid;
+      _this.session_name = user.session_name;
+
       // Update this object.
-      _this.update(user);
+      _this.update(user.user);
       callback(_this);
     });
   };
@@ -64,18 +77,11 @@ var drupal = drupal || {};
    */
   drupal.user.prototype.register = function(callback) {
 
-    // Setup the POST data to register this user.
-    var object = {
-      name: this.name,
-      mail: this.mail,
-      pass: this.pass
-    };
-
     // Execute the register.
     var _this = this;
-    this.api.execute('register', object, function(user) {
+    this.api.execute('register', this.getObject(), function(user) {
 
-      // Update this object.
+      // Now update the object.
       _this.update(user);
       callback(_this);
     });
@@ -100,7 +106,7 @@ var drupal = drupal || {};
     drupal.entity.prototype.update.call(this, object);
 
     // Make sure to also set the ID the same as uid.
-    this.id = object.uid || this.id;
+    this.id = (object && object.uid) || this.id;
   };
 
   /**
@@ -110,7 +116,8 @@ var drupal = drupal || {};
     return $.extend(drupal.entity.prototype.getObject.call(this), {
       name: this.name,
       mail: this.mail,
-      pass: this.pass
+      pass: this.pass,
+      status: this.status
     });
   };
 }(jQuery));

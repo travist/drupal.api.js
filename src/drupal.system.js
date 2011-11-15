@@ -14,9 +14,6 @@ var drupal = drupal || {};
     /** The current user. */
     this.user = null;
 
-    /** The session ID */
-    this.sessid = '';
-
     // Declare the api.
     this.api = new drupal.system.api();
 
@@ -41,7 +38,7 @@ var drupal = drupal || {};
 
       // Set the user object, session id, and return this server.
       _this.user = new drupal.user(object.user);
-      _this.sessid = object.sessid;
+      _this.user.sessid = object.sessid;
       callback(_this);
     });
   };

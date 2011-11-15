@@ -45,7 +45,7 @@ var drupal = drupal || {};
     drupal.entity.prototype.update.call(this, object);
 
     // Make sure to also set the ID the same as nid.
-    this.id = object.nid || this.id;
+    this.id = (object && object.nid) || this.id;
   };
 
   /**
