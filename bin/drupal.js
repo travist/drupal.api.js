@@ -82,6 +82,18 @@ var drupal = drupal || {};
   };
 
   /**
+   * API function to perform an action.
+   *
+   * @param {string} action The action to perform.
+   * @param {object} entity The entity object to set.
+   * @param {function} callback The callback function.
+   */
+  drupal.api.prototype.execute = function(action, object, callback) {
+    var url = this.getURL(object) + '/' + action;
+    this.call(url, 'json', 'POST', object, callback);
+  };
+
+  /**
    * API function to save the value of an object using Services.
    *
    * @param {object} entity The entity object to set.  If the object does not
@@ -105,6 +117,115 @@ var drupal = drupal || {};
   drupal.api.prototype.remove = function(object, callback) {
     this.call(this.getURL(object), 'json', 'DELETE', null, callback);
   };
+}(jQuery));
+
+
+// The drupal namespace.
+var drupal = drupal || {};
+
+(function($) {
+
+  /**
+   * @class The system class
+   *
+   * @param {function} callback The function to be called once the system has
+   * connected.
+   */
+  drupal.system = function(callback) {
+
+    /** The current user. */
+    this.user = null;
+
+    /** The session ID */
+    this.sessid = '';
+
+    // Declare the api.
+    this.api = new drupal.system.api();
+
+    // If the callback is set, then connect.
+    if (callback) {
+
+      // Connect to the server.
+      this.connect(callback);
+    }
+  };
+
+  /**
+   * Connect to the server.
+   *
+   * @param {function} callback The callback function.
+   */
+  drupal.system.prototype.connect = function(callback) {
+
+    // Connect to the server.
+    var _this = this;
+    this.api.execute('connect', null, function(object) {
+
+      // Set the user object, session id, and return this server.
+      _this.user = new drupal.user(object.user);
+      _this.sessid = object.sessid;
+      callback(_this);
+    });
+  };
+
+  /**
+   * Get a variable from the server.
+   *
+   * @param {string} name The variable you wish to retrieve.
+   * @param {string} def The default value of the variable.
+   * @param {function} callback The callback function.
+   */
+  drupal.system.prototype.get_variable = function(name, def, callback) {
+    this.api.execute('get_variable', {name: name, 'default': def}, callback);
+  };
+
+  /**
+   * Set a variable on the server.
+   *
+   * @param {string} name The variable you wish to set.
+   * @param {string} value The value of the variable.
+   * @param {function} callback The callback function.
+   */
+  drupal.system.prototype.set_variable = function(name, value, callback) {
+    this.api.execute('set_variable', {name: name, value: value}, callback);
+  };
+
+  /**
+   * Delete a variable on the server.
+   *
+   * @param {string} name The variable you wish to set.
+   * @param {function} callback The callback function.
+   */
+  drupal.system.prototype.del_variable = function(name, callback) {
+    this.api.execute('del_variable', {name: name}, callback);
+  };
+}(jQuery));
+// The drupal namespace.
+var drupal = drupal || {};
+
+/** The drupal.user namespace */
+drupal.system = drupal.system || {};
+
+(function($) {
+
+  /**
+   * The Drupal System Services class.
+   *
+   * @extends drupal.api
+   */
+  drupal.system.api = function() {
+
+    // Call the drupal.api constructor.
+    drupal.api.call(this);
+
+    // Set the resource
+    this.resource = 'system';
+  };
+
+  // Derive from drupal.api.
+  drupal.system.api.prototype = new drupal.api();
+  drupal.system.api.prototype.constructor = drupal.system.api;
+
 }(jQuery));
 
 
@@ -401,7 +522,65 @@ var drupal = drupal || {};
   drupal.user.prototype.constructor = drupal.user;
 
   /**
+   * Login a user.
+   *
+   * @param {function} callback The callback function.
+   */
+  drupal.user.prototype.login = function(callback) {
+
+    // Setup the POST data for the login of this user.
+    var object = {
+      username: this.name,
+      password: this.pass
+    };
+
+    // Execute the login.
+    var _this = this;
+    this.api.execute('login', object, function(user) {
+
+      // Update this object.
+      _this.update(user);
+      callback(_this);
+    });
+  };
+
+  /**
+   * Register a user.
+   *
+   * @param {function} callback The callback function.
+   */
+  drupal.user.prototype.register = function(callback) {
+
+    // Setup the POST data to register this user.
+    var object = {
+      name: this.name,
+      mail: this.mail,
+      pass: this.pass
+    };
+
+    // Execute the register.
+    var _this = this;
+    this.api.execute('register', object, function(user) {
+
+      // Update this object.
+      _this.update(user);
+      callback(_this);
+    });
+  };
+
+  /**
+   * Logout the user.
+   */
+  drupal.user.prototype.logout = function(callback) {
+
+    // Execute the logout.
+    this.api.execute('logout', null, callback);
+  };
+
+  /**
    * Override the update routine.
+   *
+   * @param {object} object The object to update.
    */
   drupal.user.prototype.update = function(object) {
 

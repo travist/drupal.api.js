@@ -35,7 +35,65 @@ var drupal = drupal || {};
   drupal.user.prototype.constructor = drupal.user;
 
   /**
+   * Login a user.
+   *
+   * @param {function} callback The callback function.
+   */
+  drupal.user.prototype.login = function(callback) {
+
+    // Setup the POST data for the login of this user.
+    var object = {
+      username: this.name,
+      password: this.pass
+    };
+
+    // Execute the login.
+    var _this = this;
+    this.api.execute('login', object, function(user) {
+
+      // Update this object.
+      _this.update(user);
+      callback(_this);
+    });
+  };
+
+  /**
+   * Register a user.
+   *
+   * @param {function} callback The callback function.
+   */
+  drupal.user.prototype.register = function(callback) {
+
+    // Setup the POST data to register this user.
+    var object = {
+      name: this.name,
+      mail: this.mail,
+      pass: this.pass
+    };
+
+    // Execute the register.
+    var _this = this;
+    this.api.execute('register', object, function(user) {
+
+      // Update this object.
+      _this.update(user);
+      callback(_this);
+    });
+  };
+
+  /**
+   * Logout the user.
+   */
+  drupal.user.prototype.logout = function(callback) {
+
+    // Execute the logout.
+    this.api.execute('logout', null, callback);
+  };
+
+  /**
    * Override the update routine.
+   *
+   * @param {object} object The object to update.
    */
   drupal.user.prototype.update = function(object) {
 
