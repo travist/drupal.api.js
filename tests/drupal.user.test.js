@@ -143,44 +143,54 @@ var userRegisterLogoutLogin = function(user, callback) {
   asyncTest("User Register, Logout, and Login", function() {
     new drupal.system(function(system) {
 
-      // Logout of the current user.
-      system.user.logout(function() {
+      // To run this test, the user_email_verification must be 0.
+      system.get_variable('user_email_verification', 0, function(email_verification) {
 
-        var rand = Math.floor(Math.random()*10000000000000);
-        var randomUser = "user_" + rand;
-        var randomMail = randomUser + '@example.com';
-
-        // Register a new user.
-        var newUser = new drupal.user({
-          name:randomUser,
-          pass:'testing123',
-          mail:randomMail
-        }).register(function(user) {
-
-          var test1 = user.name == randomUser;
-          var test2 = user.mail == randomMail;
-          var test3 = !!user.id;
-          var userID = user.id;
+        system.set_variable('user_email_verification', 0, function() {
 
           // Logout of the current user.
-          user.logout(function() {
+          system.user.logout(function() {
 
-            // Login to the registered user.
-            new drupal.user({name:randomUser,pass:'testing123'}).login(function(user) {
+            var rand = Math.floor(Math.random()*10000000000000);
+            var randomUser = "user_" + rand;
+            var randomMail = randomUser + '@example.com';
 
-              start();
-              expect(6);
+            // Register a new user.
+            var newUser = new drupal.user({
+              name:randomUser,
+              pass:'testing123',
+              mail:randomMail
+            }).register(function(user) {
 
-              ok(test1, "User name was set correctly");
-              ok(test2, "User mail was set correctly");
-              ok(test3, "User ID was set.");
-              ok(user.name == randomUser, "User name was verified.");
-              ok(user.mail == randomMail, "User mail was verified.");
-              ok(user.id == userID, "User ID was verified.");
+              var test1 = user.name == randomUser;
+              var test2 = user.mail == randomMail;
+              var test3 = !!user.id;
+              var userID = user.id;
 
-              if (callback) {
-                callback();
-              }
+              // Logout of the current user.
+              user.logout(function() {
+
+                // Login to the registered user.
+                new drupal.user({name:randomUser,pass:'testing123'}).login(function(user) {
+
+                  start();
+                  expect(6);
+
+                  ok(test1, "User name was set correctly");
+                  ok(test2, "User mail was set correctly");
+                  ok(test3, "User ID was set.");
+                  ok(user.name == randomUser, "User name was verified.");
+                  ok(user.mail == randomMail, "User mail was verified.");
+                  ok(user.id == userID, "User ID was verified.");
+
+                  // Set the variable back.
+                  system.set_variable('user_email_verification', email_verification);
+
+                  if (callback) {
+                    callback();
+                  }
+                });
+              });
             });
           });
         });
