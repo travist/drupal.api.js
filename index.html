@@ -26,6 +26,10 @@
         $("input#submit").click(function(event) {
           event.preventDefault();
           var endpoint = $("input#endpoint").val();
+          if (endpoint.indexOf('http') !== 0) {
+            endpoint = 'http://' + endpoint;
+          }
+
           var username = $("input#username").val();
           var password = $("input#password").val();
           if (username && password) {
