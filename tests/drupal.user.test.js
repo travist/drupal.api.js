@@ -189,13 +189,16 @@ var userRegisterLogoutLogin = function(user, callback) {
   });
 };
 
-// perform the tests in a specific order.
-createUser(function(user) {
-  updateUser(user, function(updatedUser) {
-    listUsers(function() {
-      deleteUser(updatedUser, function() {
-        userRegisterLogoutLogin();
+// Run the user tests.
+var runUserTests = function() {
+  // perform the tests in a specific order.
+  createUser(function(user) {
+    updateUser(user, function(updatedUser) {
+      listUsers(function() {
+        deleteUser(updatedUser, function() {
+          userRegisterLogoutLogin();
+        });
       });
     });
   });
-});
+};
