@@ -27,7 +27,7 @@ var drupal = drupal || {};
     var path = this.url;
     path += this.endpoint ? ('/' + this.endpoint) : '';
     path += this.resource ? ('/' + this.resource) : '';
-    path += object.id ? ('/' + object.id) : '';
+    path += (object && object.id) ? ('/' + object.id) : '';
     return path;
   };
 
