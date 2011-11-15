@@ -138,9 +138,32 @@ var updateUser = function(user, callback) {
   });
 };
 
-var loginUser = function(user, callback) {
+var logout_register_login = function(user, callback) {
+  new drupal.system(function(system) {
 
-  
+    // Logout of the current user.
+    system.user.logout(function() {
+
+      var rand = Math.floor(Math.random()*10000000000000);
+      var randomUser = "user_" + rand;
+      var randomMail = randomUser + '@example.com';
+
+      // Register a new user.
+      var newUser = new drupal.user({
+        name:randomUser,
+        pass:'testing123',
+        mail:randomMail
+      }).register(function(user) {
+
+        // Logout of the current user.
+        user.logout(function() {
+
+          // Login to the registered user.
+        });
+      });
+    });
+
+  });
 };
 
 // perform the tests in a specific order.
