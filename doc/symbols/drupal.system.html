@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - drupal.entity</title>
+		<title>JsDoc Reference - drupal.system</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -214,7 +214,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class drupal.entity
+				Class drupal.system
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -222,17 +222,16 @@ ul.inheritsList
 				
 				
 			
-				The base entity class to store the data that is common to all
-drupal entities whether it be groups, events, users, etc.
+				The system class
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_drupal.entity.js.html">drupal.entity.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_drupal.system.js.html">drupal.system.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class drupal.entity.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class drupal.system.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -245,7 +244,7 @@ drupal entities whether it be groups, events, users, etc.
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/drupal.entity.html#constructor">drupal.entity</a></b>(object, callback)
+								<b><a href="../symbols/drupal.system.html#constructor">drupal.system</a></b>(callback)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -258,7 +257,7 @@ drupal entities whether it be groups, events, users, etc.
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class drupal.entity.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class drupal.system.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -272,9 +271,9 @@ drupal entities whether it be groups, events, users, etc.
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/drupal.entity.html#api">api</a></b>
+								<b><a href="../symbols/drupal.system.html#sessid">sessid</a></b>
 								</div>
-								<div class="description">The API for this entity</div>
+								<div class="description">The session ID</div>
 							</td>
 						</tr>
 					
@@ -282,9 +281,9 @@ drupal entities whether it be groups, events, users, etc.
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/drupal.entity.html#id">id</a></b>
+								<b><a href="../symbols/drupal.system.html#user">user</a></b>
 								</div>
-								<div class="description">The unique identifier for this entity.</div>
+								<div class="description">The current user.</div>
 							</td>
 						</tr>
 					
@@ -299,7 +298,7 @@ drupal entities whether it be groups, events, users, etc.
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class drupal.entity.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class drupal.system.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -310,65 +309,47 @@ drupal entities whether it be groups, events, users, etc.
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#find">find</a></b>(callback)
+								<div class="fixedFont">drupal.system.<b><a href="../symbols/drupal.system.html#.api">api</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">The Drupal System Services class.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#get">get</a></b>(callback)
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#connect">connect</a></b>(callback)
 								</div>
-								<div class="description">Get's an object from the drupal API.</div>
+								<div class="description">Connect to the server.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#getObject">getObject</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#del_variable">del_variable</a></b>(name, callback)
 								</div>
-								<div class="description">Returns the object to send during PUT's and POST's during a save or add.</div>
+								<div class="description">Delete a variable on the server.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#getQuery">getQuery</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#get_variable">get_variable</a></b>(name, def, callback)
 								</div>
-								<div class="description">Returns the search query.</div>
+								<div class="description">Get a variable from the server.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#remove">remove</a></b>(callback)
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#set_variable">set_variable</a></b>(name, value, callback)
 								</div>
-								<div class="description">Removes an entity</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#save">save</a></b>(callback)
-								</div>
-								<div class="description">Saves this entity.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#update">update</a></b>(entity)
-								</div>
-								<div class="description">Update the entity data.</div>
+								<div class="description">Set a variable on the server.</div>
 							</td>
 						</tr>
 					
@@ -389,7 +370,7 @@ drupal entities whether it be groups, events, users, etc.
 				</div>
 				
 				<div class="fixedFont">
-						<b>drupal.entity</b>(object, callback)
+						<b>drupal.system</b>(callback)
 				</div>
 				
 				<div class="description">
@@ -405,16 +386,11 @@ drupal entities whether it be groups, events, users, etc.
 						<dt class="heading">Parameters:</dt>
 						
 							<dt>
-								<span class="light fixedFont">{object}</span>  <b>object</b>
+								<span class="light fixedFont">{function}</span>  <b>callback</b>
 								
 							</dt>
-								<dd>The entity object.</dd>
-						
-							<dt>
-								 <b>callback</b>
-								
-							</dt>
-								<dd></dd>
+								<dd>The function to be called once the system has
+connected.</dd>
 						
 						</dl>
 					
@@ -434,15 +410,15 @@ drupal entities whether it be groups, events, users, etc.
 					Field Detail
 				</div>
 				
-					<a name="api"> </a>
+					<a name="sessid"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>api</b>
+					<b>sessid</b>
 					
 					</div>
 					<div class="description">
-						The API for this entity
+						The session ID
 						
 						
 					</div>
@@ -456,15 +432,15 @@ drupal entities whether it be groups, events, users, etc.
 
 					<hr />
 				
-					<a name="id"> </a>
+					<a name="user"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>id</b>
+					<b>user</b>
 					
 					</div>
 					<div class="description">
-						The unique identifier for this entity.
+						The current user.
 						
 						
 					</div>
@@ -486,32 +462,24 @@ drupal entities whether it be groups, events, users, etc.
 					Method Detail
 				</div>
 				
-					<a name="find"> </a>
-					<div class="fixedFont">
+					<a name=".api"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>find</b>(callback)
+					<span class="light">drupal.system.</span><b>api</b>()
 					
 					</div>
 					<div class="description">
+						The Drupal System Services class.
 						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/src_drupal.system.api.js.html">drupal.system.api.js</a>.
 						
 						
 					</div>
 					
 					
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>callback</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -522,15 +490,15 @@ drupal entities whether it be groups, events, users, etc.
 
 					<hr />
 				
-					<a name="get"> </a>
+					<a name="connect"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>get</b>(callback)
+					<b>connect</b>(callback)
 					
 					</div>
 					<div class="description">
-						Get's an object from the drupal API.
+						Connect to the server.
 						
 						
 					</div>
@@ -545,8 +513,7 @@ drupal entities whether it be groups, events, users, etc.
 									<span class="light fixedFont">{function}</span> <b>callback</b>
 									
 								</dt>
-								<dd>The callback function when the object is
-retrieved.</dd>
+								<dd>The callback function.</dd>
 							
 							</dl>
 						
@@ -559,72 +526,15 @@ retrieved.</dd>
 
 					<hr />
 				
-					<a name="getObject"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>getObject</b>()
-					
-					</div>
-					<div class="description">
-						Returns the object to send during PUT's and POST's during a save or add.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> An object of the data when saving to the server.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getQuery"> </a>
+					<a name="del_variable"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>getQuery</b>()
+					<b>del_variable</b>(name, callback)
 					
 					</div>
 					<div class="description">
-						Returns the search query.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="remove"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>remove</b>(callback)
-					
-					</div>
-					<div class="description">
-						Removes an entity
+						Delete a variable on the server.
 						
 						
 					</div>
@@ -634,12 +544,18 @@ retrieved.</dd>
 						
 							<dl class="detailList">
 							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>name</b>
+									
+								</dt>
+								<dd>The variable you wish to set.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{function}</span> <b>callback</b>
 									
 								</dt>
-								<dd>The function called once entity is removed.</dd>
+								<dd>The callback function.</dd>
 							
 							</dl>
 						
@@ -652,15 +568,15 @@ retrieved.</dd>
 
 					<hr />
 				
-					<a name="save"> </a>
+					<a name="get_variable"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>save</b>(callback)
+					<b>get_variable</b>(name, def, callback)
 					
 					</div>
 					<div class="description">
-						Saves this entity.
+						Get a variable from the server.
 						
 						
 					</div>
@@ -670,12 +586,24 @@ retrieved.</dd>
 						
 							<dl class="detailList">
 							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>name</b>
+									
+								</dt>
+								<dd>The variable you wish to retrieve.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>def</b>
+									
+								</dt>
+								<dd>The default value of the variable.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{function}</span> <b>callback</b>
 									
 								</dt>
-								<dd>The function called once entity is saved.</dd>
+								<dd>The callback function.</dd>
 							
 							</dl>
 						
@@ -688,15 +616,15 @@ retrieved.</dd>
 
 					<hr />
 				
-					<a name="update"> </a>
+					<a name="set_variable"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>update</b>(entity)
+					<b>set_variable</b>(name, value, callback)
 					
 					</div>
 					<div class="description">
-						Update the entity data.
+						Set a variable on the server.
 						
 						
 					</div>
@@ -708,10 +636,22 @@ retrieved.</dd>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{object}</span> <b>entity</b>
+									<span class="light fixedFont">{string}</span> <b>name</b>
 									
 								</dt>
-								<dd>The entity information.</dd>
+								<dd>The variable you wish to set.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>value</b>
+									
+								</dt>
+								<dd>The value of the variable.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>callback</b>
+									
+								</dt>
+								<dd>The callback function.</dd>
 							
 							</dl>
 						

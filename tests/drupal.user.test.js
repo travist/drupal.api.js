@@ -138,6 +138,11 @@ var updateUser = function(user, callback) {
   });
 };
 
+var loginUser = function(user, callback) {
+
+  
+};
+
 // perform the tests in a specific order.
 createUser(function(user) {
   updateUser(user, function(updatedUser) {

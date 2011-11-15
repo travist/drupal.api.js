@@ -82,6 +82,18 @@ var drupal = drupal || {};
   };
 
   /**
+   * API function to perform an action.
+   *
+   * @param {string} action The action to perform.
+   * @param {object} entity The entity object to set.
+   * @param {function} callback The callback function.
+   */
+  drupal.api.prototype.execute = function(action, object, callback) {
+    var url = this.getURL(object) + '/' + action;
+    this.call(url, 'json', 'POST', object, callback);
+  };
+
+  /**
    * API function to save the value of an object using Services.
    *
    * @param {object} entity The entity object to set.  If the object does not
