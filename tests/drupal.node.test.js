@@ -140,11 +140,13 @@ var createNode = function(callback) {
   });
 };
 
-// perform the tests in a specific order.
-createNode(function(node) {
-  updateNode(node, function(updatedNode) {
-    listNodes(function() {
-      deleteNode(updatedNode);
+var runNodeTests = function() {
+  // perform the tests in a specific order.
+  createNode(function(node) {
+    updateNode(node, function(updatedNode) {
+      listNodes(function() {
+        deleteNode(updatedNode);
+      });
     });
   });
-});
+};

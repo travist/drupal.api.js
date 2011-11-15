@@ -20,8 +20,66 @@
     <script type='text/javascript' src='tests/drupal.system.test.js'></script>
     <script type='text/javascript' src='tests/drupal.node.test.js'></script>
     <script type='text/javascript' src='tests/drupal.user.test.js'></script>
+
+    <script type="text/javascript">
+      $(function() {
+        $("input#submit").click(function(event) {
+          event.preventDefault();
+          var endpoint = $("input#endpoint").val();
+          var username = $("input#username").val();
+          var password = $("input#password").val();
+          if (username && password) {
+
+            var runTests = function() {
+              runSystemTests();
+              runNodeTests();
+              runUserTests();
+            };
+
+            // The endpoint for this drupal.
+            drupal.endpoint = endpoint;
+
+            // Connect to the system.
+            new drupal.system(function(system) {
+
+              // If the user is already user 1, then run tests...
+              if (system.user.id == 1) {
+                runTests();
+              }
+              else {
+
+                // If the user is anonymous, then just login as admin.
+                if (system.user.id == 0) {
+                  new drupal.user({name:username,pass:password}).login(function() {
+                    runTests();
+                  });
+                }
+                else {
+
+                  // If the user is someone else, logout, then login as admin.
+                  system.user.logout(function() {
+                    new drupal.user({name:username,pass:password}).login(function() {
+                      runTests();
+                    });
+                  });
+                }
+              }
+            });
+          }
+        });
+      });
+    </script>
   </head>
   <body>
+    <form>
+      <label for="endpoint">Endpoint URL</label>
+      <input type="text" id="endpoint" value="" size="60" maxlength="1024"><br/>
+      <label for="username">Admin Username</label>
+      <input type="text" id="username" value="" size="15" maxlength="60"><br/>
+      <label for="password">Admin Password</label>
+      <input type="password" id="password" name="pass" size="15" maxlength="60"><br/>
+      <input type="submit" id="submit" name="op" value="Run Tests">
+    </form>
     <h1 id="qunit-header">QUnit example</h1>
     <h2 id="qunit-banner"></h2>
     <div id="qunit-testrunner-toolbar"></div>

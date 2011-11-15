@@ -8,11 +8,8 @@ var drupal = drupal || {};
    */
   drupal.api = function() {
 
-    /** The Services URL */
-    this.url = 'http://rest';
-
     /** The Services API endpoint */
-    this.endpoint = 'rest';
+    this.endpoint = drupal.endpoint;
 
     /** The resource within this endpoint */
     this.resource = '';
@@ -24,8 +21,7 @@ var drupal = drupal || {};
    * @param {object} object The object involved with in this request.
    */
   drupal.api.prototype.getURL = function(object) {
-    var path = this.url;
-    path += this.endpoint ? ('/' + this.endpoint) : '';
+    var path = this.endpoint;
     path += this.resource ? ('/' + this.resource) : '';
     path += (object && object.id) ? ('/' + object.id) : '';
     return path;
