@@ -25,10 +25,10 @@ jslint: ${files}
 
 # Create an aggregated js file and a compressed js file.
 js: ${files}
-	@echo "Generating aggregated bin/drupal.js file"
-	@cat > bin/drupal.js $^
-	@echo "Generating compressed bin/drupal.compressed.js file"
-	@java -jar tools/compiler.jar --js bin/drupal.js --js_output_file bin/drupal.compressed.js
+	@echo "Generating aggregated bin/drupal.api.js file"
+	@cat > bin/drupal.api.js $^
+	@echo "Generating compressed bin/drupal.api.compressed.js file"
+	@java -jar tools/compiler.jar --js bin/drupal.api.js --js_output_file bin/drupal.api.compressed.js
 
 # Create the documentation from source code.
 jsdoc: ${files}
