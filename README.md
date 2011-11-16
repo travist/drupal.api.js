@@ -90,7 +90,7 @@ Examples
 Installation & Configuration
 ----------------------------------------
 
-  * You will need a Drupal 7 site with Services 3.x installed.  You can use the rest.make included to help you get started.
+  * You will need a Drupal 7 site with Services 3.x installed.  You will also need to include this library in a sites/all/libraries/drupal.api.js folder.  You can use the rest.make included to help you get started.
   * Install the modules: Services, REST Server, CTools
   * Go to admin/structure/services and +Add a new Services endpoint.
   * Give it a name of "rest" and a Path to Endpoint of "rest".
