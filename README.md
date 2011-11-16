@@ -1,4 +1,4 @@
-The Drupal JavaScript API
+The Drupal JavaScript API Library
 ==================================
 
 This library acts as an object oriented JavaScript wrapper around the
