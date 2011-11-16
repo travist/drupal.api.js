@@ -83,3 +83,23 @@ Examples:
 
         console.log("done");
       });
+
+Installation & Configuration:
+
+  1.) You will need a Drupal 7 site with Services 3.x installed.  You can use
+      the rest.make included to help you get started.
+
+  2.) Install the modules: Services, REST Server, CTools
+  3.) Go to admin/structure/services and +Add a new Services endpoint.
+  4.) Give it a name of "rest" and a Path to Endpoint of "rest".
+  5.) Select the REST as the Server.
+  6.) Enable "Session Authentication"
+  7.) Press "Save" to save your endpoint.
+  8.) Now click on "Edit Resource" in the services overview page next to "rest"
+  9.) Enable "node", "system", and "user" resource and press "Save"
+ 10.) Click on the "Server" tab, and then enable "jsonp" and then check "application/x-www-form-urlencoded"
+      for application parsing and then press "Save".
+ 11.) Now navigate to http://{YOUR_SITE}/sites/all/libraries/drupal.api.js/index.html
+ 12.) For the endpoint URL type "{YOUR_SITE}/rest" then provide admin login.  Press "Run Tests".
+ 13.) Tests should execute which, if all green, indicates the library is working!
+
