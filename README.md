@@ -6,7 +6,8 @@ This makes is extremely simple to work with Drupal services from within a web
 application that uses JavaScript (JSON) for communication to the Drupal RESTful
 server.
 
-Examples:
+Examples
+================================
 
   1.)  To create a new node.
 
@@ -84,7 +85,9 @@ Examples:
         console.log("done");
       });
 
-Installation & Configuration:
+
+Installation & Configuration
+==================================
 
   * You will need a Drupal 7 site with Services 3.x installed.  You can use the rest.make included to help you get started.
   * Install the modules: Services, REST Server, CTools
