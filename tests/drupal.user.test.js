@@ -138,7 +138,7 @@ var updateUser = function(user, callback) {
   });
 };
 
-var userRegisterLogoutLogin = function(user, callback) {
+var userRegisterLogoutLogin = function(uname, passwd, callback) {
 
   asyncTest("User Register, Logout, and Login", function() {
     new drupal.system(function(system) {
@@ -173,22 +173,43 @@ var userRegisterLogoutLogin = function(user, callback) {
                 // Login to the registered user.
                 new drupal.user({name:randomUser,pass:'testing123'}).login(function(user) {
 
-                  start();
-                  expect(6);
+                  var test4 = user.name == randomUser;
+                  var test5 = user.mail == randomMail;
+                  var test6 = user.id == userID;
 
-                  ok(test1, "User name was set correctly");
-                  ok(test2, "User mail was set correctly");
-                  ok(test3, "User ID was set.");
-                  ok(user.name == randomUser, "User name was verified.");
-                  ok(user.mail == randomMail, "User mail was verified.");
-                  ok(user.id == userID, "User ID was verified.");
+                  // Now logout of this user.
+                  user.logout(function() {
 
-                  // Set the variable back.
-                  system.set_variable('user_email_verification', email_verification);
+                    // Log into the admin user.
+                    new drupal.user({name:uname,pass:passwd}).login(function() {
 
-                  if (callback) {
-                    callback();
-                  }
+                      // Remove the old user.
+                      user.remove(function() {
+
+                        start();
+                        expect(6);
+
+                        ok(test1, "User name was set correctly");
+                        ok(test2, "User mail was set correctly");
+                        ok(test3, "User ID was set.");
+                        ok(test4, "User name was verified.");
+                        ok(test5, "User mail was verified.");
+                        ok(test6, "User ID was verified.");
+
+                        // Set the variable back.
+                        system.set_variable('user_email_verification', email_verification);
+
+                        if (callback) {
+                          callback();
+                        }
+                      });
+                    });
+                  });
+
+                  // Now remove the user.
+                  user.remove(function() {
+
+                  });
                 });
               });
             });
@@ -200,13 +221,13 @@ var userRegisterLogoutLogin = function(user, callback) {
 };
 
 // Run the user tests.
-var runUserTests = function() {
+var runUserTests = function(uname, passwd) {
   // perform the tests in a specific order.
   createUser(function(user) {
     updateUser(user, function(updatedUser) {
       listUsers(function() {
         deleteUser(updatedUser, function() {
-          userRegisterLogoutLogin();
+          userRegisterLogoutLogin(uname, passwd);
         });
       });
     });
