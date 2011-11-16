@@ -1,4 +1,5 @@
 The Drupal JavaScript API
+==================================
 
 This library acts as an object oriented JavaScript wrapper around the
 Drupal services module ( http://drupal.org/project/services ).
@@ -7,7 +8,7 @@ application that uses JavaScript (JSON) for communication to the Drupal RESTful
 server.
 
 Examples
-================================
+----------------------------------
 
   1.)  To create a new node.
 
@@ -87,7 +88,7 @@ Examples
 
 
 Installation & Configuration
-==================================
+----------------------------------------
 
   * You will need a Drupal 7 site with Services 3.x installed.  You can use the rest.make included to help you get started.
   * Install the modules: Services, REST Server, CTools
