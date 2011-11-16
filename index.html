@@ -34,10 +34,10 @@
           var password = $("input#password").val();
           if (username && password) {
 
-            var runTests = function() {
+            var runTests = function(uname, passwd) {
               runSystemTests();
               runNodeTests();
-              runUserTests();
+              runUserTests(uname, passwd);
             };
 
             // The endpoint for this drupal.
@@ -48,14 +48,14 @@
 
               // If the user is already user 1, then run tests...
               if (system.user.id == 1) {
-                runTests();
+                runTests(username, password);
               }
               else {
 
                 // If the user is anonymous, then just login as admin.
                 if (system.user.id == 0) {
                   new drupal.user({name:username,pass:password}).login(function() {
-                    runTests();
+                    runTests(username, password);
                   });
                 }
                 else {
@@ -63,7 +63,7 @@
                   // If the user is someone else, logout, then login as admin.
                   system.user.logout(function() {
                     new drupal.user({name:username,pass:password}).login(function() {
-                      runTests();
+                      runTests(username, password);
                     });
                   });
                 }
