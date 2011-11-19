@@ -50,7 +50,10 @@ drupal.entity.prototype.get = function(callback) {
       else {
         // Update the object, then call the callback.
         _this.update(object);
-        callback(_this);
+
+        if (callback) {
+          callback(_this);
+        }
       }
     });
   }
@@ -72,7 +75,10 @@ drupal.entity.prototype.save = function(callback) {
 
       // Update the object, then call the callback.
       _this.update(object);
-      callback(_this);
+
+      if (callback) {
+        callback(_this);
+      }
     });
   }
 };
