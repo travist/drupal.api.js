@@ -11,11 +11,11 @@ drupal.user = drupal.user || {};
  */
 drupal.user.api = function() {
 
-  // Call the drupal.api constructor.
-  drupal.api.call(this);
-
   // Set the resource
   this.resource = 'user';
+
+  // Call the drupal.api constructor.
+  drupal.api.call(this);
 };
 
 /** Derive from drupal.api. */

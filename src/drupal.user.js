@@ -13,25 +13,25 @@ var drupal = drupal || {};
 drupal.user = function(object, callback) {
 
   /** The name for this user. */
-  this.name = '';
+  this.name = this.name || '';
 
   /** The email address of our user. */
-  this.mail = '';
+  this.mail = this.mail || '';
 
   /** The password of the user. */
-  this.pass = '';
+  this.pass = this.pass || '';
 
   /** The status of the user. */
-  this.status = 1;
+  this.status = this.status || 1;
 
   /** The session ID of the user. */
-  this.sessid = '';
+  this.sessid = this.sessid || '';
 
   /** The session name of the user */
-  this.session_name = '';
+  this.session_name = this.session_name || '';
 
   // Declare the api.
-  this.api = new drupal.user.api();
+  this.api = this.api || new drupal.user.api();
 
   // Call the base class.
   drupal.entity.call(this, object, callback);

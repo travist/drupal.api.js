@@ -19,7 +19,7 @@
 <span class='line'> 12</span> </span><span class="NAME">drupal.entity</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 13</span> 
 <span class='line'> 14</span> </span><span class="WHIT">  </span><span class="COMM">/** The unique identifier for this entity. */</span><span class="WHIT">
-<span class='line'> 15</span> </span><span class="WHIT">  </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">  </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 16</span> 
 <span class='line'> 17</span> </span><span class="WHIT">  </span><span class="COMM">/** The API for this entity */</span><span class="WHIT">
 <span class='line'> 18</span> </span><span class="WHIT">  </span><span class="NAME">this.api</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.api</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
@@ -145,28 +145,30 @@
 <span class='line'>138</span> 
 <span class='line'>139</span> </span><span class="WHIT">    </span><span class="COMM">// Update the params.</span><span class="WHIT">
 <span class='line'>140</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">param</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>142</span> 
-<span class='line'>143</span> </span><span class="WHIT">        </span><span class="COMM">// Check to see if this object has an update function.</span><span class="WHIT">
-<span class='line'>144</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>145</span> </span><span class="WHIT">          </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>146</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>147</span> </span><span class="WHIT">        </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>148</span> </span><span class="WHIT">          </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>149</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>150</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>151</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>152</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>153</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>154</span> 
-<span class='line'>155</span> </span><span class="COMM">/**
-<span class='line'>156</span>  * Returns the object to send during PUT's and POST's during a save or add.
-<span class='line'>157</span>  *
-<span class='line'>158</span>  * @return {object} The object to send to the Services endpoint.
-<span class='line'>159</span>  */</span><span class="WHIT">
-<span class='line'>160</span> </span><span class="NAME">drupal.entity.prototype.getObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>161</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>162</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="WHIT">
-<span class='line'>163</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>164</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span> </span></pre></body></html>
+<span class='line'>141</span> 
+<span class='line'>142</span> </span><span class="WHIT">      </span><span class="COMM">// Check to make sure that this param is within object scope.</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span> </span><span class="WHIT">        </span><span class="COMM">// Check to see if this object has an update function.</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">          </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">        </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">          </span><span class="KEYW">this</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> 
+<span class='line'>157</span> </span><span class="COMM">/**
+<span class='line'>158</span>  * Returns the object to send during PUT's and POST's during a save or add.
+<span class='line'>159</span>  *
+<span class='line'>160</span>  * @return {object} The object to send to the Services endpoint.
+<span class='line'>161</span>  */</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="NAME">drupal.entity.prototype.getObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>167</span> </span></pre></body></html>

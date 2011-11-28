@@ -11,11 +11,11 @@ drupal.system = drupal.system || {};
  */
 drupal.system.api = function() {
 
+  // Set the resource
+  this.resource = this.resource || 'system';
+
   // Call the drupal.api constructor.
   drupal.api.call(this);
-
-  // Set the resource
-  this.resource = 'system';
 };
 
 /** Derive from drupal.api. */

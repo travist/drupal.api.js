@@ -13,19 +13,19 @@ var drupal = drupal || {};
 drupal.node = function(object, callback) {
 
   /** The title for this node. */
-  this.title = '';
+  this.title = this.title || '';
 
   /** The type of node we are dealing with. */
-  this.type = '';
+  this.type = this.type || '';
 
   /** The status of this node. */
-  this.status = 0;
+  this.status = this.status || 0;
 
   /** The user who created this node */
-  this.uid = 0;
+  this.uid = this.uid || 0;
 
   // Declare the api.
-  this.api = new drupal.node.api();
+  this.api = this.api || new drupal.node.api();
 
   // Call the base class.
   drupal.entity.call(this, object, callback);
