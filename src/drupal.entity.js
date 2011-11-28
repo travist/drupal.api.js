@@ -11,20 +11,24 @@ var drupal = drupal || {};
  */
 drupal.entity = function(object, callback) {
 
-  /** The unique identifier for this entity. */
-  this.id = this.id || '';
+  // Only continue if the object is valid.
+  if (object) {
 
-  /** The API for this entity */
-  this.api = this.api || null;
+    /** The unique identifier for this entity. */
+    this.id = this.id || '';
 
-  // If object is a string, assume it is a UUID and get it.
-  this.update(object);
+    /** The API for this entity */
+    this.api = this.api || null;
 
-  // If they provide a callback, call it now.
-  if (callback) {
+    // If object is a string, assume it is a UUID and get it.
+    this.update(object);
 
-    // Get the object from the server.
-    this.get(callback);
+    // If they provide a callback, call it now.
+    if (callback) {
+
+      // Get the object from the server.
+      this.get(callback);
+    }
   }
 };
 
@@ -43,8 +47,17 @@ drupal.entity.prototype.get = function(callback) {
     var _this = this;
     this.api.get(this.getObject(), this.getQuery(), function(object) {
 
-      // If this is an array, then just return the results.
-      if (object[0]) {
+      if (!object) {
+        callback(null);
+      }
+      else if (object[0]) {
+
+        var i = object.length;
+        while (i--) {
+          object[i] = new _this.constructor(object[i]);
+        }
+
+        // Callback a list of objects.
         callback(object);
       }
       else {
@@ -112,6 +125,8 @@ drupal.entity.prototype.getQuery = function() {
 
     // Iterate through all of our fields.
     for (var field in this) {
+
+      // Make sure that this property exists, is set, and is not an object.
       if (this.hasOwnProperty(field) &&
           this[field] &&
           (typeof this[field] != 'object')) {
@@ -157,7 +172,7 @@ drupal.entity.prototype.update = function(object) {
 /**
  * Returns the object to send during PUT's and POST's during a save or add.
  *
- * @return {object} The object to send to the Services endpoint.
+ * @return {object} The JSON object to send to the Services endpoint.
  */
 drupal.entity.prototype.getObject = function() {
   return {
