@@ -8,10 +8,10 @@ var drupal = drupal || {};
 drupal.api = function() {
 
   /** The Services API endpoint */
-  this.endpoint = drupal.endpoint;
+  this.endpoint = drupal.endpoint || this.endpoint || '';
 
   /** The resource within this endpoint */
-  this.resource = '';
+  this.resource = this.resource || '';
 };
 
 /**

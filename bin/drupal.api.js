@@ -8,10 +8,10 @@ var drupal = drupal || {};
 drupal.api = function() {
 
   /** The Services API endpoint */
-  this.endpoint = drupal.endpoint;
+  this.endpoint = drupal.endpoint || this.endpoint || '';
 
   /** The resource within this endpoint */
-  this.resource = '';
+  this.resource = this.resource || '';
 };
 
 /**
@@ -126,10 +126,10 @@ var drupal = drupal || {};
 drupal.system = function(callback) {
 
   /** The current user. */
-  this.user = null;
+  this.user = this.user || null;
 
   // Declare the api.
-  this.api = new drupal.system.api();
+  this.api = this.api || new drupal.system.api();
 
   // If the callback is set, then connect.
   if (callback) {
@@ -201,11 +201,11 @@ drupal.system = drupal.system || {};
  */
 drupal.system.api = function() {
 
+  // Set the resource
+  this.resource = this.resource || 'system';
+
   // Call the drupal.api constructor.
   drupal.api.call(this);
-
-  // Set the resource
-  this.resource = 'system';
 };
 
 /** Derive from drupal.api. */
@@ -227,7 +227,7 @@ var drupal = drupal || {};
 drupal.entity = function(object, callback) {
 
   /** The unique identifier for this entity. */
-  this.id = '';
+  this.id = this.id || '';
 
   /** The API for this entity */
   this.api = this.api || null;
@@ -353,6 +353,8 @@ drupal.entity.prototype.update = function(object) {
 
     // Update the params.
     for (var param in object) {
+
+      // Check to make sure that this param is within object scope.
       if (object.hasOwnProperty(param) && this.hasOwnProperty(param)) {
 
         // Check to see if this object has an update function.
@@ -392,19 +394,19 @@ var drupal = drupal || {};
 drupal.node = function(object, callback) {
 
   /** The title for this node. */
-  this.title = '';
+  this.title = this.title || '';
 
   /** The type of node we are dealing with. */
-  this.type = '';
+  this.type = this.type || '';
 
   /** The status of this node. */
-  this.status = 0;
+  this.status = this.status || 0;
 
   /** The user who created this node */
-  this.uid = 0;
+  this.uid = this.uid || 0;
 
   // Declare the api.
-  this.api = new drupal.node.api();
+  this.api = this.api || new drupal.node.api();
 
   // Call the base class.
   drupal.entity.call(this, object, callback);
@@ -455,11 +457,11 @@ drupal.node = drupal.node || {};
  */
 drupal.node.api = function() {
 
+  // Set the resource
+  this.resource = this.resource || 'node';
+
   // Call the drupal.api constructor.
   drupal.api.call(this);
-
-  // Set the resource
-  this.resource = 'node';
 };
 
 /** Derive from drupal.api. */
@@ -482,25 +484,25 @@ var drupal = drupal || {};
 drupal.user = function(object, callback) {
 
   /** The name for this user. */
-  this.name = '';
+  this.name = this.name || '';
 
   /** The email address of our user. */
-  this.mail = '';
+  this.mail = this.mail || '';
 
   /** The password of the user. */
-  this.pass = '';
+  this.pass = this.pass || '';
 
   /** The status of the user. */
-  this.status = 1;
+  this.status = this.status || 1;
 
   /** The session ID of the user. */
-  this.sessid = '';
+  this.sessid = this.sessid || '';
 
   /** The session name of the user */
-  this.session_name = '';
+  this.session_name = this.session_name || '';
 
   // Declare the api.
-  this.api = new drupal.user.api();
+  this.api = this.api || new drupal.user.api();
 
   // Call the base class.
   drupal.entity.call(this, object, callback);
@@ -606,11 +608,11 @@ drupal.user = drupal.user || {};
  */
 drupal.user.api = function() {
 
-  // Call the drupal.api constructor.
-  drupal.api.call(this);
-
   // Set the resource
   this.resource = 'user';
+
+  // Call the drupal.api constructor.
+  drupal.api.call(this);
 };
 
 /** Derive from drupal.api. */

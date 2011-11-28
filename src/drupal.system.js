@@ -11,10 +11,10 @@ var drupal = drupal || {};
 drupal.system = function(callback) {
 
   /** The current user. */
-  this.user = null;
+  this.user = this.user || null;
 
   // Declare the api.
-  this.api = new drupal.system.api();
+  this.api = this.api || new drupal.system.api();
 
   // If the callback is set, then connect.
   if (callback) {

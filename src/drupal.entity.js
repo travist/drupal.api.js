@@ -12,7 +12,7 @@ var drupal = drupal || {};
 drupal.entity = function(object, callback) {
 
   /** The unique identifier for this entity. */
-  this.id = '';
+  this.id = this.id || '';
 
   /** The API for this entity */
   this.api = this.api || null;
@@ -138,6 +138,8 @@ drupal.entity.prototype.update = function(object) {
 
     // Update the params.
     for (var param in object) {
+
+      // Check to make sure that this param is within object scope.
       if (object.hasOwnProperty(param) && this.hasOwnProperty(param)) {
 
         // Check to see if this object has an update function.
