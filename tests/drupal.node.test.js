@@ -16,11 +16,11 @@ var listNodes = function(callback) {
         // Check the node.
         var node = nodes[index];
 
-        // There should be an nid.
-        ok(node.hasOwnProperty("nid"), "Node ID is present.");
+        // There should be an id.
+        ok(!!node.id, "Node ID is present.");
 
         // There should be a title.
-        ok(node.hasOwnProperty("title"), "Node Title is present");
+        ok(!!node.title, "Node Title is present");
 
         // This should only be an 'delete' type.
         ok((node.type == 'page'), "node.type == 'page'");

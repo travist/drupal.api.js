@@ -17,13 +17,13 @@ var listUsers = function(callback) {
         var user = users[index];
 
         // There should be an uid.
-        ok(user.hasOwnProperty("uid"), "User ID is present.");
+        ok(!!user.id, "User ID is present.");
 
         // There should be a name.
-        ok(user.hasOwnProperty("name"), "User name is present");
+        ok(!!user.name, "User name is present");
 
         // There should be an email.
-        ok(user.hasOwnProperty("mail"), "User email is present");
+        ok(!!user.mail, "User email is present");
       }
 
       if (callback) {

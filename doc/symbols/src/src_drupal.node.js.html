@@ -19,55 +19,61 @@
 <span class='line'> 12</span>  */</span><span class="WHIT">
 <span class='line'> 13</span> </span><span class="NAME">drupal.node</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 14</span> 
-<span class='line'> 15</span> </span><span class="WHIT">  </span><span class="COMM">/** The title for this node. */</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="WHIT">  </span><span class="NAME">this.title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.title</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="WHIT">  </span><span class="COMM">// Only continue if the object is valid.</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 17</span> 
-<span class='line'> 18</span> </span><span class="WHIT">  </span><span class="COMM">/** The type of node we are dealing with. */</span><span class="WHIT">
-<span class='line'> 19</span> </span><span class="WHIT">  </span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">    </span><span class="COMM">/** The title for this node. */</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">    </span><span class="NAME">this.title</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.title</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 20</span> 
-<span class='line'> 21</span> </span><span class="WHIT">  </span><span class="COMM">/** The status of this node. */</span><span class="WHIT">
-<span class='line'> 22</span> </span><span class="WHIT">  </span><span class="NAME">this.status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.status</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">    </span><span class="COMM">/** The type of node we are dealing with. */</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">    </span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 23</span> 
-<span class='line'> 24</span> </span><span class="WHIT">  </span><span class="COMM">/** The user who created this node */</span><span class="WHIT">
-<span class='line'> 25</span> </span><span class="WHIT">  </span><span class="NAME">this.uid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.uid</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">    </span><span class="COMM">/** The status of this node. */</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">    </span><span class="NAME">this.status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.status</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 26</span> 
-<span class='line'> 27</span> </span><span class="WHIT">  </span><span class="COMM">// Declare the api.</span><span class="WHIT">
-<span class='line'> 28</span> </span><span class="WHIT">  </span><span class="NAME">this.api</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.api</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">drupal.node.api</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">    </span><span class="COMM">/** The user who created this node */</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">    </span><span class="NAME">this.uid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.uid</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 29</span> 
-<span class='line'> 30</span> </span><span class="WHIT">  </span><span class="COMM">// Call the base class.</span><span class="WHIT">
-<span class='line'> 31</span> </span><span class="WHIT">  </span><span class="NAME">drupal.entity.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 32</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">    </span><span class="COMM">// Declare the api.</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">    </span><span class="NAME">this.api</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.api</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">drupal.node.api</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 33</span> 
-<span class='line'> 34</span> </span><span class="COMM">/** Derive from entity. */</span><span class="WHIT">
-<span class='line'> 35</span> </span><span class="NAME">drupal.node.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">drupal.entity</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 36</span> 
-<span class='line'> 37</span> </span><span class="COMM">/** Reset the constructor. */</span><span class="WHIT">
-<span class='line'> 38</span> </span><span class="NAME">drupal.node.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drupal.node</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 39</span> 
-<span class='line'> 40</span> </span><span class="COMM">/**
-<span class='line'> 41</span>  * Override the update routine.
-<span class='line'> 42</span>  *
-<span class='line'> 43</span>  * @param {object} object The node object to update.
-<span class='line'> 44</span>  */</span><span class="WHIT">
-<span class='line'> 45</span> </span><span class="NAME">drupal.node.prototype.update</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 46</span> 
-<span class='line'> 47</span> </span><span class="WHIT">  </span><span class="NAME">drupal.entity.prototype.update.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 48</span> 
-<span class='line'> 49</span> </span><span class="WHIT">  </span><span class="COMM">// Make sure to also set the ID the same as nid.</span><span class="WHIT">
-<span class='line'> 50</span> </span><span class="WHIT">  </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">object.nid</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 51</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">  </span><span class="COMM">// Call the base class.</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">  </span><span class="NAME">drupal.entity.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 37</span> 
+<span class='line'> 38</span> </span><span class="COMM">/** Derive from entity. */</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="NAME">drupal.node.prototype</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">drupal.entity</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> 
+<span class='line'> 41</span> </span><span class="COMM">/** Reset the constructor. */</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="NAME">drupal.node.prototype.constructor</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drupal.node</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 43</span> 
+<span class='line'> 44</span> </span><span class="COMM">/**
+<span class='line'> 45</span>  * Override the update routine.
+<span class='line'> 46</span>  *
+<span class='line'> 47</span>  * @param {object} object The node object to update.
+<span class='line'> 48</span>  */</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="NAME">drupal.node.prototype.update</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 50</span> 
+<span class='line'> 51</span> </span><span class="WHIT">  </span><span class="NAME">drupal.entity.prototype.update.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 52</span> 
-<span class='line'> 53</span> </span><span class="COMM">/**
-<span class='line'> 54</span>  * Returns the object to send to Services.
-<span class='line'> 55</span>  *
-<span class='line'> 56</span>  * @return {object} The object to send to the Services endpoint.
-<span class='line'> 57</span>  */</span><span class="WHIT">
-<span class='line'> 58</span> </span><span class="NAME">drupal.node.prototype.getObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 59</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">jQuery.extend</span><span class="PUNC">(</span><span class="NAME">drupal.entity.prototype.getObject.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 60</span> </span><span class="WHIT">    </span><span class="NAME">title</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.title</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 61</span> </span><span class="WHIT">    </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.type</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 62</span> </span><span class="WHIT">    </span><span class="NAME">status</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.status</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 63</span> </span><span class="WHIT">    </span><span class="NAME">uid</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.uid</span><span class="WHIT">
-<span class='line'> 64</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 65</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 66</span> </span></pre></body></html>
+<span class='line'> 53</span> </span><span class="WHIT">  </span><span class="COMM">// Make sure to also set the ID the same as nid.</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">    </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object.nid</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 58</span> 
+<span class='line'> 59</span> </span><span class="COMM">/**
+<span class='line'> 60</span>  * Returns the object to send to Services.
+<span class='line'> 61</span>  *
+<span class='line'> 62</span>  * @return {object} The object to send to the Services endpoint.
+<span class='line'> 63</span>  */</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="NAME">drupal.node.prototype.getObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">jQuery.extend</span><span class="PUNC">(</span><span class="NAME">drupal.entity.prototype.getObject.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">    </span><span class="NAME">title</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.title</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">    </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.type</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">    </span><span class="NAME">status</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.status</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">    </span><span class="NAME">uid</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.uid</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span></pre></body></html>

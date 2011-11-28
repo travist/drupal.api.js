@@ -78,6 +78,21 @@ drupal.api.prototype.get = function(object, query, callback) {
 };
 
 /**
+ * API function to get a type of object within an object.
+ *
+ * @param {object} object The object of the item we are getting..
+ * @param {string} type The type of object you wish to get within this object.
+ * @param {object} query key-value pairs to add to the query of the URL.
+ * @param {function} callback The callback function.
+ */
+drupal.api.prototype.getItems = function(object, type, query, callback) {
+  var url = this.getURL(object) + '/' + type;
+  url += '.jsonp';
+  url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
+  this.call(url, 'jsonp', 'GET', null, callback);
+};
+
+/**
  * API function to perform an action.
  *
  * @param {string} action The action to perform.

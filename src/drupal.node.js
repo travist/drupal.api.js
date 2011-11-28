@@ -12,20 +12,24 @@ var drupal = drupal || {};
  */
 drupal.node = function(object, callback) {
 
-  /** The title for this node. */
-  this.title = this.title || '';
+  // Only continue if the object is valid.
+  if (object) {
 
-  /** The type of node we are dealing with. */
-  this.type = this.type || '';
+    /** The title for this node. */
+    this.title = this.title || '';
 
-  /** The status of this node. */
-  this.status = this.status || 0;
+    /** The type of node we are dealing with. */
+    this.type = this.type || '';
 
-  /** The user who created this node */
-  this.uid = this.uid || 0;
+    /** The status of this node. */
+    this.status = this.status || 0;
 
-  // Declare the api.
-  this.api = this.api || new drupal.node.api();
+    /** The user who created this node */
+    this.uid = this.uid || 0;
+
+    // Declare the api.
+    this.api = this.api || new drupal.node.api();
+  }
 
   // Call the base class.
   drupal.entity.call(this, object, callback);
@@ -47,7 +51,9 @@ drupal.node.prototype.update = function(object) {
   drupal.entity.prototype.update.call(this, object);
 
   // Make sure to also set the ID the same as nid.
-  this.id = (object && object.nid) || this.id;
+  if (object) {
+    this.id = object.nid || this.id;
+  }
 };
 
 /**

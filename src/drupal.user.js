@@ -12,26 +12,30 @@ var drupal = drupal || {};
  */
 drupal.user = function(object, callback) {
 
-  /** The name for this user. */
-  this.name = this.name || '';
+  // Only continue if the object is valid.
+  if (object) {
 
-  /** The email address of our user. */
-  this.mail = this.mail || '';
+    /** The name for this user. */
+    this.name = this.name || '';
 
-  /** The password of the user. */
-  this.pass = this.pass || '';
+    /** The email address of our user. */
+    this.mail = this.mail || '';
 
-  /** The status of the user. */
-  this.status = this.status || 1;
+    /** The password of the user. */
+    this.pass = this.pass || '';
 
-  /** The session ID of the user. */
-  this.sessid = this.sessid || '';
+    /** The status of the user. */
+    this.status = this.status || 1;
 
-  /** The session name of the user */
-  this.session_name = this.session_name || '';
+    /** The session ID of the user. */
+    this.sessid = this.sessid || '';
 
-  // Declare the api.
-  this.api = this.api || new drupal.user.api();
+    /** The session name of the user */
+    this.session_name = this.session_name || '';
+
+    // Declare the api.
+    this.api = this.api || new drupal.user.api();
+  }
 
   // Call the base class.
   drupal.entity.call(this, object, callback);
@@ -108,7 +112,9 @@ drupal.user.prototype.update = function(object) {
   drupal.entity.prototype.update.call(this, object);
 
   // Make sure to also set the ID the same as uid.
-  this.id = (object && object.uid) || this.id;
+  if (object) {
+    this.id = object.uid || this.id;
+  }
 };
 
 /**
