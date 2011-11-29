@@ -342,6 +342,19 @@ drupal.entity.prototype.remove = function(callback) {
 };
 
 /**
+ * Adds a key value pair to the query object.
+ *
+ * @param {object} query The query object.
+ * @param {string} field The field to set.
+ * @param {string} value The value of the field to set.
+ */
+drupal.entity.prototype.setQuery = function(query, field, value) {
+
+  // Set the value of this query.
+  query[field] = value;
+};
+
+/**
  * Returns the search query.
  *
  * @return {object} The query to pass to the server.
@@ -361,8 +374,8 @@ drupal.entity.prototype.getQuery = function() {
           this[field] &&
           (typeof this[field] != 'object')) {
 
-        // Add this as a search parameter.
-        query['parameters[' + field + ']'] = this[field];
+        // Add this as a query parameter.
+        this.setQuery(query, field, this[field]);
       }
     }
   }
@@ -465,6 +478,19 @@ drupal.node.prototype.update = function(object) {
   if (object) {
     this.id = object.nid || this.id;
   }
+};
+
+/**
+ * Override the setQuery method of the entity.
+ *
+ * @param {object} query The query object.
+ * @param {string} field The field to set.
+ * @param {string} value The value of the field to set.
+ */
+drupal.node.prototype.setQuery = function(query, field, value) {
+
+  // The node object sets parameters like ?parameters[field]=value...
+  query['parameters[' + field + ']'] = value;
 };
 
 /**
