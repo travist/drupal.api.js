@@ -57,6 +57,19 @@ drupal.node.prototype.update = function(object) {
 };
 
 /**
+ * Override the setQuery method of the entity.
+ *
+ * @param {object} query The query object.
+ * @param {string} field The field to set.
+ * @param {string} value The value of the field to set.
+ */
+drupal.node.prototype.setQuery = function(query, field, value) {
+
+  // The node object sets parameters like ?parameters[field]=value...
+  query['parameters[' + field + ']'] = value;
+};
+
+/**
  * Returns the object to send to Services.
  *
  * @return {object} The object to send to the Services endpoint.
