@@ -60,7 +60,7 @@ drupal.api.prototype.call = function(url, dataType, type, data, callback) {
   }
 
   // Make the request.
-  jQuery.ajax(request);
+  drupal.tools.ajax(request);
 };
 
 /**
