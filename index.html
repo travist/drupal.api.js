@@ -8,6 +8,7 @@
     <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js'></script>
     <script type='text/javascript' src='http://code.jquery.com/qunit/qunit-git.js'></script>
+    <script type='text/javascript' src='src/drupal.tools.js'></script>
     <script type='text/javascript' src='src/drupal.api.js'></script>
     <script type='text/javascript' src='src/drupal.system.js'></script>
     <script type='text/javascript' src='src/drupal.system.api.js'></script>
@@ -77,11 +78,11 @@
   <body>
     <form>
       <label for="endpoint">Endpoint URL</label>
-      <input type="text" id="endpoint" value="" size="60" maxlength="1024"><br/>
+      <input type="text" id="endpoint" value="http://sdemo/api" size="60" maxlength="1024"><br/>
       <label for="username">Admin Username</label>
-      <input type="text" id="username" value="" size="15" maxlength="60"><br/>
+      <input type="text" id="username" value="admin" size="15" maxlength="60"><br/>
       <label for="password">Admin Password</label>
-      <input type="password" id="password" name="pass" size="15" maxlength="60"><br/>
+      <input type="password" id="password" name="pass" value ="drupaladm1n" size="15" maxlength="60"><br/>
       <input type="submit" id="submit" name="op" value="Run Tests">
     </form>
     <h1 id="qunit-header">QUnit example</h1>
