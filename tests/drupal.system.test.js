@@ -3,9 +3,8 @@ var runSystemTests = function() {
   asyncTest("System Connect", function() {
     new drupal.system(function(system) {
       start();
-      expect(2);
+      expect(1);
       ok(!!system.user.sessid, "Connection successful");
-      ok(!!system.user.id, "User is logged in");
     });
   });
 

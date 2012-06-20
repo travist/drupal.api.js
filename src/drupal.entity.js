@@ -1,6 +1,9 @@
 // The drupal namespace.
 var drupal = drupal || {};
 
+/** Determine if we have storage. */
+drupal.hasStorage = typeof(Storage) !== 'undefined';
+
 /**
  * @constructor
  * @class The base entity class to store the data that is common to all
@@ -11,64 +14,149 @@ var drupal = drupal || {};
  */
 drupal.entity = function(object, callback) {
 
-  // Only continue if the object is valid.
+  // If the object is valid, then set it...
   if (object) {
+    this.set(object);
+  }
 
-    /** The unique identifier for this entity. */
-    this.id = this.id || '';
-
-    /** The API for this entity */
-    this.api = this.api || null;
-
-    // If object is a string, assume it is a UUID and get it.
-    this.update(object);
-
-    // If they provide a callback, call it now.
-    if (callback) {
-
-      // Get the object from the server.
-      this.get(callback);
-    }
+  // If the callback is valid, then load it...
+  if (callback) {
+    this.load(callback);
   }
 };
 
 /**
- * Get's an object from the drupal API.
+ * Update an object.
+ *
+ * @param {object} object The object which contains the data.
+ * @param {function} callback The function to call when it is done updating.
+ */
+drupal.entity.prototype.update = function(object, callback) {
+
+  // Set the object.
+  if (object) {
+    this.set(object);
+  }
+
+  // Now store the object.
+  if (drupal.hasStorage && this.id) {
+    sessionStorage.setItem('entity-' + this.id, this.get());
+  }
+
+  // Now callback that this object has been updated.
+  if (callback) {
+    callback.call(this, this);
+  }
+};
+
+/**
+ * Sets the object.
+ *
+ * @param {object} object The object which contains the data.
+ */
+drupal.entity.prototype.set = function(object) {
+
+  /** The API for this entity */
+  this.api = this.api || null;
+
+  /** The ID of this entity. */
+  this.id = object.id || '';
+};
+
+/**
+ * Returns the object in JSON form.
+ *
+ * @return {object} The object representation of this entity.
+ */
+drupal.entity.prototype.get = function() {
+  return {
+    id: this.id
+  };
+};
+
+/**
+ * Sets a query variable.
+ *
+ * @param {object} query The query object.
+ * @param {string} param The param to set.
+ * @param {string} value The value of the field to set.
+ */
+drupal.entity.prototype.setQuery = function(query, param, value) {
+  query[param] = value;
+};
+
+/**
+ * Gets the query variables.
+ *
+ * @return {object} The query variables.
+ */
+drupal.entity.prototype.getQuery = function() {
+  var object = this.get();
+  var query = {};
+  for (var param in object) {
+    if (object.hasOwnProperty(param) && object[param]) {
+      this.setQuery(query, param, object[param]);
+    }
+  }
+  delete query.id;
+  return query;
+};
+
+/**
+ * Loads and object using the drupal.api.
  *
  * @param {function} callback The callback function when the object is
  * retrieved.
  */
-drupal.entity.prototype.get = function(callback) {
+drupal.entity.prototype.load = function(callback) {
 
-  // If the API exists, then we need to get the object.
-  if (this.api) {
+  // Declare the object to load...
+  var object = {};
+
+  // First check to see if we have storage...
+  if (drupal.hasStorage && this.id) {
+    object = sessionStorage.getItem('entity-' + this.id);
+    if (object) {
+      this.set(object);
+      if (callback) {
+        callback.call(this, this);
+      }
+    }
+  }
+
+  // If the object doesn't exist... then get it from the server.
+  if (!object && this.api) {
 
     // Call the API.
-    var _this = this;
-    this.api.get(this.getObject(), this.getQuery(), function(object) {
+    this.api.get(this.get(), this.getQuery(), (function(entity) {
+      return function(object) {
 
-      if (!object) {
-        callback(null);
-      }
-      else if (object[0]) {
-
-        var i = object.length;
-        while (i--) {
-          object[i] = new _this.constructor(object[i]);
+        // If no object is returned, then return null.
+        if (!object) {
+          callback(null);
         }
 
-        // Callback a list of objects.
-        callback(object);
-      }
-      else {
-        // Update the object, then call the callback.
-        _this.update(object);
+        // If this is an array of objects, then return a list of new objects.
+        else if (object[0]) {
 
-        if (callback) {
-          callback(_this);
+          var i = object.length;
+          while (i--) {
+            object[i] = new entity.constructor(object[i]);
+            if (drupal.hasStorage && object[i].id) {
+              sessionStorage.setItem('entity-' + object[i].id, object[i].get());
+            }
+          }
+
+          // Callback a list of objects.
+          callback.call(entity, entity);
+
+        } else {
+
+          // Update the object.
+          entity.update(object, callback);
         }
-      }
-    });
+      };
+    })(this));
   }
 };
 
@@ -79,20 +167,15 @@ drupal.entity.prototype.get = function(callback) {
  */
 drupal.entity.prototype.save = function(callback) {
 
-  // If the API exists, then we can save this object.
+  // Check to see if the api is valid.
   if (this.api) {
 
-    // Call the API.
-    var _this = this;
-    this.api.save(this.getObject(), function(object) {
-
-      // Update the object, then call the callback.
-      _this.update(object);
-
-      if (callback) {
-        callback(_this);
-      }
-    });
+    // Call the api.
+    this.api.save(this.get(), (function(entity) {
+      return function(object) {
+        entity.update(object, callback);
+      };
+    })(this));
   }
 };
 
@@ -107,88 +190,9 @@ drupal.entity.prototype.remove = function(callback) {
   if (this.id) {
 
     // Call the API.
-    this.api.remove(this.getObject(), callback);
-  }
-};
-
-/**
- * Adds a key value pair to the query object.
- *
- * @param {object} query The query object.
- * @param {string} field The field to set.
- * @param {string} value The value of the field to set.
- */
-drupal.entity.prototype.setQuery = function(query, field, value) {
-
-  // Set the value of this query.
-  query[field] = value;
-};
-
-/**
- * Returns the search query.
- *
- * @return {object} The query to pass to the server.
- */
-drupal.entity.prototype.getQuery = function() {
-
-  var query = {};
-
-  // We only need to provide a search query if there is no ID.
-  if (!this.id) {
-
-    // Iterate through all of our fields.
-    for (var field in this) {
-
-      // Make sure that this property exists, is set, and is not an object.
-      if (this.hasOwnProperty(field) &&
-          this[field] &&
-          (typeof this[field] != 'object')) {
-
-        // Add this as a query parameter.
-        this.setQuery(query, field, this[field]);
-      }
+    this.api.remove(this.get(), callback);
+    if (drupal.hasStorage) {
+      sessionStorage.removeItem('entity-' + this.id);
     }
   }
-
-  // Return the params.
-  return query;
-};
-
-/**
- * Update the entity data.
- *
- * @param {object} object The entity information.
- */
-drupal.entity.prototype.update = function(object) {
-
-  // Update the object.
-  if (object) {
-
-    // Update the params.
-    for (var param in object) {
-
-      // Check to make sure that this param is within object scope.
-      if (object.hasOwnProperty(param) && this.hasOwnProperty(param)) {
-
-        // Check to see if this object has an update function.
-        if (this[param].update) {
-          this[param].update(object[param]);
-        }
-        else {
-          this[param] = object[param];
-        }
-      }
-    }
-  }
-};
-
-/**
- * Returns the object to send during PUT's and POST's during a save or add.
- *
- * @return {object} The JSON object to send to the Services endpoint.
- */
-drupal.entity.prototype.getObject = function() {
-  return {
-    id: this.id
-  };
 };

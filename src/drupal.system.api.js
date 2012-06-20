@@ -10,11 +10,7 @@ drupal.system = drupal.system || {};
  * @class The Drupal System Services class.
  */
 drupal.system.api = function() {
-
-  // Set the resource
   this.resource = this.resource || 'system';
-
-  // Call the drupal.api constructor.
   drupal.api.call(this);
 };
 

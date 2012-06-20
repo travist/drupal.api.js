@@ -273,9 +273,29 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
+								<b><a href="../symbols/drupal.system.html#api">api</a></b>
+								</div>
+								<div class="description">Set the api.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/drupal.system.html#constructor">constructor</a></b>
+								</div>
+								<div class="description">Reset the constructor.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
 								<b><a href="../symbols/drupal.system.html#user">user</a></b>
 								</div>
-								<div class="description">The current user.</div>
+								<div class="description">Set current user.</div>
 							</td>
 						</tr>
 					
@@ -303,15 +323,6 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#connect">connect</a></b>(callback)
-								</div>
-								<div class="description">Connect to the server.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#del_variable">del_variable</a></b>(name, callback)
 								</div>
 								<div class="description">Delete a variable on the server.</div>
@@ -321,9 +332,36 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#get">get</a></b>()
+								</div>
+								<div class="description">Returns the object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#get_variable">get_variable</a></b>(name, def, callback)
 								</div>
 								<div class="description">Get a variable from the server.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#load">load</a></b>(callback)
+								</div>
+								<div class="description">Loads the server.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/drupal.system.html#set">set</a></b>(object)
+								</div>
+								<div class="description">Sets the object.</div>
 							</td>
 						</tr>
 					
@@ -393,6 +431,50 @@ connected.</dd>
 					Field Detail
 				</div>
 				
+					<a name="api"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>api</b>
+					
+					</div>
+					<div class="description">
+						Set the api.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="constructor"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>constructor</b>
+					
+					</div>
+					<div class="description">
+						Reset the constructor.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="user"> </a>
 					<div class="fixedFont">
 					
@@ -401,7 +483,7 @@ connected.</dd>
 					
 					</div>
 					<div class="description">
-						The current user.
+						Set current user.
 						
 						
 					</div>
@@ -422,42 +504,6 @@ connected.</dd>
 				<div class="sectionTitle">
 					Method Detail
 				</div>
-				
-					<a name="connect"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>connect</b>(callback)
-					
-					</div>
-					<div class="description">
-						Connect to the server.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{function}</span> <b>callback</b>
-									
-								</dt>
-								<dd>The callback function.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
 				
 					<a name="del_variable"> </a>
 					<div class="fixedFont">
@@ -501,6 +547,38 @@ connected.</dd>
 
 					<hr />
 				
+					<a name="get"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>get</b>()
+					
+					</div>
+					<div class="description">
+						Returns the object.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The object to send to the Services endpoint.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="get_variable"> </a>
 					<div class="fixedFont">
 					
@@ -537,6 +615,78 @@ connected.</dd>
 									
 								</dt>
 								<dd>The callback function.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="load"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>load</b>(callback)
+					
+					</div>
+					<div class="description">
+						Loads the server.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>callback</b>
+									
+								</dt>
+								<dd>The callback function.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="set"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>set</b>(object)
+					
+					</div>
+					<div class="description">
+						Sets the object.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>object</b>
+									
+								</dt>
+								<dd>The object which contains the data.</dd>
 							
 							</dl>
 						
@@ -609,7 +759,7 @@ connected.</dd>
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Nov 29 2011 18:44:48 GMT-0000 (UTC)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Jun 20 2012 08:08:36 GMT-0700 (PDT)
 		</div>
 	</body>
 </html>

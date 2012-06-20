@@ -10,11 +10,7 @@ drupal.node = drupal.node || {};
  * @class The Drupal Node Services class.
  */
 drupal.node.api = function() {
-
-  // Set the resource
   this.resource = this.resource || 'node';
-
-  // Call the drupal.api constructor.
   drupal.api.call(this);
 };
 

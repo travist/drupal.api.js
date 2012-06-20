@@ -286,7 +286,7 @@ drupal entities whether it be groups, events, users, etc.
 								<div class="fixedFont">
 								<b><a href="../symbols/drupal.entity.html#id">id</a></b>
 								</div>
-								<div class="description">The unique identifier for this entity.</div>
+								<div class="description">The ID of this entity.</div>
 							</td>
 						</tr>
 					
@@ -314,18 +314,9 @@ drupal entities whether it be groups, events, users, etc.
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#get">get</a></b>(callback)
+								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#get">get</a></b>()
 								</div>
-								<div class="description">Get's an object from the drupal API.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#getObject">getObject</a></b>()
-								</div>
-								<div class="description">Returns the object to send during PUT's and POST's during a save or add.</div>
+								<div class="description">Returns the object in JSON form.</div>
 							</td>
 						</tr>
 					
@@ -334,7 +325,16 @@ drupal entities whether it be groups, events, users, etc.
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#getQuery">getQuery</a></b>()
 								</div>
-								<div class="description">Returns the search query.</div>
+								<div class="description">Gets the query variables.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#load">load</a></b>(callback)
+								</div>
+								<div class="description">Loads and object using the drupal.api.</div>
 							</td>
 						</tr>
 					
@@ -359,18 +359,27 @@ drupal entities whether it be groups, events, users, etc.
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#setQuery">setQuery</a></b>(query, field, value)
+								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#set">set</a></b>(object)
 								</div>
-								<div class="description">Adds a key value pair to the query object.</div>
+								<div class="description">Sets the object.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#update">update</a></b>(object)
+								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#setQuery">setQuery</a></b>(query, param, value)
 								</div>
-								<div class="description">Update the entity data.</div>
+								<div class="description">Sets a query variable.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/drupal.entity.html#update">update</a></b>(object, callback)
+								</div>
+								<div class="description">Update an object.</div>
 							</td>
 						</tr>
 					
@@ -466,7 +475,7 @@ drupal entities whether it be groups, events, users, etc.
 					
 					</div>
 					<div class="description">
-						The unique identifier for this entity.
+						The ID of this entity.
 						
 						
 					</div>
@@ -491,12 +500,76 @@ drupal entities whether it be groups, events, users, etc.
 					<a name="get"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>get</b>(callback)
+					<span class="light">{object}</span>
+					<b>get</b>()
 					
 					</div>
 					<div class="description">
-						Get's an object from the drupal API.
+						Returns the object in JSON form.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The object representation of this entity.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getQuery"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>getQuery</b>()
+					
+					</div>
+					<div class="description">
+						Gets the query variables.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The query variables.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="load"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>load</b>(callback)
+					
+					</div>
+					<div class="description">
+						Loads and object using the drupal.api.
 						
 						
 					</div>
@@ -519,70 +592,6 @@ retrieved.</dd>
 						
 						
 						
-						
-						
-						
-
-					<hr />
-				
-					<a name="getObject"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>getObject</b>()
-					
-					</div>
-					<div class="description">
-						Returns the object to send during PUT's and POST's during a save or add.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The JSON object to send to the Services endpoint.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getQuery"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>getQuery</b>()
-					
-					</div>
-					<div class="description">
-						Returns the search query.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The query to pass to the server.</dd>
-							
-							</dl>
 						
 						
 						
@@ -661,15 +670,51 @@ retrieved.</dd>
 
 					<hr />
 				
+					<a name="set"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>set</b>(object)
+					
+					</div>
+					<div class="description">
+						Sets the object.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>object</b>
+									
+								</dt>
+								<dd>The object which contains the data.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setQuery"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>setQuery</b>(query, field, value)
+					<b>setQuery</b>(query, param, value)
 					
 					</div>
 					<div class="description">
-						Adds a key value pair to the query object.
+						Sets a query variable.
 						
 						
 					</div>
@@ -687,10 +732,10 @@ retrieved.</dd>
 								<dd>The query object.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{string}</span> <b>field</b>
+									<span class="light fixedFont">{string}</span> <b>param</b>
 									
 								</dt>
-								<dd>The field to set.</dd>
+								<dd>The param to set.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{string}</span> <b>value</b>
@@ -713,11 +758,11 @@ retrieved.</dd>
 					<div class="fixedFont">
 					
 					
-					<b>update</b>(object)
+					<b>update</b>(object, callback)
 					
 					</div>
 					<div class="description">
-						Update the entity data.
+						Update an object.
 						
 						
 					</div>
@@ -732,7 +777,13 @@ retrieved.</dd>
 									<span class="light fixedFont">{object}</span> <b>object</b>
 									
 								</dt>
-								<dd>The entity information.</dd>
+								<dd>The object which contains the data.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>callback</b>
+									
+								</dt>
+								<dd>The function to call when it is done updating.</dd>
 							
 							</dl>
 						
@@ -757,7 +808,7 @@ retrieved.</dd>
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Nov 29 2011 18:44:48 GMT-0000 (UTC)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Jun 20 2012 08:08:36 GMT-0700 (PDT)
 		</div>
 	</body>
 </html>

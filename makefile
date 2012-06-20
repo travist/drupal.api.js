@@ -7,9 +7,9 @@
 
 # Create the list of files
 files =	src/drupal.api.js\
-	src/drupal.system.js\
-	src/drupal.system.api.js\
 	src/drupal.entity.js\
+  src/drupal.system.js\
+  src/drupal.system.api.js\
 	src/drupal.node.js\
 	src/drupal.node.api.js\
 	src/drupal.user.js\

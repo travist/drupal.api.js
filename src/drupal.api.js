@@ -49,6 +49,17 @@ drupal.api.prototype.call = function(url, dataType, type, data, callback) {
         console.log('Error: ' + textStatus);
       }
     },
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    beforeSend: function(xhr) {
+      if (drupal.current_user) {
+        var cookie = drupal.current_user.session_name;
+        cookie += '=' + drupal.current_user.sessid;
+        xhr.setRequestHeader('Cookie', cookie);
+      }
+    },
     error: function(xhr, ajaxOptions, thrownError) {
       console.log(xhr.responseText);
       callback(null);
@@ -101,6 +112,7 @@ drupal.api.prototype.getItems = function(object, type, query, callback) {
  */
 drupal.api.prototype.execute = function(action, object, callback) {
   var url = this.getURL(object) + '/' + action;
+  url += '?XDEBUG_SESSION_START=netbeans-xdebug';
   this.call(url, 'json', 'POST', object, callback);
 };
 

@@ -49,6 +49,17 @@ drupal.api.prototype.call = function(url, dataType, type, data, callback) {
         console.log('Error: ' + textStatus);
       }
     },
+    xhrFields: {
+      withCredentials: true
+    },
+    crossDomain: true,
+    beforeSend: function(xhr) {
+      if (drupal.current_user) {
+        var cookie = drupal.current_user.session_name;
+        cookie += '=' + drupal.current_user.sessid;
+        xhr.setRequestHeader('Cookie', cookie);
+      }
+    },
     error: function(xhr, ajaxOptions, thrownError) {
       console.log(xhr.responseText);
       callback(null);
@@ -101,6 +112,7 @@ drupal.api.prototype.getItems = function(object, type, query, callback) {
  */
 drupal.api.prototype.execute = function(action, object, callback) {
   var url = this.getURL(object) + '/' + action;
+  url += '?XDEBUG_SESSION_START=netbeans-xdebug';
   this.call(url, 'json', 'POST', object, callback);
 };
 
@@ -131,105 +143,8 @@ drupal.api.prototype.remove = function(object, callback) {
 // The drupal namespace.
 var drupal = drupal || {};
 
-/**
- * @constructor
- * @class The system class
- *
- * @param {function} callback The function to be called once the system has
- * connected.
- */
-drupal.system = function(callback) {
-
-  /** The current user. */
-  this.user = this.user || null;
-
-  // Declare the api.
-  this.api = this.api || new drupal.system.api();
-
-  // If the callback is set, then connect.
-  if (callback) {
-
-    // Connect to the server.
-    this.connect(callback);
-  }
-};
-
-/**
- * Connect to the server.
- *
- * @param {function} callback The callback function.
- */
-drupal.system.prototype.connect = function(callback) {
-
-  // Connect to the server.
-  var _this = this;
-  this.api.execute('connect', null, function(object) {
-
-    // Set the user object, session id, and return this server.
-    _this.user = new drupal.user(object.user);
-    _this.user.sessid = object.sessid;
-    callback(_this);
-  });
-};
-
-/**
- * Get a variable from the server.
- *
- * @param {string} name The variable you wish to retrieve.
- * @param {string} def The default value of the variable.
- * @param {function} callback The callback function.
- */
-drupal.system.prototype.get_variable = function(name, def, callback) {
-  this.api.execute('get_variable', {name: name, 'default': def}, callback);
-};
-
-/**
- * Set a variable on the server.
- *
- * @param {string} name The variable you wish to set.
- * @param {string} value The value of the variable.
- * @param {function} callback The callback function.
- */
-drupal.system.prototype.set_variable = function(name, value, callback) {
-  this.api.execute('set_variable', {name: name, value: value}, callback);
-};
-
-/**
- * Delete a variable on the server.
- *
- * @param {string} name The variable you wish to set.
- * @param {function} callback The callback function.
- */
-drupal.system.prototype.del_variable = function(name, callback) {
-  this.api.execute('del_variable', {name: name}, callback);
-};
-// The drupal namespace.
-var drupal = drupal || {};
-
-/** The drupal.user namespace */
-drupal.system = drupal.system || {};
-
-/**
- * @constructor
- * @extends drupal.api
- * @class The Drupal System Services class.
- */
-drupal.system.api = function() {
-
-  // Set the resource
-  this.resource = this.resource || 'system';
-
-  // Call the drupal.api constructor.
-  drupal.api.call(this);
-};
-
-/** Derive from drupal.api. */
-drupal.system.api.prototype = new drupal.api();
-
-/** Reset the constructor. */
-drupal.system.api.prototype.constructor = drupal.system.api;
-// The drupal namespace.
-var drupal = drupal || {};
+/** Determine if we have storage. */
+drupal.hasStorage = typeof(Storage) !== 'undefined';
 
 /**
  * @constructor
@@ -241,64 +156,149 @@ var drupal = drupal || {};
  */
 drupal.entity = function(object, callback) {
 
-  // Only continue if the object is valid.
+  // If the object is valid, then set it...
   if (object) {
+    this.set(object);
+  }
 
-    /** The unique identifier for this entity. */
-    this.id = this.id || '';
-
-    /** The API for this entity */
-    this.api = this.api || null;
-
-    // If object is a string, assume it is a UUID and get it.
-    this.update(object);
-
-    // If they provide a callback, call it now.
-    if (callback) {
-
-      // Get the object from the server.
-      this.get(callback);
-    }
+  // If the callback is valid, then load it...
+  if (callback) {
+    this.load(callback);
   }
 };
 
 /**
- * Get's an object from the drupal API.
+ * Update an object.
+ *
+ * @param {object} object The object which contains the data.
+ * @param {function} callback The function to call when it is done updating.
+ */
+drupal.entity.prototype.update = function(object, callback) {
+
+  // Set the object.
+  if (object) {
+    this.set(object);
+  }
+
+  // Now store the object.
+  if (drupal.hasStorage && this.id) {
+    sessionStorage.setItem('entity-' + this.id, this.get());
+  }
+
+  // Now callback that this object has been updated.
+  if (callback) {
+    callback.call(this, this);
+  }
+};
+
+/**
+ * Sets the object.
+ *
+ * @param {object} object The object which contains the data.
+ */
+drupal.entity.prototype.set = function(object) {
+
+  /** The API for this entity */
+  this.api = this.api || null;
+
+  /** The ID of this entity. */
+  this.id = object.id || '';
+};
+
+/**
+ * Returns the object in JSON form.
+ *
+ * @return {object} The object representation of this entity.
+ */
+drupal.entity.prototype.get = function() {
+  return {
+    id: this.id
+  };
+};
+
+/**
+ * Sets a query variable.
+ *
+ * @param {object} query The query object.
+ * @param {string} param The param to set.
+ * @param {string} value The value of the field to set.
+ */
+drupal.entity.prototype.setQuery = function(query, param, value) {
+  query[param] = value;
+};
+
+/**
+ * Gets the query variables.
+ *
+ * @return {object} The query variables.
+ */
+drupal.entity.prototype.getQuery = function() {
+  var object = this.get();
+  var query = {};
+  for (var param in object) {
+    if (object.hasOwnProperty(param) && object[param]) {
+      this.setQuery(query, param, object[param]);
+    }
+  }
+  delete query.id;
+  return query;
+};
+
+/**
+ * Loads and object using the drupal.api.
  *
  * @param {function} callback The callback function when the object is
  * retrieved.
  */
-drupal.entity.prototype.get = function(callback) {
+drupal.entity.prototype.load = function(callback) {
 
-  // If the API exists, then we need to get the object.
-  if (this.api) {
+  // Declare the object to load...
+  var object = {};
+
+  // First check to see if we have storage...
+  if (drupal.hasStorage && this.id) {
+    object = sessionStorage.getItem('entity-' + this.id);
+    if (object) {
+      this.set(object);
+      if (callback) {
+        callback.call(this, this);
+      }
+    }
+  }
+
+  // If the object doesn't exist... then get it from the server.
+  if (!object && this.api) {
 
     // Call the API.
-    var _this = this;
-    this.api.get(this.getObject(), this.getQuery(), function(object) {
+    this.api.get(this.get(), this.getQuery(), (function(entity) {
+      return function(object) {
 
-      if (!object) {
-        callback(null);
-      }
-      else if (object[0]) {
-
-        var i = object.length;
-        while (i--) {
-          object[i] = new _this.constructor(object[i]);
+        // If no object is returned, then return null.
+        if (!object) {
+          callback(null);
         }
 
-        // Callback a list of objects.
-        callback(object);
-      }
-      else {
-        // Update the object, then call the callback.
-        _this.update(object);
+        // If this is an array of objects, then return a list of new objects.
+        else if (object[0]) {
 
-        if (callback) {
-          callback(_this);
+          var i = object.length;
+          while (i--) {
+            object[i] = new entity.constructor(object[i]);
+            if (drupal.hasStorage && object[i].id) {
+              sessionStorage.setItem('entity-' + object[i].id, object[i].get());
+            }
+          }
+
+          // Callback a list of objects.
+          callback.call(entity, entity);
+
+        } else {
+
+          // Update the object.
+          entity.update(object, callback);
         }
-      }
-    });
+      };
+    })(this));
   }
 };
 
@@ -309,20 +309,15 @@ drupal.entity.prototype.get = function(callback) {
  */
 drupal.entity.prototype.save = function(callback) {
 
-  // If the API exists, then we can save this object.
+  // Check to see if the api is valid.
   if (this.api) {
 
-    // Call the API.
-    var _this = this;
-    this.api.save(this.getObject(), function(object) {
-
-      // Update the object, then call the callback.
-      _this.update(object);
-
-      if (callback) {
-        callback(_this);
-      }
-    });
+    // Call the api.
+    this.api.save(this.get(), (function(entity) {
+      return function(object) {
+        entity.update(object, callback);
+      };
+    })(this));
   }
 };
 
@@ -337,91 +332,198 @@ drupal.entity.prototype.remove = function(callback) {
   if (this.id) {
 
     // Call the API.
-    this.api.remove(this.getObject(), callback);
-  }
-};
-
-/**
- * Adds a key value pair to the query object.
- *
- * @param {object} query The query object.
- * @param {string} field The field to set.
- * @param {string} value The value of the field to set.
- */
-drupal.entity.prototype.setQuery = function(query, field, value) {
-
-  // Set the value of this query.
-  query[field] = value;
-};
-
-/**
- * Returns the search query.
- *
- * @return {object} The query to pass to the server.
- */
-drupal.entity.prototype.getQuery = function() {
-
-  var query = {};
-
-  // We only need to provide a search query if there is no ID.
-  if (!this.id) {
-
-    // Iterate through all of our fields.
-    for (var field in this) {
-
-      // Make sure that this property exists, is set, and is not an object.
-      if (this.hasOwnProperty(field) &&
-          this[field] &&
-          (typeof this[field] != 'object')) {
-
-        // Add this as a query parameter.
-        this.setQuery(query, field, this[field]);
-      }
-    }
-  }
-
-  // Return the params.
-  return query;
-};
-
-/**
- * Update the entity data.
- *
- * @param {object} object The entity information.
- */
-drupal.entity.prototype.update = function(object) {
-
-  // Update the object.
-  if (object) {
-
-    // Update the params.
-    for (var param in object) {
-
-      // Check to make sure that this param is within object scope.
-      if (object.hasOwnProperty(param) && this.hasOwnProperty(param)) {
-
-        // Check to see if this object has an update function.
-        if (this[param].update) {
-          this[param].update(object[param]);
-        }
-        else {
-          this[param] = object[param];
-        }
-      }
+    this.api.remove(this.get(), callback);
+    if (drupal.hasStorage) {
+      sessionStorage.removeItem('entity-' + this.id);
     }
   }
 };
+// The drupal namespace.
+var drupal = drupal || {};
+
+/*!
+ * Modified from...
+ *
+ * jQuery Cookie Plugin
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2011, Klaus Hartl
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.opensource.org/licenses/GPL-2.0
+ */
+/**
+ * Add a way to store cookies.
+ *
+ * @param {string} key The key for the cookie.
+ * @param {string} value The value of the cookie.
+ * @param {object} options The options for the cookie storage.
+ * @return {string} The results of the storage.
+ */
+drupal.cookie = function(key, value, options) {
+
+  // key and at least value given, set cookie...
+  if (arguments.length > 1 &&
+     (!/Object/.test(Object.prototype.toString.call(value)) ||
+      value === null ||
+      value === undefined)) {
+    options = $.extend({}, options);
+
+    if (value === null || value === undefined) {
+      options.expires = -1;
+    }
+
+    if (typeof options.expires === 'number') {
+      var days = options.expires, t = options.expires = new Date();
+      t.setDate(t.getDate() + days);
+    }
+
+    value = String(value);
+
+    // use expires attribute, max-age is not supported by IE
+    return (document.cookie = [encodeURIComponent(key), '=',
+    options.raw ? value : encodeURIComponent(value),
+    options.expires ? '; expires=' + options.expires.toUTCString() : '',
+    options.path ? '; path=' + options.path : '',
+    options.domain ? '; domain=' + options.domain : '',
+    options.secure ? '; secure' : ''].join(''));
+  }
+
+  // key and possibly options given, get cookie...
+  options = value || {};
+  var decode = options.raw ? function(s) {
+    return s;
+  } : decodeURIComponent;
+
+  var pairs = document.cookie.split('; ');
+  for (var i = 0, pair; pair = pairs[i] && pairs[i].split('='); i++) {
+    if (decode(pair[0]) === key)
+      return decode(pair[1] || '');
+  }
+  return null;
+};
 
 /**
- * Returns the object to send during PUT's and POST's during a save or add.
+ * @constructor
+ * @class The system class
  *
- * @return {object} The JSON object to send to the Services endpoint.
+ * @param {function} callback The function to be called once the system has
+ * connected.
  */
-drupal.entity.prototype.getObject = function() {
-  return {
-    id: this.id
-  };
+drupal.system = function(callback) {
+  drupal.entity.call(this, {}, callback);
 };
+
+/** Derive from entity. */
+drupal.system.prototype = new drupal.entity();
+
+/** Reset the constructor. */
+drupal.system.prototype.constructor = drupal.system;
+
+/**
+ * Sets the object.
+ *
+ * @param {object} object The object which contains the data.
+ */
+drupal.system.prototype.set = function(object) {
+  drupal.entity.prototype.set.call(this, object);
+
+  /** Set the api. */
+  this.api = this.api || new drupal.system.api();
+
+  /** Set current user. */
+  this.user = new drupal.user(object.user);
+
+  /** Set the users session. */
+  this.user.setSession(object.session_name, object.sessid);
+};
+
+/**
+ * Returns the object.
+ *
+ * @return {object} The object to send to the Services endpoint.
+ */
+drupal.system.prototype.get = function() {
+  return jQuery.extend(drupal.entity.prototype.get.call(this), {
+    user: this.user.get()
+  });
+};
+
+/**
+ * Loads the server.
+ *
+ * @param {function} callback The callback function.
+ */
+drupal.system.prototype.load = function(callback) {
+
+  // Connect to the server.
+  this.api.execute('connect', null, (function(system) {
+    return function(object) {
+      system.update(object, callback);
+    };
+  })(this));
+};
+
+/**
+ * Get a variable from the server.
+ *
+ * @param {string} name The variable you wish to retrieve.
+ * @param {string} def The default value of the variable.
+ * @param {function} callback The callback function.
+ */
+drupal.system.prototype.get_variable = function(name, def, callback) {
+  this.api.execute('get_variable', {
+    name: name,
+    'default': def
+  }, callback);
+};
+
+/**
+ * Set a variable on the server.
+ *
+ * @param {string} name The variable you wish to set.
+ * @param {string} value The value of the variable.
+ * @param {function} callback The callback function.
+ */
+drupal.system.prototype.set_variable = function(name, value, callback) {
+  this.api.execute('set_variable', {
+    name: name,
+    value: value
+  }, callback);
+};
+
+/**
+ * Delete a variable on the server.
+ *
+ * @param {string} name The variable you wish to set.
+ * @param {function} callback The callback function.
+ */
+drupal.system.prototype.del_variable = function(name, callback) {
+  this.api.execute('del_variable', {
+    name: name
+  }, callback);
+};
+// The drupal namespace.
+var drupal = drupal || {};
+
+/** The drupal.user namespace */
+drupal.system = drupal.system || {};
+
+/**
+ * @constructor
+ * @extends drupal.api
+ * @class The Drupal System Services class.
+ */
+drupal.system.api = function() {
+  this.resource = this.resource || 'system';
+  drupal.api.call(this);
+};
+
+/** Derive from drupal.api. */
+drupal.system.api.prototype = new drupal.api();
+
+/** Reset the constructor. */
+drupal.system.api.prototype.constructor = drupal.system.api;
 // The drupal namespace.
 var drupal = drupal || {};
 
@@ -435,27 +537,6 @@ var drupal = drupal || {};
  * been retrieved from the server.
  */
 drupal.node = function(object, callback) {
-
-  // Only continue if the object is valid.
-  if (object) {
-
-    /** The title for this node. */
-    this.title = this.title || '';
-
-    /** The type of node we are dealing with. */
-    this.type = this.type || '';
-
-    /** The status of this node. */
-    this.status = this.status || 0;
-
-    /** The user who created this node */
-    this.uid = this.uid || 0;
-
-    // Declare the api.
-    this.api = this.api || new drupal.node.api();
-  }
-
-  // Call the base class.
   drupal.entity.call(this, object, callback);
 };
 
@@ -466,31 +547,30 @@ drupal.node.prototype = new drupal.entity();
 drupal.node.prototype.constructor = drupal.node;
 
 /**
- * Override the update routine.
+ * Sets the object.
  *
- * @param {object} object The node object to update.
+ * @param {object} object The object which contains the data.
  */
-drupal.node.prototype.update = function(object) {
+drupal.node.prototype.set = function(object) {
+  drupal.entity.prototype.set.call(this, object);
 
-  drupal.entity.prototype.update.call(this, object);
+  /** Set the api. */
+  this.api = this.api || new drupal.node.api();
 
-  // Make sure to also set the ID the same as nid.
-  if (object) {
-    this.id = object.nid || this.id;
-  }
-};
+  /** Set the ID based on the nid. */
+  this.id = object.nid || this.id;
 
-/**
- * Override the setQuery method of the entity.
- *
- * @param {object} query The query object.
- * @param {string} field The field to set.
- * @param {string} value The value of the field to set.
- */
-drupal.node.prototype.setQuery = function(query, field, value) {
+  /** The title for this node. */
+  this.title = object.title || '';
 
-  // The node object sets parameters like ?parameters[field]=value...
-  query['parameters[' + field + ']'] = value;
+  /** The type of node we are dealing with. */
+  this.type = object.type || '';
+
+  /** The status of this node. */
+  this.status = object.status || 0;
+
+  /** The user who created this node */
+  this.uid = object.uid || 0;
 };
 
 /**
@@ -498,13 +578,25 @@ drupal.node.prototype.setQuery = function(query, field, value) {
  *
  * @return {object} The object to send to the Services endpoint.
  */
-drupal.node.prototype.getObject = function() {
-  return jQuery.extend(drupal.entity.prototype.getObject.call(this), {
+drupal.node.prototype.get = function() {
+  return jQuery.extend(drupal.entity.prototype.get.call(this), {
     title: this.title,
     type: this.type,
     status: this.status,
     uid: this.uid
   });
+};
+
+/**
+ * Override the setQuery method of the entity.
+ *
+ * @param {object} query The query object.
+ * @param {string} param The param to set.
+ * @param {string} value The value of the field to set.
+ */
+drupal.node.prototype.setQuery = function(query, param, value) {
+  // The node object sets parameters like ?parameters[param]=value...
+  query['parameters[' + param + ']'] = value;
 };
 // The drupal namespace.
 var drupal = drupal || {};
@@ -518,11 +610,7 @@ drupal.node = drupal.node || {};
  * @class The Drupal Node Services class.
  */
 drupal.node.api = function() {
-
-  // Set the resource
   this.resource = this.resource || 'node';
-
-  // Call the drupal.api constructor.
   drupal.api.call(this);
 };
 
@@ -534,6 +622,9 @@ drupal.node.api.prototype.constructor = drupal.node.api;
 // The drupal namespace.
 var drupal = drupal || {};
 
+/** The current logged in user. */
+drupal.current_user = null;
+
 /**
  * @constructor
  * @extends drupal.entity
@@ -544,33 +635,6 @@ var drupal = drupal || {};
  * been retrieved from the server.
  */
 drupal.user = function(object, callback) {
-
-  // Only continue if the object is valid.
-  if (object) {
-
-    /** The name for this user. */
-    this.name = this.name || '';
-
-    /** The email address of our user. */
-    this.mail = this.mail || '';
-
-    /** The password of the user. */
-    this.pass = this.pass || '';
-
-    /** The status of the user. */
-    this.status = this.status || 1;
-
-    /** The session ID of the user. */
-    this.sessid = this.sessid || '';
-
-    /** The session name of the user */
-    this.session_name = this.session_name || '';
-
-    // Declare the api.
-    this.api = this.api || new drupal.user.api();
-  }
-
-  // Call the base class.
   drupal.entity.call(this, object, callback);
 };
 
@@ -581,30 +645,77 @@ drupal.user.prototype = new drupal.entity();
 drupal.user.prototype.constructor = drupal.user;
 
 /**
+ * Sets the object.
+ *
+ * @param {object} object The object which contains the data.
+ */
+drupal.user.prototype.set = function(object) {
+  drupal.entity.prototype.set.call(this, object);
+
+  /** Set the api. */
+  this.api = this.api || new drupal.user.api();
+
+  /** Set the ID based on the uid. */
+  this.id = object.uid || this.id;
+
+  /** The name for this user. */
+  this.name = object.name || '';
+
+  /** The email address of our user. */
+  this.mail = object.mail || '';
+
+  /** The password of the user. */
+  this.pass = object.pass || '';
+
+  /** The status of the user. */
+  this.status = object.status || 1;
+};
+
+/**
+ * Sets a user session.
+ *
+ * @param {string} name The name of the session.
+ * @param {string} sessid The session ID.
+ */
+drupal.user.prototype.setSession = function(name, sessid) {
+
+  /** Set the session id for this user. */
+  this.sessid = sessid;
+
+  if (name) {
+
+    /** Set the session name for this user. */
+    this.session_name = name;
+
+    /** Now store this in a cookie for further authentication. */
+    drupal.cookie(name, sessid);
+
+    /** Now store this user as the 'current' user. */
+    drupal.current_user = this;
+  }
+};
+
+/**
  * Login a user.
  *
  * @param {function} callback The callback function.
  */
 drupal.user.prototype.login = function(callback) {
+  if (this.api) {
+    this.api.execute('login', {
+      username: this.name,
+      password: this.pass
+    }, (function(user) {
+      return function(object) {
 
-  // Setup the POST data for the login of this user.
-  var object = {
-    username: this.name,
-    password: this.pass
-  };
+        // Set the session.
+        user.setSession(object.session_name, object.sessid);
 
-  // Execute the login.
-  var _this = this;
-  this.api.execute('login', object, function(user) {
-
-    // Set the session ID and session name.
-    _this.sessid = user.sessid;
-    _this.session_name = user.session_name;
-
-    // Update this object.
-    _this.update(user.user);
-    callback(_this);
-  });
+        // Update this object.
+        user.update(object.user, callback);
+      };
+    })(this));
+  }
 };
 
 /**
@@ -613,15 +724,13 @@ drupal.user.prototype.login = function(callback) {
  * @param {function} callback The callback function.
  */
 drupal.user.prototype.register = function(callback) {
-
-  // Execute the register.
-  var _this = this;
-  this.api.execute('register', this.getObject(), function(user) {
-
-    // Now update the object.
-    _this.update(user);
-    callback(_this);
-  });
+  if (this.api) {
+    this.api.execute('register', this.get(), (function(user) {
+      return function(object) {
+        user.update(object, callback);
+      };
+    })(this));
+  }
 };
 
 /**
@@ -630,23 +739,8 @@ drupal.user.prototype.register = function(callback) {
  * @param {function} callback The callback function.
  */
 drupal.user.prototype.logout = function(callback) {
-
-  // Execute the logout.
-  this.api.execute('logout', null, callback);
-};
-
-/**
- * Override the update routine.
- *
- * @param {object} object The object to update.
- */
-drupal.user.prototype.update = function(object) {
-
-  drupal.entity.prototype.update.call(this, object);
-
-  // Make sure to also set the ID the same as uid.
-  if (object) {
-    this.id = object.uid || this.id;
+  if (this.api) {
+    this.api.execute('logout', null, callback);
   }
 };
 
@@ -655,8 +749,8 @@ drupal.user.prototype.update = function(object) {
  *
  * @return {object} The object to send to the Services endpoint.
  */
-drupal.user.prototype.getObject = function() {
-  return jQuery.extend(drupal.entity.prototype.getObject.call(this), {
+drupal.user.prototype.get = function() {
+  return jQuery.extend(drupal.entity.prototype.get.call(this), {
     name: this.name,
     mail: this.mail,
     pass: this.pass,
