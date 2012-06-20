@@ -35,19 +35,19 @@ drupal.user.prototype.set = function(object) {
   this.api = this.api || new drupal.user.api();
 
   /** Set the ID based on the uid. */
-  this.id = object.uid || this.id;
+  this.id = object.uid || this.id || 0;
 
   /** The name for this user. */
-  this.name = object.name || '';
+  this.name = object.name || this.name || '';
 
   /** The email address of our user. */
-  this.mail = object.mail || '';
+  this.mail = object.mail || this.mail || '';
 
   /** The password of the user. */
-  this.pass = object.pass || '';
+  this.pass = object.pass || this.pass || '';
 
   /** The status of the user. */
-  this.status = object.status || 1;
+  this.status = object.status || this.status || 1;
 };
 
 /**

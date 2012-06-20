@@ -32,19 +32,19 @@ drupal.node.prototype.set = function(object) {
   this.api = this.api || new drupal.node.api();
 
   /** Set the ID based on the nid. */
-  this.id = object.nid || this.id;
+  this.id = object.nid || this.id || 0;
 
   /** The title for this node. */
-  this.title = object.title || '';
+  this.title = object.title || this.title || '';
 
   /** The type of node we are dealing with. */
-  this.type = object.type || '';
+  this.type = object.type || this.type || '';
 
   /** The status of this node. */
-  this.status = object.status || 0;
+  this.status = object.status || this.status || 0;
 
   /** The user who created this node */
-  this.uid = object.uid || 0;
+  this.uid = object.uid || this.uid || 0;
 };
 
 /**

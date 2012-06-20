@@ -60,7 +60,7 @@ drupal.entity.prototype.set = function(object) {
   this.api = this.api || null;
 
   /** The ID of this entity. */
-  this.id = object.id || '';
+  this.id = object.id || this.id || '';
 };
 
 /**
@@ -136,6 +136,7 @@ drupal.entity.prototype.load = function(callback) {
   }
 
   // First check to see if we have storage...
+  /*
   if (drupal.hasStorage) {
     object = sessionStorage.getItem('entity-' + this.id);
     if (object) {
@@ -145,6 +146,7 @@ drupal.entity.prototype.load = function(callback) {
       }
     }
   }
+  */
 
   // If the object doesn't exist... then get it from the server.
   if (!object && this.api) {
