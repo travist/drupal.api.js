@@ -51,17 +51,6 @@ drupal.api.prototype.call = function(url, dataType, type, data, callback) {
         console.log('Error: ' + textStatus);
       }
     },
-    xhrFields: {
-      withCredentials: true
-    },
-    crossDomain: true,
-    beforeSend: function(xhr) {
-      if (drupal.current_user) {
-        var cookie = drupal.current_user.session_name;
-        cookie += '=' + drupal.current_user.sessid;
-        xhr.setRequestHeader('Cookie', cookie);
-      }
-    },
     error: function(xhr, ajaxOptions, thrownError) {
       console.log(xhr.responseText);
       if (callback) {
@@ -768,11 +757,15 @@ drupal.user.prototype.login = function(callback) {
     }, (function(user) {
       return function(object) {
 
+        // Update this object.
+        user.update(object.user);
+
         // Set the session.
         user.setSession(object.session_name, object.sessid);
 
-        // Update this object.
-        user.update(object.user, callback);
+        if (callback) {
+          callback.call(user, user);
+        }
       };
     })(this));
   }

@@ -91,11 +91,15 @@ drupal.user.prototype.login = function(callback) {
     }, (function(user) {
       return function(object) {
 
+        // Update this object.
+        user.update(object.user);
+
         // Set the session.
         user.setSession(object.session_name, object.sessid);
 
-        // Update this object.
-        user.update(object.user, callback);
+        if (callback) {
+          callback.call(user, user);
+        }
       };
     })(this));
   }

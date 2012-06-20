@@ -98,65 +98,69 @@
 <span class='line'> 91</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">user</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 92</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 93</span> 
-<span class='line'> 94</span> </span><span class="WHIT">        </span><span class="COMM">// Set the session.</span><span class="WHIT">
-<span class='line'> 95</span> </span><span class="WHIT">        </span><span class="NAME">user.setSession</span><span class="PUNC">(</span><span class="NAME">object.session_name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object.sessid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">        </span><span class="COMM">// Update this object.</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">        </span><span class="NAME">user.update</span><span class="PUNC">(</span><span class="NAME">object.user</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 96</span> 
-<span class='line'> 97</span> </span><span class="WHIT">        </span><span class="COMM">// Update this object.</span><span class="WHIT">
-<span class='line'> 98</span> </span><span class="WHIT">        </span><span class="NAME">user.update</span><span class="PUNC">(</span><span class="NAME">object.user</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 99</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>100</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>101</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>102</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>103</span> 
-<span class='line'>104</span> </span><span class="COMM">/**
-<span class='line'>105</span>  * Register a user.
-<span class='line'>106</span>  *
-<span class='line'>107</span>  * @param {function} callback The callback function.
-<span class='line'>108</span>  */</span><span class="WHIT">
-<span class='line'>109</span> </span><span class="NAME">drupal.user.prototype.register</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>110</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>111</span> </span><span class="WHIT">    </span><span class="NAME">this.api.execute</span><span class="PUNC">(</span><span class="STRN">'register'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getPOST</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">user</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>112</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>113</span> </span><span class="WHIT">        </span><span class="NAME">user.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>114</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>115</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>116</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>117</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>118</span> 
-<span class='line'>119</span> </span><span class="COMM">/**
-<span class='line'>120</span>  * Logout the user.
-<span class='line'>121</span>  *
-<span class='line'>122</span>  * @param {function} callback The callback function.
-<span class='line'>123</span>  */</span><span class="WHIT">
-<span class='line'>124</span> </span><span class="NAME">drupal.user.prototype.logout</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>125</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>126</span> </span><span class="WHIT">    </span><span class="NAME">this.api.execute</span><span class="PUNC">(</span><span class="STRN">'logout'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>127</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>128</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>129</span> 
-<span class='line'>130</span> </span><span class="COMM">/**
-<span class='line'>131</span>  * Gets a POST object.
-<span class='line'>132</span>  *
-<span class='line'>133</span>  * @return {object} The filtered object.
-<span class='line'>134</span>  */</span><span class="WHIT">
-<span class='line'>135</span> </span><span class="NAME">drupal.user.prototype.getPOST</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>136</span> 
-<span class='line'>137</span> </span><span class="WHIT">  </span><span class="COMM">// Add the password to POST's only.</span><span class="WHIT">
-<span class='line'>138</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">post</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drupal.entity.prototype.getPOST.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>139</span> </span><span class="WHIT">  </span><span class="NAME">post.pass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.pass</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>140</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">post</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>142</span> 
-<span class='line'>143</span> </span><span class="COMM">/**
-<span class='line'>144</span>  * Returns the object to send to Services.
-<span class='line'>145</span>  *
-<span class='line'>146</span>  * @return {object} The object to send to the Services endpoint.
-<span class='line'>147</span>  */</span><span class="WHIT">
-<span class='line'>148</span> </span><span class="NAME">drupal.user.prototype.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>149</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">jQuery.extend</span><span class="PUNC">(</span><span class="NAME">drupal.entity.prototype.get.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>150</span> </span><span class="WHIT">    </span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>151</span> </span><span class="WHIT">    </span><span class="NAME">mail</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.mail</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>152</span> </span><span class="WHIT">    </span><span class="NAME">status</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.status</span><span class="WHIT">
-<span class='line'>153</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>154</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>155</span> </span></pre></body></html>
+<span class='line'> 97</span> </span><span class="WHIT">        </span><span class="COMM">// Set the session.</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">        </span><span class="NAME">user.setSession</span><span class="PUNC">(</span><span class="NAME">object.session_name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object.sessid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 99</span> 
+<span class='line'>100</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>101</span> </span><span class="WHIT">          </span><span class="NAME">callback.call</span><span class="PUNC">(</span><span class="NAME">user</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">user</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>107</span> 
+<span class='line'>108</span> </span><span class="COMM">/**
+<span class='line'>109</span>  * Register a user.
+<span class='line'>110</span>  *
+<span class='line'>111</span>  * @param {function} callback The callback function.
+<span class='line'>112</span>  */</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="NAME">drupal.user.prototype.register</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">    </span><span class="NAME">this.api.execute</span><span class="PUNC">(</span><span class="STRN">'register'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getPOST</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">user</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">        </span><span class="NAME">user.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span> 
+<span class='line'>123</span> </span><span class="COMM">/**
+<span class='line'>124</span>  * Logout the user.
+<span class='line'>125</span>  *
+<span class='line'>126</span>  * @param {function} callback The callback function.
+<span class='line'>127</span>  */</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="NAME">drupal.user.prototype.logout</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">    </span><span class="NAME">this.api.execute</span><span class="PUNC">(</span><span class="STRN">'logout'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> 
+<span class='line'>134</span> </span><span class="COMM">/**
+<span class='line'>135</span>  * Gets a POST object.
+<span class='line'>136</span>  *
+<span class='line'>137</span>  * @return {object} The filtered object.
+<span class='line'>138</span>  */</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="NAME">drupal.user.prototype.getPOST</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>140</span> 
+<span class='line'>141</span> </span><span class="WHIT">  </span><span class="COMM">// Add the password to POST's only.</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">post</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drupal.entity.prototype.getPOST.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">  </span><span class="NAME">post.pass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.pass</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">post</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>146</span> 
+<span class='line'>147</span> </span><span class="COMM">/**
+<span class='line'>148</span>  * Returns the object to send to Services.
+<span class='line'>149</span>  *
+<span class='line'>150</span>  * @return {object} The object to send to the Services endpoint.
+<span class='line'>151</span>  */</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="NAME">drupal.user.prototype.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">jQuery.extend</span><span class="PUNC">(</span><span class="NAME">drupal.entity.prototype.get.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">    </span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">    </span><span class="NAME">mail</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.mail</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">    </span><span class="NAME">status</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.status</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>159</span> </span></pre></body></html>
