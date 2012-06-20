@@ -116,7 +116,7 @@ drupal.api.prototype.getItems = function(object, type, query, callback) {
  */
 drupal.api.prototype.execute = function(action, object, callback) {
   var url = this.getURL(object) + '/' + action;
-  url += '?XDEBUG_SESSION_START=netbeans-xdebug';
+  //url += '?XDEBUG_SESSION_START=netbeans-xdebug';
   this.call(url, 'json', 'POST', object, callback);
 };
 
