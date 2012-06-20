@@ -129,12 +129,6 @@ drupal.entity.prototype.load = function(callback) {
   // Declare the object to load...
   var object = {};
 
-  // If no id is provided, then just return nothing...
-  if (!this.id) {
-    callback(null);
-    return;
-  }
-
   // First check to see if we have storage...
   /*
   if (drupal.hasStorage) {
@@ -148,8 +142,7 @@ drupal.entity.prototype.load = function(callback) {
   }
   */
 
-  // If the object doesn't exist... then get it from the server.
-  if (!object && this.api) {
+  if (this.api) {
 
     // Call the API.
     this.api.get(this.get(), this.getQuery(), (function(entity) {
@@ -172,7 +165,7 @@ drupal.entity.prototype.load = function(callback) {
           }
 
           // Callback a list of objects.
-          callback.call(entity, entity);
+          callback.call(entity, object);
 
         } else {
 

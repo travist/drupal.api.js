@@ -1,13 +1,18 @@
 
-var runSystemTests = function() {
+var systemConnect = function(callback) {
   asyncTest("System Connect", function() {
     new drupal.system(function(system) {
       start();
       expect(1);
       ok(!!system.user.sessid, "Connection successful");
+      if (callback) {
+        callback();
+      }
     });
   });
+};
 
+var variableGetSetDelete = function(callback) {
   asyncTest("Variable Set, Get, Delete", function() {
     var system = new drupal.system();
 
@@ -30,9 +35,18 @@ var runSystemTests = function() {
             expect(2);
             ok(test1, "set_variable & get_variable passed.");
             ok(check=='2468', "del_variable passed.");
+            if (callback) {
+              callback();
+            }
           });
         });
       });
     });
+  });
+};
+
+var runSystemTests = function(callback) {
+  systemConnect(function() {
+    variableGetSetDelete(callback);
   });
 };
