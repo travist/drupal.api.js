@@ -43,7 +43,9 @@ drupal.api.prototype.call = function(url, dataType, type, data, callback) {
     type: type,
     success: function(data, textStatus) {
       if (textStatus == 'success') {
-        callback(data);
+        if (callback) {
+          callback(data);
+        }
       }
       else {
         console.log('Error: ' + textStatus);
@@ -62,7 +64,9 @@ drupal.api.prototype.call = function(url, dataType, type, data, callback) {
     },
     error: function(xhr, ajaxOptions, thrownError) {
       console.log(xhr.responseText);
-      callback(null);
+      if (callback) {
+        callback(null);
+      }
     }
   };
 

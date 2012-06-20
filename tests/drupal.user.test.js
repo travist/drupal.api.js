@@ -7,23 +7,26 @@ var listUsers = function(callback) {
       // Start the test...
       start();
 
-      // Set the expection to the length of the nodes.
-      expect(users.length*3);
-
       // Iterate over all the nodes and verify that they auto nodes.
       for (var index in users) {
 
         // Check the user.
         var user = users[index];
 
-        // There should be an uid.
-        ok(!!user.id, "User ID is present.");
+        if (parseInt(user.id)) {
 
-        // There should be a name.
-        ok(!!user.name, "User name is present");
+          // Increase our expectations.
+          expect((parseInt(index)+1)*3);
 
-        // There should be an email.
-        ok(!!user.mail, "User email is present");
+          // There should be an uid.
+          ok(!!user.id, "User ID is present.");
+
+          // There should be a name.
+          ok(!!user.name, "User name is present");
+
+          // There should be an email.
+          ok(!!user.mail, "User email is present");
+        }
       }
 
       if (callback) {
