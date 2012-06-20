@@ -86,6 +86,22 @@ drupal.entity.prototype.setQuery = function(query, param, value) {
 };
 
 /**
+ * Gets a filtered object.
+ *
+ * @return {object} The filtered object.
+ */
+drupal.entity.prototype.getFiltered = function() {
+  var object = this.get();
+  var filtered = {};
+  for (var param in object) {
+    if (object.hasOwnProperty(param) && object[param]) {
+      filtered[param] = object[param];
+    }
+  }
+  return filtered;
+};
+
+/**
  * Gets the query variables.
  *
  * @return {object} The query variables.
@@ -113,8 +129,14 @@ drupal.entity.prototype.load = function(callback) {
   // Declare the object to load...
   var object = {};
 
+  // If no id is provided, then just return nothing...
+  if (!this.id) {
+    callback(null);
+    return;
+  }
+
   // First check to see if we have storage...
-  if (drupal.hasStorage && this.id) {
+  if (drupal.hasStorage) {
     object = sessionStorage.getItem('entity-' + this.id);
     if (object) {
       this.set(object);
@@ -171,7 +193,7 @@ drupal.entity.prototype.save = function(callback) {
   if (this.api) {
 
     // Call the api.
-    this.api.save(this.get(), (function(entity) {
+    this.api.save(this.getFiltered(), (function(entity) {
       return function(object) {
         entity.update(object, callback);
       };
