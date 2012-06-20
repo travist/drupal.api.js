@@ -28,6 +28,9 @@ drupal.node.prototype.constructor = drupal.node;
 drupal.node.prototype.set = function(object) {
   drupal.entity.prototype.set.call(this, object);
 
+  /** The name of this entity. */
+  this.entityName = 'node';
+
   /** Set the api. */
   this.api = this.api || new drupal.node.api();
 

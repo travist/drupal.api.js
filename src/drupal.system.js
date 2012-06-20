@@ -88,13 +88,14 @@ drupal.system.prototype.constructor = drupal.system;
 drupal.system.prototype.set = function(object) {
   drupal.entity.prototype.set.call(this, object);
 
+  /** The name of this entity. */
+  this.entityName = 'system';
+
   /** Set the api. */
   this.api = this.api || new drupal.system.api();
 
   /** Set current user. */
   this.user = new drupal.user(object.user);
-
-  /** Set the users session. */
   this.user.setSession(object.session_name, object.sessid);
 };
 

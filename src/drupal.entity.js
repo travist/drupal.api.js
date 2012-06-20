@@ -2,7 +2,7 @@
 var drupal = drupal || {};
 
 /** Determine if we have storage. */
-drupal.hasStorage = typeof(Storage) !== 'undefined';
+drupal.hasStorage = false/*typeof(Storage) !== 'undefined'*/;
 
 /**
  * @constructor
@@ -39,13 +39,59 @@ drupal.entity.prototype.update = function(object, callback) {
   }
 
   // Now store the object.
-  if (drupal.hasStorage && this.id) {
-    sessionStorage.setItem('entity-' + this.id, this.get());
-  }
+  this.store();
 
   // Now callback that this object has been updated.
   if (callback) {
     callback.call(this, this);
+  }
+};
+
+/**
+ * Stores the object in local storage.
+ */
+drupal.entity.prototype.store = function() {
+  if (this.id && drupal.hasStorage) {
+    var object = this.get();
+    var key = '';
+    for (var prop in object) {
+      if (object.hasOwnProperty(prop) && object[prop]) {
+        key = this.entityName + '-' + this.id + '-' + prop;
+        localStorage.setItem(key, object[prop]);
+      }
+    }
+  }
+};
+
+/**
+ * Retrieves an object from local storage.
+ *
+ * @return {object} The object in local storage.
+ */
+drupal.entity.prototype.retrieve = function() {
+  var object = null, key = '', value = '';
+  if (this.id && drupal.hasStorage) {
+    object = this.get();
+    for (var prop in object) {
+      key = this.entityName + '-' + this.id + '-' + prop;
+      if (value = localStorage.getItem(key)) {
+        object[prop] = value;
+      }
+    }
+  }
+  return object;
+};
+
+/**
+ * Clears an item out of local storage.
+ */
+drupal.entity.prototype.clear = function() {
+  if (this.id && drupal.hasStorage) {
+    var object = this.get(), key = '';
+    for (var prop in object) {
+      key = this.entityName + '-' + this.id + '-' + prop;
+      localStorage.removeItem(key);
+    }
   }
 };
 
@@ -61,6 +107,9 @@ drupal.entity.prototype.set = function(object) {
 
   /** The ID of this entity. */
   this.id = object.id || this.id || '';
+
+  /** The name of this entity. */
+  this.entityName = 'entity';
 };
 
 /**
@@ -86,19 +135,16 @@ drupal.entity.prototype.setQuery = function(query, param, value) {
 };
 
 /**
- * Gets a filtered object.
+ * Gets a POST object.
  *
  * @return {object} The filtered object.
  */
-drupal.entity.prototype.getFiltered = function() {
+drupal.entity.prototype.getPOST = function() {
   var object = this.get();
-  var filtered = {};
-  for (var param in object) {
-    if (object.hasOwnProperty(param) && object[param]) {
-      filtered[param] = object[param];
-    }
+  if (!object.id) {
+    delete object.id;
   }
-  return filtered;
+  return object;
 };
 
 /**
@@ -127,22 +173,11 @@ drupal.entity.prototype.getQuery = function() {
 drupal.entity.prototype.load = function(callback) {
 
   // Declare the object to load...
-  var object = {};
-
-  // First check to see if we have storage...
-  /*
-  if (drupal.hasStorage) {
-    object = sessionStorage.getItem('entity-' + this.id);
-    if (object) {
-      this.set(object);
-      if (callback) {
-        callback.call(this, this);
-      }
-    }
+  var object = null;
+  if (object = this.retrieve()) {
+    this.update(object, callback);
   }
-  */
-
-  if (this.api) {
+  else if (this.api) {
 
     // Call the API.
     this.api.get(this.get(), this.getQuery(), (function(entity) {
@@ -159,9 +194,7 @@ drupal.entity.prototype.load = function(callback) {
           var i = object.length;
           while (i--) {
             object[i] = new entity.constructor(object[i]);
-            if (drupal.hasStorage && object[i].id) {
-              sessionStorage.setItem('entity-' + object[i].id, object[i].get());
-            }
+            object[i].store();
           }
 
           // Callback a list of objects.
@@ -188,7 +221,7 @@ drupal.entity.prototype.save = function(callback) {
   if (this.api) {
 
     // Call the api.
-    this.api.save(this.getFiltered(), (function(entity) {
+    this.api.save(this.getPOST(), (function(entity) {
       return function(object) {
         entity.update(object, callback);
       };
@@ -208,8 +241,6 @@ drupal.entity.prototype.remove = function(callback) {
 
     // Call the API.
     this.api.remove(this.get(), callback);
-    if (drupal.hasStorage) {
-      sessionStorage.removeItem('entity-' + this.id);
-    }
+    this.clear();
   }
 };

@@ -31,6 +31,9 @@ drupal.user.prototype.constructor = drupal.user;
 drupal.user.prototype.set = function(object) {
   drupal.entity.prototype.set.call(this, object);
 
+  /** The name of this entity. */
+  this.entityName = 'user';
+
   /** Set the api. */
   this.api = this.api || new drupal.user.api();
 
@@ -61,7 +64,8 @@ drupal.user.prototype.setSession = function(name, sessid) {
   /** Set the session id for this user. */
   this.sessid = sessid;
 
-  if (name) {
+  // Only set the session name if this user is valid and has a session name.
+  if (this.id && name) {
 
     /** Set the session name for this user. */
     this.session_name = name;
@@ -104,7 +108,7 @@ drupal.user.prototype.login = function(callback) {
  */
 drupal.user.prototype.register = function(callback) {
   if (this.api) {
-    this.api.execute('register', this.get(), (function(user) {
+    this.api.execute('register', this.getPOST(), (function(user) {
       return function(object) {
         user.update(object, callback);
       };
@@ -124,6 +128,19 @@ drupal.user.prototype.logout = function(callback) {
 };
 
 /**
+ * Gets a POST object.
+ *
+ * @return {object} The filtered object.
+ */
+drupal.user.prototype.getPOST = function() {
+
+  // Add the password to POST's only.
+  var post = drupal.entity.prototype.getPOST.call(this);
+  post.pass = this.pass;
+  return post;
+};
+
+/**
  * Returns the object to send to Services.
  *
  * @return {object} The object to send to the Services endpoint.
@@ -132,7 +149,6 @@ drupal.user.prototype.get = function() {
   return jQuery.extend(drupal.entity.prototype.get.call(this), {
     name: this.name,
     mail: this.mail,
-    pass: this.pass,
     status: this.status
   });
 };
