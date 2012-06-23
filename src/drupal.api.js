@@ -54,7 +54,6 @@ drupal.api = function() {
         dataType: dataType,
         type: type,
         success: function(data, textStatus) {
-          console.log(data);
           if (textStatus == 'success') {
             if (callback) {
               callback(data);
