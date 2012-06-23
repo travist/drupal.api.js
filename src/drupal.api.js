@@ -14,6 +14,9 @@ drupal.api = function() {
     /** The resource within this endpoint */
     resource: '',
 
+    /** See if we are dealing with jQuery Mobile applications. */
+    isMobile: jQuery.hasOwnProperty('mobile'),
+
     /**
      * The Services API endpoint
      *
@@ -39,6 +42,23 @@ drupal.api = function() {
     },
 
     /**
+     * Called when we are loading or not.
+     *
+     * @param {boolean} loading If this api is loading something.
+     * @this Points to the drupal.api object.
+     */
+    loading: function(loading) {
+      if (this.isMobile) {
+        if (loading) {
+          jQuery.mobile.showPageLoadingMsg();
+        }
+        else {
+          jQuery.mobile.hidePageLoadingMsg();
+        }
+      }
+    },
+
+    /**
      * API function to act as a generic request for all Service calls.
      *
      * @this {object} The drupal.api object.
@@ -53,27 +73,36 @@ drupal.api = function() {
         url: url,
         dataType: dataType,
         type: type,
-        success: function(data, textStatus) {
-          if (textStatus == 'success') {
-            if (callback) {
-              callback(data);
+        success: (function(api) {
+          return function(data, textStatus) {
+            api.loading(false);
+            if (textStatus == 'success') {
+              if (callback) {
+                callback(data);
+              }
             }
-          }
-          else {
-            console.log('Error: ' + textStatus);
-          }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          console.log(xhr.responseText);
-          if (callback) {
-            callback(null);
-          }
-        }
+            else {
+              console.log('Error: ' + textStatus);
+            }
+          };
+        })(this),
+        error: (function(api) {
+          return function(xhr, ajaxOptions, thrownError) {
+            api.loading(false);
+            console.log(xhr.responseText);
+            if (callback) {
+              callback(null);
+            }
+          };
+        })(this)
       };
 
       if (data) {
         request['data'] = data;
       }
+
+      // Show a loading cursor.
+      this.loading(true);
 
       // Make the request.
       jQuery.ajax(request);
