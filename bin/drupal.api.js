@@ -662,8 +662,13 @@ drupal.node.prototype.get = function() {
  * @param {string} value The value of the field to set.
  */
 drupal.node.prototype.setQuery = function(query, param, value) {
-  // The node object sets parameters like ?parameters[param]=value...
-  query['parameters[' + param + ']'] = value;
+  if (this.hasOwnProperty(param)) {
+    // The node object sets parameters like ?parameters[param]=value...
+    query['parameters[' + param + ']'] = value;
+  }
+  else {
+    query[param] = value;
+  }
 };
 // The drupal namespace.
 var drupal = drupal || {};
