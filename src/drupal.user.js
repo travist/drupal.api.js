@@ -23,6 +23,11 @@ drupal.user.prototype = new drupal.entity();
 /** Reset the constructor. */
 drupal.user.prototype.constructor = drupal.user;
 
+/** Declare the user api. */
+drupal.user.api = jQuery.extend(drupal.api, {
+  resource: 'user'
+});
+
 /**
  * Sets the object.
  *
@@ -35,7 +40,7 @@ drupal.user.prototype.set = function(object) {
   this.entityName = 'user';
 
   /** Set the api. */
-  this.api = this.api || new drupal.user.api();
+  this.api = drupal.user.api;
 
   /** Set the ID based on the uid. */
   this.id = object.uid || this.id || 0;
@@ -73,7 +78,7 @@ drupal.user.prototype.setSession = function(name, sessid) {
     /** Now store this in a cookie for further authentication. */
     drupal.cookie(name, sessid);
 
-    /** Now store this user as the 'current' user. */
+    // Now store this user as the 'current' user.
     drupal.current_user = this;
   }
 };

@@ -80,6 +80,11 @@ drupal.system.prototype = new drupal.entity();
 /** Reset the constructor. */
 drupal.system.prototype.constructor = drupal.system;
 
+/** Declare the system api. */
+drupal.system.api = jQuery.extend(drupal.api, {
+  resource: 'system'
+});
+
 /**
  * Sets the object.
  *
@@ -92,7 +97,7 @@ drupal.system.prototype.set = function(object) {
   this.entityName = 'system';
 
   /** Set the api. */
-  this.api = this.api || new drupal.system.api();
+  this.api = drupal.system.api;
 
   /** Set current user. */
   this.user = new drupal.user(object.user);

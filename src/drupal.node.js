@@ -20,6 +20,11 @@ drupal.node.prototype = new drupal.entity();
 /** Reset the constructor. */
 drupal.node.prototype.constructor = drupal.node;
 
+/** Declare the node api. */
+drupal.node.api = jQuery.extend(drupal.api, {
+  resource: 'node'
+});
+
 /**
  * Sets the object.
  *
@@ -31,8 +36,8 @@ drupal.node.prototype.set = function(object) {
   /** The name of this entity. */
   this.entityName = 'node';
 
-  /** Set the api. */
-  this.api = this.api || new drupal.node.api();
+  /** Set the api to the drupal.node.api. */
+  this.api = drupal.node.api;
 
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;

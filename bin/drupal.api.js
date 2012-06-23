@@ -2,136 +2,128 @@
 var drupal = drupal || {};
 
 /**
- * @constructor
- * @class The base Drupal API class.
+ * The Drupal API class.  This is a static class helper
+ * to assist in communication between javascript and
+ * a Drupal CMS backend.
  */
-drupal.api = function() {
+drupal.api = {
 
   /** The Services API endpoint */
-  this.endpoint = drupal.endpoint || this.endpoint || '';
+  endpoint: drupal.endpoint || '',
 
   /** The resource within this endpoint */
-  this.resource = this.resource || '';
-};
+  resource: '',
 
-/**
- * Helper function to get the Services URL for this resource.
- *
- * @param {object} object The object involved with in this request.
- * @return {string} The path to the API endpoint.
- */
-drupal.api.prototype.getURL = function(object) {
-  var path = this.endpoint;
-  path += this.resource ? ('/' + this.resource) : '';
-  path += (object && object.id) ? ('/' + object.id) : '';
-  return path;
-};
+  /**
+   * Helper function to get the Services URL for this resource.
+   *
+   * @this {object} The drupal.api object.
+   * @param {object} object The object involved with in this request.
+   * @return {string} The path to the API endpoint.
+   */
+  getURL: function(entity) {
+    var path = this.endpoint;
+    path += this.resource ? ('/' + this.resource) : '';
+    path += (entity && entity.id) ? ('/' + entity.id) : '';
+    return path;
+  },
 
-/**
- * API function to act as a generic request for all Service calls.
- *
- * @param {string} url The URL where the request will go.
- * @param {string} dataType The type of request.  json or jsonp.
- * @param {string} type The type of HTTP request.  GET, POST, PUT, etc.
- * @param {object} data The data to send to the server.
- * @param {function} callback The function callback.
- */
-drupal.api.prototype.call = function(url, dataType, type, data, callback) {
-  var request = {
-    url: url,
-    dataType: dataType,
-    type: type,
-    success: function(data, textStatus) {
-      if (textStatus == 'success') {
+  /**
+   * API function to act as a generic request for all Service calls.
+   *
+   * @this {object} The drupal.api object.
+   * @param {string} url The URL where the request will go.
+   * @param {string} dataType The type of request.  json or jsonp.
+   * @param {string} type The type of HTTP request.  GET, POST, PUT, etc.
+   * @param {object} data The data to send to the server.
+   * @param {function} callback The function callback.
+   */
+  call: function(url, dataType, type, data, callback) {
+    var request = {
+      url: url,
+      dataType: dataType,
+      type: type,
+      success: function(data, textStatus) {
+        console.log(data);
+        if (textStatus == 'success') {
+          if (callback) {
+            callback(data);
+          }
+        }
+        else {
+          console.log('Error: ' + textStatus);
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        console.log(xhr.responseText);
         if (callback) {
-          callback(data);
+          callback(null);
         }
       }
-      else {
-        console.log('Error: ' + textStatus);
-      }
-    },
-    error: function(xhr, ajaxOptions, thrownError) {
-      console.log(xhr.responseText);
-      if (callback) {
-        callback(null);
-      }
+    };
+
+    if (data) {
+      request['data'] = data;
     }
-  };
 
-  if (data) {
-    request['data'] = data;
+    // Make the request.
+    jQuery.ajax(request);
+  },
+
+  /**
+   * API function to get any results from the drupal API.
+   *
+   * @this {object} The drupal.api object.
+   * @param {object} object The object of the item we are getting..
+   * @param {object} query key-value pairs to add to the query of the URL.
+   * @param {function} callback The callback function.
+   */
+  get: function(object, query, callback) {
+    var url = this.getURL(object);
+    url += '.jsonp';
+    url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
+    this.call(url, 'jsonp', 'GET', null, callback);
+  },
+
+  /**
+   * API function to perform an action.
+   *
+   * @this {object} The drupal.api object.
+   * @param {string} action The action to perform.
+   * @param {object} object The entity object to set.
+   * @param {function} callback The callback function.
+   */
+  execute: function(action, object, callback) {
+    var url = this.getURL(object) + '/' + action;
+    this.call(url, 'json', 'POST', object, callback);
+  },
+
+  /**
+   * API function to save the value of an object using Services.
+   *
+   * @this {object} The drupal.api object.
+   * @param {object} object The entity object to set.  If the object does not
+   * have an ID, then this will create a new entity, otherwise, it will simply
+   * update the existing resource.
+   *
+   * @param {function} callback The callback function.
+   *
+   */
+  save: function(object, callback) {
+    var type = object.id ? 'PUT' : 'POST';
+    this.call(this.getURL(object), 'json', type, object, callback);
+  },
+
+  /**
+   * API function to remove an object on the server.
+   *
+   * @this {object} The drupal.api object.
+   * @param {object} object The entity object to delete.
+   * @param {function} callback The callback function.
+   */
+  remove: function(object, callback) {
+    this.call(this.getURL(object), 'json', 'DELETE', null, callback);
   }
-
-  // Make the request.
-  jQuery.ajax(request);
-};
-
-/**
- * API function to get any results from the drupal API.
- *
- * @param {object} object The object of the item we are getting..
- * @param {object} query key-value pairs to add to the query of the URL.
- * @param {function} callback The callback function.
- */
-drupal.api.prototype.get = function(object, query, callback) {
-  var url = this.getURL(object);
-  url += '.jsonp';
-  url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
-  this.call(url, 'jsonp', 'GET', null, callback);
-};
-
-/**
- * API function to get a type of object within an object.
- *
- * @param {object} object The object of the item we are getting..
- * @param {string} type The type of object you wish to get within this object.
- * @param {object} query key-value pairs to add to the query of the URL.
- * @param {function} callback The callback function.
- */
-drupal.api.prototype.getItems = function(object, type, query, callback) {
-  var url = this.getURL(object) + '/' + type;
-  url += '.jsonp';
-  url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
-  this.call(url, 'jsonp', 'GET', null, callback);
-};
-
-/**
- * API function to perform an action.
- *
- * @param {string} action The action to perform.
- * @param {object} object The entity object to set.
- * @param {function} callback The callback function.
- */
-drupal.api.prototype.execute = function(action, object, callback) {
-  var url = this.getURL(object) + '/' + action;
-  //url += '?XDEBUG_SESSION_START=netbeans-xdebug';
-  this.call(url, 'json', 'POST', object, callback);
-};
-
-/**
- * API function to save the value of an object using Services.
- *
- * @param {object} object The entity object to set.  If the object does not
- * have an ID, then this will create a new entity, otherwise, it will simply
- * update the existing resource.
- *
- * @param {function} callback The callback function.
- *
- **/
-drupal.api.prototype.save = function(object, callback) {
-  var type = object.id ? 'PUT' : 'POST';
-  this.call(this.getURL(object), 'json', type, object, callback);
-};
-
-/**
- * API function to remove an object on the server.
- *
- * @param {object} object The entity object to delete.
- * @param {function} callback The callback function.
- */
-drupal.api.prototype.remove = function(object, callback) {
-  this.call(this.getURL(object), 'json', 'DELETE', null, callback);
 };
 // The drupal namespace.
 var drupal = drupal || {};
@@ -461,6 +453,11 @@ drupal.system.prototype = new drupal.entity();
 /** Reset the constructor. */
 drupal.system.prototype.constructor = drupal.system;
 
+/** Declare the system api. */
+drupal.system.api = jQuery.extend(drupal.api, {
+  resource: 'system'
+});
+
 /**
  * Sets the object.
  *
@@ -473,7 +470,7 @@ drupal.system.prototype.set = function(object) {
   this.entityName = 'system';
 
   /** Set the api. */
-  this.api = this.api || new drupal.system.api();
+  this.api = drupal.system.api;
 
   /** Set current user. */
   this.user = new drupal.user(object.user);
@@ -548,27 +545,6 @@ drupal.system.prototype.del_variable = function(name, callback) {
 // The drupal namespace.
 var drupal = drupal || {};
 
-/** The drupal.user namespace */
-drupal.system = drupal.system || {};
-
-/**
- * @constructor
- * @extends drupal.api
- * @class The Drupal System Services class.
- */
-drupal.system.api = function() {
-  this.resource = this.resource || 'system';
-  drupal.api.call(this);
-};
-
-/** Derive from drupal.api. */
-drupal.system.api.prototype = new drupal.api();
-
-/** Reset the constructor. */
-drupal.system.api.prototype.constructor = drupal.system.api;
-// The drupal namespace.
-var drupal = drupal || {};
-
 /**
  * @constructor
  * @extends drupal.entity
@@ -588,6 +564,11 @@ drupal.node.prototype = new drupal.entity();
 /** Reset the constructor. */
 drupal.node.prototype.constructor = drupal.node;
 
+/** Declare the node api. */
+drupal.node.api = jQuery.extend(drupal.api, {
+  resource: 'node'
+});
+
 /**
  * Sets the object.
  *
@@ -599,8 +580,8 @@ drupal.node.prototype.set = function(object) {
   /** The name of this entity. */
   this.entityName = 'node';
 
-  /** Set the api. */
-  this.api = this.api || new drupal.node.api();
+  /** Set the api to the drupal.node.api. */
+  this.api = drupal.node.api;
 
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
@@ -646,27 +627,6 @@ drupal.node.prototype.setQuery = function(query, param, value) {
 // The drupal namespace.
 var drupal = drupal || {};
 
-/** The drupal.node namespace */
-drupal.node = drupal.node || {};
-
-/**
- * @constructor
- * @extends drupal.api
- * @class The Drupal Node Services class.
- */
-drupal.node.api = function() {
-  this.resource = this.resource || 'node';
-  drupal.api.call(this);
-};
-
-/** Derive from drupal.api. */
-drupal.node.api.prototype = new drupal.api();
-
-/** Reset the constructor. */
-drupal.node.api.prototype.constructor = drupal.node.api;
-// The drupal namespace.
-var drupal = drupal || {};
-
 /** The current logged in user. */
 drupal.current_user = null;
 
@@ -689,6 +649,11 @@ drupal.user.prototype = new drupal.entity();
 /** Reset the constructor. */
 drupal.user.prototype.constructor = drupal.user;
 
+/** Declare the user api. */
+drupal.user.api = jQuery.extend(drupal.api, {
+  resource: 'user'
+});
+
 /**
  * Sets the object.
  *
@@ -701,7 +666,7 @@ drupal.user.prototype.set = function(object) {
   this.entityName = 'user';
 
   /** Set the api. */
-  this.api = this.api || new drupal.user.api();
+  this.api = drupal.user.api;
 
   /** Set the ID based on the uid. */
   this.id = object.uid || this.id || 0;
@@ -739,7 +704,7 @@ drupal.user.prototype.setSession = function(name, sessid) {
     /** Now store this in a cookie for further authentication. */
     drupal.cookie(name, sessid);
 
-    /** Now store this user as the 'current' user. */
+    // Now store this user as the 'current' user.
     drupal.current_user = this;
   }
 };
@@ -822,28 +787,3 @@ drupal.user.prototype.get = function() {
     status: this.status
   });
 };
-// The drupal namespace.
-var drupal = drupal || {};
-
-/** The drupal.user namespace */
-drupal.user = drupal.user || {};
-
-/**
- * @constructor
- * @extends drupal.api
- * @class The Drupal User Services class.
- */
-drupal.user.api = function() {
-
-  // Set the resource
-  this.resource = 'user';
-
-  // Call the drupal.api constructor.
-  drupal.api.call(this);
-};
-
-/** Derive from drupal.api. */
-drupal.user.api.prototype = new drupal.api();
-
-/** Reset the constructor. */
-drupal.user.api.prototype.constructor = drupal.user.api;
