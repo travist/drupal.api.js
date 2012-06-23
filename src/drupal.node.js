@@ -26,6 +26,16 @@ drupal.node.api = jQuery.extend(new drupal.api(), {
 });
 
 /**
+ * Returns an index of nodes.
+ *
+ * @param {object} query The query parameters.
+ * @param {function} callback The callback function.
+ */
+drupal.node.index = function(query, callback) {
+  drupal.entity.index(drupal.node, query, callback);
+};
+
+/**
  * Sets the object.
  *
  * @param {object} object The object which contains the data.

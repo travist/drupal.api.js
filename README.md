@@ -25,7 +25,7 @@ Examples
 
    3.) To get a list of nodes of type='page'
 
-      new drupal.node({type:'page'}, function(nodes) {
+      drupal.node.index({type:'page'}, function(nodes) {
 
         // This is a list of nodes of type 'page'.
         console.log(nodes);

@@ -2,7 +2,7 @@ var listNodes = function(callback) {
   asyncTest("Get list of nodes based on node type", function() {
 
     // Get all "auto" nodes.
-    new drupal.node({type:"page"}, function(nodes) {
+    drupal.node.index({type:"page"}, function(nodes) {
 
       // Start the test...
       start();

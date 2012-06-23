@@ -29,6 +29,16 @@ drupal.user.api = jQuery.extend(new drupal.api(), {
 });
 
 /**
+ * Returns an index of users.
+ *
+ * @param {object} query The query parameters.
+ * @param {function} callback The callback function.
+ */
+drupal.user.index = function(query, callback) {
+  drupal.entity.index(drupal.user, query, callback);
+};
+
+/**
  * Sets the object.
  *
  * @param {object} object The object which contains the data.

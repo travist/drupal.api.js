@@ -26,6 +26,34 @@ drupal.entity = function(object, callback) {
 };
 
 /**
+ * Returns an index of entities.
+ *
+ * @param {object} object The object to create for each entity.
+ * @param {object} query The query parameters.
+ * @param {function} callback The callback function.
+ */
+drupal.entity.index = function(object, query, callback) {
+
+  // Don't require a query...
+  if (typeof query === 'function') {
+    callback = query;
+    query = {};
+  }
+
+  // Get the list of entities.
+  object.api.get({}, query, function(entities) {
+    var i = entities.length;
+    while (i--) {
+      entities[i] = new object(entities[i]);
+      entities[i].store();
+    }
+    if (callback) {
+      callback(entities);
+    }
+  });
+};
+
+/**
  * Update an object.
  *
  * @param {object} object The object which contains the data.
@@ -172,6 +200,11 @@ drupal.entity.prototype.getQuery = function() {
  */
 drupal.entity.prototype.load = function(callback) {
 
+  // If this isn't a valid object, then return null...
+  if (!this.id) {
+    callback(null);
+  }
+
   // Declare the object to load...
   var object = null;
   if (object = this.retrieve()) {
@@ -188,23 +221,8 @@ drupal.entity.prototype.load = function(callback) {
           callback(null);
         }
 
-        // If this is an array of objects, then return a list of new objects.
-        else if (object[0]) {
-
-          var i = object.length;
-          while (i--) {
-            object[i] = new entity.constructor(object[i]);
-            object[i].store();
-          }
-
-          // Callback a list of objects.
-          callback.call(entity, object);
-
-        } else {
-
-          // Update the object.
-          entity.update(object, callback);
-        }
+        // Update the object.
+        entity.update(object, callback);
       };
     })(this));
   }

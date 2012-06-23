@@ -26,7 +26,7 @@ var userList = function(callback) {
   // Get a list of users.
   asyncTest("Get list of users", function() {
     expect(3);
-    new drupal.user({}, function(users) {
+    drupal.user.index(function(users) {
       // Iterate over all the nodes and verify that they auto nodes.
       for (var index in users) {
 
