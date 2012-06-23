@@ -21,7 +21,7 @@ drupal.api = function() {
      * @return {string} The services endpoint.
      **/
     endpoint: function() {
-      return drupal.endpoint || this.endpoint;
+      return drupal.endpoint || '';
     },
 
     /**
