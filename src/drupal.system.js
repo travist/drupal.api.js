@@ -81,7 +81,7 @@ drupal.system.prototype = new drupal.entity();
 drupal.system.prototype.constructor = drupal.system;
 
 /** Declare the system api. */
-drupal.system.api = jQuery.extend(drupal.api, {
+drupal.system.api = jQuery.extend(new drupal.api(), {
   resource: 'system'
 });
 

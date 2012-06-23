@@ -21,7 +21,7 @@ drupal.node.prototype = new drupal.entity();
 drupal.node.prototype.constructor = drupal.node;
 
 /** Declare the node api. */
-drupal.node.api = jQuery.extend(drupal.api, {
+drupal.node.api = jQuery.extend(new drupal.api(), {
   resource: 'node'
 });
 

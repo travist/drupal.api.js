@@ -24,7 +24,7 @@ drupal.user.prototype = new drupal.entity();
 drupal.user.prototype.constructor = drupal.user;
 
 /** Declare the user api. */
-drupal.user.api = jQuery.extend(drupal.api, {
+drupal.user.api = jQuery.extend(new drupal.api(), {
   resource: 'user'
 });
 
