@@ -179,6 +179,7 @@ drupal.entity.prototype.getPOST = function() {
 /**
  * Gets the query variables.
  *
+ * @param {object} object The query variables.
  * @return {object} The query variables.
  */
 drupal.entity.prototype.getQuery = function(object) {

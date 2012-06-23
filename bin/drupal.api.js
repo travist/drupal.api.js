@@ -179,7 +179,8 @@ drupal.entity.index = function(object, query, callback) {
   }
 
   // Get the list of entities.
-  object.api.get({}, query, function(entities) {
+  var instance = new object({});
+  instance.api.get({}, instance.getQuery(query), function(entities) {
     var i = entities.length;
     while (i--) {
       entities[i] = new object(entities[i]);
@@ -316,11 +317,12 @@ drupal.entity.prototype.getPOST = function() {
 /**
  * Gets the query variables.
  *
+ * @param {object} object The query variables.
  * @return {object} The query variables.
  */
-drupal.entity.prototype.getQuery = function() {
-  var object = this.get();
+drupal.entity.prototype.getQuery = function(object) {
   var query = {};
+  object = object || this.get();
   for (var param in object) {
     if (object.hasOwnProperty(param) && object[param]) {
       this.setQuery(query, param, object[param]);
