@@ -2,7 +2,8 @@
 var drupal = drupal || {};
 
 /** Determine if we have storage. */
-drupal.hasStorage = false/*typeof(Storage) !== 'undefined'*/;
+drupal.hasStorage = (typeof(Storage) !== 'undefined');
+drupal.hasStorage &= (typeof(JSON) !== 'undefined');
 
 /**
  * @constructor
@@ -82,13 +83,8 @@ drupal.entity.prototype.update = function(object, callback) {
 drupal.entity.prototype.store = function() {
   if (this.id && drupal.hasStorage) {
     var object = this.get();
-    var key = '';
-    for (var prop in object) {
-      if (object.hasOwnProperty(prop) && object[prop]) {
-        key = this.entityName + '-' + this.id + '-' + prop;
-        localStorage.setItem(key, object[prop]);
-      }
-    }
+    var key = this.entityName + '-' + this.id;
+    localStorage.setItem(key, JSON.stringify(object));
   }
 };
 
@@ -100,12 +96,9 @@ drupal.entity.prototype.store = function() {
 drupal.entity.prototype.retrieve = function() {
   var object = null, key = '', value = '';
   if (this.id && drupal.hasStorage) {
-    object = this.get();
-    for (var prop in object) {
-      key = this.entityName + '-' + this.id + '-' + prop;
-      if (value = localStorage.getItem(key)) {
-        object[prop] = value;
-      }
+    var key = this.entityName + '-' + this.id;
+    if (object = JSON.parse(localStorage.getItem(key))) {
+      this.set(object);
     }
   }
   return object;
