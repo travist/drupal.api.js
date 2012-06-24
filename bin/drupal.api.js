@@ -352,7 +352,7 @@ drupal.entity.prototype.getQuery = function(object) {
   var query = {};
   object = object || this.get();
   for (var param in object) {
-    if (object.hasOwnProperty(param) && object[param]) {
+    if (param !== 'id' && object.hasOwnProperty(param) && object[param]) {
       this.setQuery(query, param, object[param]);
     }
   }
