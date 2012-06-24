@@ -69,9 +69,10 @@ drupal.cookie = function(key, value, options) {
  *
  * @param {function} callback The function to be called once the system has
  * connected.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.system = function(callback) {
-  drupal.entity.call(this, {}, callback);
+drupal.system = function(callback, store) {
+  drupal.entity.call(this, {}, callback, store);
 };
 
 /** Derive from entity. */

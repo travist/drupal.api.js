@@ -12,9 +12,10 @@ drupal.current_user = null;
  * @param {object} object The user object.
  * @param {function} callback The function to be called once the user has
  * been retrieved from the server.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.user = function(object, callback) {
-  drupal.entity.call(this, object, callback);
+drupal.user = function(object, callback, store) {
+  drupal.entity.call(this, object, callback, store);
 };
 
 /** Derive from drupal.entity. */
@@ -33,9 +34,10 @@ drupal.user.api = jQuery.extend(new drupal.api(), {
  *
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
+ * @param {boolean} store Determines if the objects should be stored.
  */
-drupal.user.index = function(query, callback) {
-  drupal.entity.index(drupal.user, query, callback);
+drupal.user.index = function(query, callback, store) {
+  drupal.entity.index(drupal.user, query, callback, store);
 };
 
 /**

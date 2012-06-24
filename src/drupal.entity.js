@@ -12,8 +12,12 @@ drupal.hasStorage &= (typeof(JSON) !== 'undefined');
  *
  * @param {object} object The entity object.
  * @param {function} callback The callback function to get the object.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.entity = function(object, callback) {
+drupal.entity = function(object, callback, store) {
+
+  // If we should store this object in localStorage.
+  this.store = store || true;
 
   // If the object is valid, then set it...
   if (object) {
@@ -32,8 +36,12 @@ drupal.entity = function(object, callback) {
  * @param {object} object The object to create for each entity.
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
+ * @param {boolean} store Determines if the objects should be stored.
  */
-drupal.entity.index = function(object, query, callback) {
+drupal.entity.index = function(object, query, callback, store) {
+
+  // Indexes by default shouldn't store...
+  store = store || false;
 
   // Don't require a query...
   if (typeof query === 'function') {
@@ -47,7 +55,9 @@ drupal.entity.index = function(object, query, callback) {
     var i = entities.length;
     while (i--) {
       entities[i] = new object(entities[i]);
-      entities[i].store();
+      if (store) {
+        entities[i].store();
+      }
     }
     if (callback) {
       callback(entities);
@@ -81,7 +91,7 @@ drupal.entity.prototype.update = function(object, callback) {
  * Stores the object in local storage.
  */
 drupal.entity.prototype.store = function() {
-  if (this.id && drupal.hasStorage) {
+  if (this.id && this.store && drupal.hasStorage) {
     var object = this.get();
     var key = this.entityName + '-' + this.id;
     localStorage.setItem(key, JSON.stringify(object));
@@ -95,7 +105,7 @@ drupal.entity.prototype.store = function() {
  */
 drupal.entity.prototype.retrieve = function() {
   var object = null, key = '', value = '';
-  if (this.id && drupal.hasStorage) {
+  if (this.id && this.store && drupal.hasStorage) {
     var key = this.entityName + '-' + this.id;
     if (object = JSON.parse(localStorage.getItem(key))) {
       this.set(object);

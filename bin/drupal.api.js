@@ -665,8 +665,12 @@ drupal.hasStorage &= (typeof(JSON) !== 'undefined');
  *
  * @param {object} object The entity object.
  * @param {function} callback The callback function to get the object.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.entity = function(object, callback) {
+drupal.entity = function(object, callback, store) {
+
+  // If we should store this object in localStorage.
+  this.store = store || true;
 
   // If the object is valid, then set it...
   if (object) {
@@ -685,8 +689,12 @@ drupal.entity = function(object, callback) {
  * @param {object} object The object to create for each entity.
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
+ * @param {boolean} store Determines if the objects should be stored.
  */
-drupal.entity.index = function(object, query, callback) {
+drupal.entity.index = function(object, query, callback, store) {
+
+  // Indexes by default shouldn't store...
+  store = store || false;
 
   // Don't require a query...
   if (typeof query === 'function') {
@@ -700,7 +708,9 @@ drupal.entity.index = function(object, query, callback) {
     var i = entities.length;
     while (i--) {
       entities[i] = new object(entities[i]);
-      entities[i].store();
+      if (store) {
+        entities[i].store();
+      }
     }
     if (callback) {
       callback(entities);
@@ -734,7 +744,7 @@ drupal.entity.prototype.update = function(object, callback) {
  * Stores the object in local storage.
  */
 drupal.entity.prototype.store = function() {
-  if (this.id && drupal.hasStorage) {
+  if (this.id && this.store && drupal.hasStorage) {
     var object = this.get();
     var key = this.entityName + '-' + this.id;
     localStorage.setItem(key, JSON.stringify(object));
@@ -748,7 +758,7 @@ drupal.entity.prototype.store = function() {
  */
 drupal.entity.prototype.retrieve = function() {
   var object = null, key = '', value = '';
-  if (this.id && drupal.hasStorage) {
+  if (this.id && this.store && drupal.hasStorage) {
     var key = this.entityName + '-' + this.id;
     if (object = JSON.parse(localStorage.getItem(key))) {
       this.set(object);
@@ -981,9 +991,10 @@ drupal.cookie = function(key, value, options) {
  *
  * @param {function} callback The function to be called once the system has
  * connected.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.system = function(callback) {
-  drupal.entity.call(this, {}, callback);
+drupal.system = function(callback, store) {
+  drupal.entity.call(this, {}, callback, store);
 };
 
 /** Derive from entity. */
@@ -1092,9 +1103,10 @@ var drupal = drupal || {};
  * @param {object} object The node object.
  * @param {function} callback The function to be called once the node has
  * been retrieved from the server.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.node = function(object, callback) {
-  drupal.entity.call(this, object, callback);
+drupal.node = function(object, callback, store) {
+  drupal.entity.call(this, object, callback, store);
 };
 
 /** Derive from entity. */
@@ -1113,9 +1125,10 @@ drupal.node.api = jQuery.extend(new drupal.api(), {
  *
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
+ * @param {boolean} store Determines if the objects should be stored.
  */
-drupal.node.index = function(query, callback) {
-  drupal.entity.index(drupal.node, query, callback);
+drupal.node.index = function(query, callback, store) {
+  drupal.entity.index(drupal.node, query, callback, store);
 };
 
 /**
@@ -1192,9 +1205,10 @@ drupal.current_user = null;
  * @param {object} object The user object.
  * @param {function} callback The function to be called once the user has
  * been retrieved from the server.
+ * @param {boolean} store Determines if this object should be stored.
  */
-drupal.user = function(object, callback) {
-  drupal.entity.call(this, object, callback);
+drupal.user = function(object, callback, store) {
+  drupal.entity.call(this, object, callback, store);
 };
 
 /** Derive from drupal.entity. */
@@ -1213,9 +1227,10 @@ drupal.user.api = jQuery.extend(new drupal.api(), {
  *
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
+ * @param {boolean} store Determines if the objects should be stored.
  */
-drupal.user.index = function(query, callback) {
-  drupal.entity.index(drupal.user, query, callback);
+drupal.user.index = function(query, callback, store) {
+  drupal.entity.index(drupal.user, query, callback, store);
 };
 
 /**
