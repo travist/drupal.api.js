@@ -20,10 +20,7 @@ drupal.entity = function(object, callback, options) {
   this.options = jQuery.extend({
     store: true,
     expires: 3600
-  }, options || {});
-
-  // If we should store this object in localStorage.
-  this.store = (typeof store === 'undefined') ? true : store;
+  }, (typeof options === 'undefined') ? {} : options);
 
   // If the object is valid, then set it...
   if (object) {
