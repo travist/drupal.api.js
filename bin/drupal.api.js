@@ -670,7 +670,7 @@ drupal.hasStorage &= (typeof(JSON) !== 'undefined');
 drupal.entity = function(object, callback, store) {
 
   // If we should store this object in localStorage.
-  this.store = store || true;
+  this.store = (typeof store === 'undefined') ? true : store;
 
   // If the object is valid, then set it...
   if (object) {
@@ -694,7 +694,7 @@ drupal.entity = function(object, callback, store) {
 drupal.entity.index = function(object, query, callback, store) {
 
   // Indexes by default shouldn't store...
-  store = store || false;
+  store = (typeof store === 'undefined') ? false : store;
 
   // Don't require a query...
   if (typeof query === 'function') {
