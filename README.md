@@ -7,6 +7,10 @@ This makes is extremely simple to work with Drupal services from within a web
 application that uses JavaScript (JSON) for communication to the Drupal RESTful
 server.
 
+A great use case for the need for this library is within the <a href="http://phonegap.com/">PhoneGap</a> platform
+for building mobile applications that may need to interact with your Drupal CMS
+backend.
+
 Examples
 ----------------------------------
 
