@@ -12,9 +12,15 @@ drupal.hasStorage &= (typeof(JSON) !== 'undefined');
  *
  * @param {object} object The entity object.
  * @param {function} callback The callback function to get the object.
- * @param {boolean} store Determines if this object should be stored.
+ * @param {object} options Options used to govern functionality.
  */
-drupal.entity = function(object, callback, store) {
+drupal.entity = function(object, callback, options) {
+
+  // Set the options.
+  this.options = jQuery.extend({
+    store: true,
+    expires: 3600
+  }, options || {});
 
   // If we should store this object in localStorage.
   this.store = (typeof store === 'undefined') ? true : store;
@@ -36,12 +42,14 @@ drupal.entity = function(object, callback, store) {
  * @param {object} object The object to create for each entity.
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
- * @param {boolean} store Determines if the objects should be stored.
+ * @param {object} options Options used to govern functionality.
  */
-drupal.entity.index = function(object, query, callback, store) {
+drupal.entity.index = function(object, query, callback, options) {
 
-  // Indexes by default shouldn't store...
-  store = (typeof store === 'undefined') ? false : store;
+  // Set the default options.
+  options = jQuery.extend({
+    store: false
+  }, options || {});
 
   // Don't require a query...
   if (typeof query === 'function') {
@@ -54,10 +62,8 @@ drupal.entity.index = function(object, query, callback, store) {
   instance.api.get({}, instance.getQuery(query), function(entities) {
     var i = entities.length;
     while (i--) {
-      entities[i] = new object(entities[i]);
-      if (store) {
-        entities[i].store();
-      }
+      entities[i] = new object(entities[i], null, options);
+      entities[i].store();
     }
     if (callback) {
       callback(entities);
@@ -91,7 +97,7 @@ drupal.entity.prototype.update = function(object, callback) {
  * Stores the object in local storage.
  */
 drupal.entity.prototype.store = function() {
-  if (this.id && this.store && drupal.hasStorage) {
+  if (this.id && this.options.store && drupal.hasStorage) {
     var object = this.get();
     var key = this.entityName + '-' + this.id;
     localStorage.setItem(key, JSON.stringify(object));
@@ -105,7 +111,7 @@ drupal.entity.prototype.store = function() {
  */
 drupal.entity.prototype.retrieve = function() {
   var object = null, key = '', value = '';
-  if (this.id && this.store && drupal.hasStorage) {
+  if (this.id && this.options.store && drupal.hasStorage) {
     var key = this.entityName + '-' + this.id;
     if (object = JSON.parse(localStorage.getItem(key))) {
       this.set(object);

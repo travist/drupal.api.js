@@ -9,10 +9,10 @@ var drupal = drupal || {};
  * @param {object} object The node object.
  * @param {function} callback The function to be called once the node has
  * been retrieved from the server.
- * @param {boolean} store Determines if this object should be stored.
+ * @param {object} options Options used to govern functionality.
  */
-drupal.node = function(object, callback, store) {
-  drupal.entity.call(this, object, callback, store);
+drupal.node = function(object, callback, options) {
+  drupal.entity.call(this, object, callback, options);
 };
 
 /** Derive from entity. */
@@ -31,10 +31,10 @@ drupal.node.api = jQuery.extend(new drupal.api(), {
  *
  * @param {object} query The query parameters.
  * @param {function} callback The callback function.
- * @param {boolean} store Determines if the objects should be stored.
+ * @param {object} options Options used to govern functionality.
  */
-drupal.node.index = function(query, callback, store) {
-  drupal.entity.index(drupal.node, query, callback, store);
+drupal.node.index = function(query, callback, options) {
+  drupal.entity.index(drupal.node, query, callback, options);
 };
 
 /**
