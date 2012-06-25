@@ -748,8 +748,17 @@ drupal.entity.prototype.update = function(object, callback) {
  */
 drupal.entity.prototype.store = function() {
   if (this.id && this.options.store && drupal.hasStorage) {
+
+    // Get the object.
     var object = this.get();
+
+    // Get the key for this object.
     var key = this.entityName + '-' + this.id;
+
+    // Set an expiration date for this object.
+    object.expires = (this.options.expires * 1000) + (new Date()).getTime();
+
+    // Store this object in localStorage.
     localStorage.setItem(key, JSON.stringify(object));
   }
 };
@@ -762,9 +771,24 @@ drupal.entity.prototype.store = function() {
 drupal.entity.prototype.retrieve = function() {
   var object = null, key = '', value = '';
   if (this.id && this.options.store && drupal.hasStorage) {
+
+    // Get the key for this object.
     var key = this.entityName + '-' + this.id;
+
+    // Get it out of localStorage.
     if (object = JSON.parse(localStorage.getItem(key))) {
-      this.set(object);
+
+      // Make sure this object hasn't expired.
+      if (object.expires > (new Date()).getTime()) {
+
+        // Clear it if it has.
+        localStorage.removeItem(key);
+      }
+      else {
+
+        // Set the object if it was retrieved.
+        this.set(object);
+      }
     }
   }
   return object;
