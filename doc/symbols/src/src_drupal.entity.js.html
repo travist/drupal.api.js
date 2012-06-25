@@ -147,131 +147,135 @@
 <span class='line'>140</span> </span><span class="WHIT">  </span><span class="COMM">/** The ID of this entity. */</span><span class="WHIT">
 <span class='line'>141</span> </span><span class="WHIT">  </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object.id</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>142</span> 
-<span class='line'>143</span> </span><span class="WHIT">  </span><span class="COMM">/** The name of this entity. */</span><span class="WHIT">
-<span class='line'>144</span> </span><span class="WHIT">  </span><span class="NAME">this.entityName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'entity'</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>145</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>146</span> 
-<span class='line'>147</span> </span><span class="COMM">/**
-<span class='line'>148</span>  * Returns the object in JSON form.
-<span class='line'>149</span>  *
-<span class='line'>150</span>  * @return {object} The object representation of this entity.
-<span class='line'>151</span>  */</span><span class="WHIT">
-<span class='line'>152</span> </span><span class="NAME">drupal.entity.prototype.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>153</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>154</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="WHIT">
-<span class='line'>155</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>156</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>157</span> 
-<span class='line'>158</span> </span><span class="COMM">/**
-<span class='line'>159</span>  * Sets a query variable.
-<span class='line'>160</span>  *
-<span class='line'>161</span>  * @param {object} query The query object.
-<span class='line'>162</span>  * @param {string} param The param to set.
-<span class='line'>163</span>  * @param {string} value The value of the field to set.
-<span class='line'>164</span>  */</span><span class="WHIT">
-<span class='line'>165</span> </span><span class="NAME">drupal.entity.prototype.setQuery</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">query</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>166</span> </span><span class="WHIT">  </span><span class="NAME">query</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>167</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>168</span> 
-<span class='line'>169</span> </span><span class="COMM">/**
-<span class='line'>170</span>  * Gets a POST object.
-<span class='line'>171</span>  *
-<span class='line'>172</span>  * @return {object} The filtered object.
-<span class='line'>173</span>  */</span><span class="WHIT">
-<span class='line'>174</span> </span><span class="NAME">drupal.entity.prototype.getPOST</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>175</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>176</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">object.id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="WHIT">    </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">object.id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>179</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>180</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>181</span> 
-<span class='line'>182</span> </span><span class="COMM">/**
-<span class='line'>183</span>  * Gets the query variables.
-<span class='line'>184</span>  *
-<span class='line'>185</span>  * @param {object} object The query variables.
-<span class='line'>186</span>  * @return {object} The query variables.
-<span class='line'>187</span>  */</span><span class="WHIT">
-<span class='line'>188</span> </span><span class="NAME">drupal.entity.prototype.getQuery</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>189</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">query</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>190</span> </span><span class="WHIT">  </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>191</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">param</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>192</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">'id'</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">object.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>193</span> </span><span class="WHIT">      </span><span class="NAME">this.setQuery</span><span class="PUNC">(</span><span class="NAME">query</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>195</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>196</span> </span><span class="WHIT">  </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">query.id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>197</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">query</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>198</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>199</span> 
-<span class='line'>200</span> </span><span class="COMM">/**
-<span class='line'>201</span>  * Loads and object using the drupal.api.
-<span class='line'>202</span>  *
-<span class='line'>203</span>  * @param {function} callback The callback function when the object is
-<span class='line'>204</span>  * retrieved.
-<span class='line'>205</span>  */</span><span class="WHIT">
-<span class='line'>206</span> </span><span class="NAME">drupal.entity.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>207</span> 
-<span class='line'>208</span> </span><span class="WHIT">  </span><span class="COMM">// If this isn't a valid object, then return null...</span><span class="WHIT">
-<span class='line'>209</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>210</span> </span><span class="WHIT">    </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>211</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>212</span> 
-<span class='line'>213</span> </span><span class="WHIT">  </span><span class="COMM">// Declare the object to load...</span><span class="WHIT">
-<span class='line'>214</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>215</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.retrieve</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>216</span> </span><span class="WHIT">    </span><span class="NAME">this.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>217</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>218</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>219</span> 
-<span class='line'>220</span> </span><span class="WHIT">    </span><span class="COMM">// Call the API.</span><span class="WHIT">
-<span class='line'>221</span> </span><span class="WHIT">    </span><span class="NAME">this.api.get</span><span class="PUNC">(</span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getQuery</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">entity</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>222</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">  </span><span class="COMM">/** The uri of this entity. */</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">  </span><span class="NAME">this.uri</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object.uri</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.uri</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span> 
+<span class='line'>146</span> </span><span class="WHIT">  </span><span class="COMM">/** The name of this entity. */</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">  </span><span class="NAME">this.entityName</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'entity'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>149</span> 
+<span class='line'>150</span> </span><span class="COMM">/**
+<span class='line'>151</span>  * Returns the object in JSON form.
+<span class='line'>152</span>  *
+<span class='line'>153</span>  * @return {object} The object representation of this entity.
+<span class='line'>154</span>  */</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="NAME">drupal.entity.prototype.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.id</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">    </span><span class="NAME">uri</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.uri</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> 
+<span class='line'>162</span> </span><span class="COMM">/**
+<span class='line'>163</span>  * Sets a query variable.
+<span class='line'>164</span>  *
+<span class='line'>165</span>  * @param {object} query The query object.
+<span class='line'>166</span>  * @param {string} param The param to set.
+<span class='line'>167</span>  * @param {string} value The value of the field to set.
+<span class='line'>168</span>  */</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="NAME">drupal.entity.prototype.setQuery</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">query</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="WHIT">  </span><span class="NAME">query</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>172</span> 
+<span class='line'>173</span> </span><span class="COMM">/**
+<span class='line'>174</span>  * Gets a POST object.
+<span class='line'>175</span>  *
+<span class='line'>176</span>  * @return {object} The filtered object.
+<span class='line'>177</span>  */</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="NAME">drupal.entity.prototype.getPOST</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">object.id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">    </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">object.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>185</span> 
+<span class='line'>186</span> </span><span class="COMM">/**
+<span class='line'>187</span>  * Gets the query variables.
+<span class='line'>188</span>  *
+<span class='line'>189</span>  * @param {object} object The query variables.
+<span class='line'>190</span>  * @return {object} The query variables.
+<span class='line'>191</span>  */</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="NAME">drupal.entity.prototype.getQuery</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>193</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">query</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>194</span> </span><span class="WHIT">  </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">param</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">param</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">'id'</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">object.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">param</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">      </span><span class="NAME">this.setQuery</span><span class="PUNC">(</span><span class="NAME">query</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">param</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">object</span><span class="PUNC">[</span><span class="NAME">param</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">  </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">query.id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">query</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> 
+<span class='line'>204</span> </span><span class="COMM">/**
+<span class='line'>205</span>  * Loads and object using the drupal.api.
+<span class='line'>206</span>  *
+<span class='line'>207</span>  * @param {function} callback The callback function when the object is
+<span class='line'>208</span>  * retrieved.
+<span class='line'>209</span>  */</span><span class="WHIT">
+<span class='line'>210</span> </span><span class="NAME">drupal.entity.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>211</span> 
+<span class='line'>212</span> </span><span class="WHIT">  </span><span class="COMM">// If this isn't a valid object, then return null...</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">    </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>216</span> 
+<span class='line'>217</span> </span><span class="WHIT">  </span><span class="COMM">// Declare the object to load...</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.retrieve</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">    </span><span class="NAME">this.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>223</span> 
-<span class='line'>224</span> </span><span class="WHIT">        </span><span class="COMM">// If no object is returned, then return null.</span><span class="WHIT">
-<span class='line'>225</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>226</span> </span><span class="WHIT">          </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>227</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>228</span> 
-<span class='line'>229</span> </span><span class="WHIT">        </span><span class="COMM">// Update the object.</span><span class="WHIT">
-<span class='line'>230</span> </span><span class="WHIT">        </span><span class="NAME">entity.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>231</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>232</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>233</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>234</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>235</span> 
-<span class='line'>236</span> </span><span class="COMM">/**
-<span class='line'>237</span>  * Saves this entity.
-<span class='line'>238</span>  *
-<span class='line'>239</span>  * @param {function} callback The function called once entity is saved.
-<span class='line'>240</span>  */</span><span class="WHIT">
-<span class='line'>241</span> </span><span class="NAME">drupal.entity.prototype.save</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>242</span> 
-<span class='line'>243</span> </span><span class="WHIT">  </span><span class="COMM">// Check to see if the api is valid.</span><span class="WHIT">
-<span class='line'>244</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>245</span> 
-<span class='line'>246</span> </span><span class="WHIT">    </span><span class="COMM">// Call the api.</span><span class="WHIT">
-<span class='line'>247</span> </span><span class="WHIT">    </span><span class="NAME">this.api.save</span><span class="PUNC">(</span><span class="NAME">this.getPOST</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">entity</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>248</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>249</span> </span><span class="WHIT">        </span><span class="NAME">entity.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>250</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>251</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>252</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>253</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>254</span> 
-<span class='line'>255</span> </span><span class="COMM">/**
-<span class='line'>256</span>  * Removes an entity
-<span class='line'>257</span>  *
-<span class='line'>258</span>  * @param {function} callback The function called once entity is removed.
-<span class='line'>259</span>  */</span><span class="WHIT">
-<span class='line'>260</span> </span><span class="NAME">drupal.entity.prototype.remove</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>261</span> 
-<span class='line'>262</span> </span><span class="WHIT">  </span><span class="COMM">// Only remove if they have an ID.</span><span class="WHIT">
-<span class='line'>263</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>264</span> 
-<span class='line'>265</span> </span><span class="WHIT">    </span><span class="COMM">// Call the API.</span><span class="WHIT">
-<span class='line'>266</span> </span><span class="WHIT">    </span><span class="NAME">this.api.remove</span><span class="PUNC">(</span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>267</span> </span><span class="WHIT">    </span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>268</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>269</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>270</span> </span></pre></body></html>
+<span class='line'>224</span> </span><span class="WHIT">    </span><span class="COMM">// Call the API.</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">    </span><span class="NAME">this.api.get</span><span class="PUNC">(</span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getQuery</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">entity</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>227</span> 
+<span class='line'>228</span> </span><span class="WHIT">        </span><span class="COMM">// If no object is returned, then return null.</span><span class="WHIT">
+<span class='line'>229</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>230</span> </span><span class="WHIT">          </span><span class="NAME">callback</span><span class="PUNC">(</span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>232</span> 
+<span class='line'>233</span> </span><span class="WHIT">        </span><span class="COMM">// Update the object.</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="WHIT">        </span><span class="NAME">entity.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>238</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>239</span> 
+<span class='line'>240</span> </span><span class="COMM">/**
+<span class='line'>241</span>  * Saves this entity.
+<span class='line'>242</span>  *
+<span class='line'>243</span>  * @param {function} callback The function called once entity is saved.
+<span class='line'>244</span>  */</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="NAME">drupal.entity.prototype.save</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>246</span> 
+<span class='line'>247</span> </span><span class="WHIT">  </span><span class="COMM">// Check to see if the api is valid.</span><span class="WHIT">
+<span class='line'>248</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.api</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>249</span> 
+<span class='line'>250</span> </span><span class="WHIT">    </span><span class="COMM">// Call the api.</span><span class="WHIT">
+<span class='line'>251</span> </span><span class="WHIT">    </span><span class="NAME">this.api.save</span><span class="PUNC">(</span><span class="NAME">this.getPOST</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">entity</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>252</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>253</span> </span><span class="WHIT">        </span><span class="NAME">entity.update</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>258</span> 
+<span class='line'>259</span> </span><span class="COMM">/**
+<span class='line'>260</span>  * Removes an entity
+<span class='line'>261</span>  *
+<span class='line'>262</span>  * @param {function} callback The function called once entity is removed.
+<span class='line'>263</span>  */</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="NAME">drupal.entity.prototype.remove</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>265</span> 
+<span class='line'>266</span> </span><span class="WHIT">  </span><span class="COMM">// Only remove if they have an ID.</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>268</span> 
+<span class='line'>269</span> </span><span class="WHIT">    </span><span class="COMM">// Call the API.</span><span class="WHIT">
+<span class='line'>270</span> </span><span class="WHIT">    </span><span class="NAME">this.api.remove</span><span class="PUNC">(</span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> </span><span class="WHIT">    </span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>272</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>273</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>274</span> </span></pre></body></html>

@@ -793,6 +793,9 @@ drupal.entity.prototype.set = function(object) {
   /** The ID of this entity. */
   this.id = object.id || this.id || '';
 
+  /** The uri of this entity. */
+  this.uri = object.uri || this.uri || '';
+
   /** The name of this entity. */
   this.entityName = 'entity';
 };
@@ -804,7 +807,8 @@ drupal.entity.prototype.set = function(object) {
  */
 drupal.entity.prototype.get = function() {
   return {
-    id: this.id
+    id: this.id,
+    uri: this.uri
   };
 };
 
