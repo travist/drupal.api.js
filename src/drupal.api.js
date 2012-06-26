@@ -35,10 +35,18 @@ drupal.api = function() {
      * @return {string} The path to the API endpoint.
      */
     getURL: function(entity) {
-      var path = this.endpoint();
-      path += this.resource ? ('/' + this.resource) : '';
-      path += (entity && entity.id) ? ('/' + entity.id) : '';
-      return path;
+      // If the entity has a valid URI, then use that...
+      if (entity.uri) {
+        return entity.uri;
+      }
+      else {
+
+        // Otherwise, build our best guess for the URI of this entity.
+        var path = this.endpoint();
+        path += this.resource ? ('/' + this.resource) : '';
+        path += (entity && entity.id) ? ('/' + entity.id) : '';
+        return path;
+      }
     },
 
     /**
