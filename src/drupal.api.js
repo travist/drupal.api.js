@@ -36,7 +36,7 @@ drupal.api = function() {
      */
     getURL: function(entity) {
       // If the entity has a valid URI, then use that...
-      if (entity.uri) {
+      if (entity && entity.uri) {
         return entity.uri;
       }
       else {

@@ -89,8 +89,9 @@ drupal.node.prototype.get = function() {
  */
 drupal.node.prototype.getQuery = function(query) {
   query = drupal.entity.prototype.getQuery.call(this, query);
-  if (this.type) {
-    query['parameters[type]'] = this.type;
+  if (query.type) {
+    query['parameters[type]'] = query.type;
+    delete query.type;
   }
   return query;
 };

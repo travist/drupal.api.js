@@ -523,7 +523,7 @@ drupal.api = function() {
      */
     getURL: function(entity) {
       // If the entity has a valid URI, then use that...
-      if (entity.uri) {
+      if (entity && entity.uri) {
         return entity.uri;
       }
       else {
@@ -1203,8 +1203,9 @@ drupal.node.prototype.get = function() {
  */
 drupal.node.prototype.getQuery = function(query) {
   query = drupal.entity.prototype.getQuery.call(this, query);
-  if (this.type) {
-    query['parameters[type]'] = this.type;
+  if (query.type) {
+    query['parameters[type]'] = query.type;
+    delete query.type;
   }
   return query;
 };
