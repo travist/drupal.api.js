@@ -82,18 +82,15 @@ drupal.node.prototype.get = function() {
 };
 
 /**
- * Override the setQuery method of the entity.
+ * Override the getQuery method of the entity.
  *
- * @param {object} query The query object.
- * @param {string} param The param to set.
- * @param {string} value The value of the field to set.
+ * @param {object} query The query variables.
+ * @return {object} The query variables.
  */
-drupal.node.prototype.setQuery = function(query, param, value) {
-  if (this.hasOwnProperty(param)) {
-    // The node object sets parameters like ?parameters[param]=value...
-    query['parameters[' + param + ']'] = value;
+drupal.node.prototype.getQuery = function(query) {
+  query = drupal.entity.prototype.getQuery.call(this, query);
+  if (this.type) {
+    query['parameters[type]'] = this.type;
   }
-  else {
-    query[param] = value;
-  }
+  return query;
 };

@@ -187,17 +187,6 @@ drupal.entity.prototype.get = function() {
 };
 
 /**
- * Sets a query variable.
- *
- * @param {object} query The query object.
- * @param {string} param The param to set.
- * @param {string} value The value of the field to set.
- */
-drupal.entity.prototype.setQuery = function(query, param, value) {
-  query[param] = value;
-};
-
-/**
  * Gets a POST object.
  *
  * @return {object} The filtered object.
@@ -213,19 +202,11 @@ drupal.entity.prototype.getPOST = function() {
 /**
  * Gets the query variables.
  *
- * @param {object} object The query variables.
+ * @param {object} query The query variables.
  * @return {object} The query variables.
  */
-drupal.entity.prototype.getQuery = function(object) {
-  var query = {};
-  object = object || this.get();
-  for (var param in object) {
-    if (param !== 'id' && object.hasOwnProperty(param) && object[param]) {
-      this.setQuery(query, param, object[param]);
-    }
-  }
-  delete query.id;
-  return query;
+drupal.entity.prototype.getQuery = function(query) {
+  return query || {};
 };
 
 /**
@@ -249,7 +230,7 @@ drupal.entity.prototype.load = function(callback) {
   else if (this.api) {
 
     // Call the API.
-    this.api.get(this.get(), this.getQuery(), (function(entity) {
+    this.api.get(this.get(), {}, (function(entity) {
       return function(object) {
 
         // If no object is returned, then return null.
