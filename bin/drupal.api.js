@@ -779,7 +779,7 @@ drupal.entity.prototype.retrieve = function() {
     if (object = JSON.parse(localStorage.getItem(key))) {
 
       // Make sure this object hasn't expired.
-      if (object.expires > (new Date()).getTime()) {
+      if ((new Date()).getTime() > object.expires) {
 
         // Clear it if it has.
         localStorage.removeItem(key);
