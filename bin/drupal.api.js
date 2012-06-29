@@ -771,6 +771,18 @@ drupal.entity.index = function(object, query, callback, options) {
 };
 
 /**
+ * Sets the defaults for an entities properties.
+ *
+ * @param {object} defaults The defaults for the properties being set.
+ * @param {object} object The object used to set the properties.
+ */
+drupal.entity.prototype.setValues = function(defaults, object) {
+  for (var name in defaults) {
+    this[name] = object[name] || this[name] || defaults[name];
+  }
+};
+
+/**
  * Update an object.
  *
  * @param {object} object The object which contains the data.
@@ -866,11 +878,11 @@ drupal.entity.prototype.set = function(object) {
   /** The API for this entity */
   this.api = this.api || null;
 
-  /** The ID of this entity. */
-  this.id = object.id || this.id || '';
-
-  /** The uri of this entity. */
-  this.uri = object.uri || this.uri || '';
+  // Set the values for this entity.
+  this.setValues({
+    id: '',
+    uri: ''
+  }, object);
 
   /** The name of this entity. */
   this.entityName = 'entity';
@@ -1209,17 +1221,13 @@ drupal.node.prototype.set = function(object) {
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
 
-  /** The title for this node. */
-  this.title = object.title || this.title || '';
-
-  /** The type of node we are dealing with. */
-  this.type = object.type || this.type || '';
-
-  /** The status of this node. */
-  this.status = object.status || this.status || 0;
-
-  /** The user who created this node */
-  this.uid = object.uid || this.uid || 0;
+  // Set the values for this entity.
+  this.setValues({
+    title: '',
+    type: '',
+    status: 0,
+    uid: 0
+  }, object);
 };
 
 /**
@@ -1309,17 +1317,13 @@ drupal.user.prototype.set = function(object) {
   /** Set the ID based on the uid. */
   this.id = object.uid || this.id || 0;
 
-  /** The name for this user. */
-  this.name = object.name || this.name || '';
-
-  /** The email address of our user. */
-  this.mail = object.mail || this.mail || '';
-
-  /** The password of the user. */
-  this.pass = object.pass || this.pass || '';
-
-  /** The status of the user. */
-  this.status = object.status || this.status || 1;
+  // Set the values for this entity.
+  this.setValues({
+    name: '',
+    mail: '',
+    pass: '',
+    status: 1
+  }, object);
 };
 
 /**

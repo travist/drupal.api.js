@@ -69,6 +69,18 @@ drupal.entity.index = function(object, query, callback, options) {
 };
 
 /**
+ * Sets the defaults for an entities properties.
+ *
+ * @param {object} defaults The defaults for the properties being set.
+ * @param {object} object The object used to set the properties.
+ */
+drupal.entity.prototype.setValues = function(defaults, object) {
+  for (var name in defaults) {
+    this[name] = object[name] || this[name] || defaults[name];
+  }
+};
+
+/**
  * Update an object.
  *
  * @param {object} object The object which contains the data.
@@ -164,11 +176,11 @@ drupal.entity.prototype.set = function(object) {
   /** The API for this entity */
   this.api = this.api || null;
 
-  /** The ID of this entity. */
-  this.id = object.id || this.id || '';
-
-  /** The uri of this entity. */
-  this.uri = object.uri || this.uri || '';
+  // Set the values for this entity.
+  this.setValues({
+    id: '',
+    uri: ''
+  }, object);
 
   /** The name of this entity. */
   this.entityName = 'entity';

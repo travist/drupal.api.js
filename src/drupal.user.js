@@ -57,17 +57,13 @@ drupal.user.prototype.set = function(object) {
   /** Set the ID based on the uid. */
   this.id = object.uid || this.id || 0;
 
-  /** The name for this user. */
-  this.name = object.name || this.name || '';
-
-  /** The email address of our user. */
-  this.mail = object.mail || this.mail || '';
-
-  /** The password of the user. */
-  this.pass = object.pass || this.pass || '';
-
-  /** The status of the user. */
-  this.status = object.status || this.status || 1;
+  // Set the values for this entity.
+  this.setValues({
+    name: '',
+    mail: '',
+    pass: '',
+    status: 1
+  }, object);
 };
 
 /**

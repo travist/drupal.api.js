@@ -54,17 +54,13 @@ drupal.node.prototype.set = function(object) {
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
 
-  /** The title for this node. */
-  this.title = object.title || this.title || '';
-
-  /** The type of node we are dealing with. */
-  this.type = object.type || this.type || '';
-
-  /** The status of this node. */
-  this.status = object.status || this.status || 0;
-
-  /** The user who created this node */
-  this.uid = object.uid || this.uid || 0;
+  // Set the values for this entity.
+  this.setValues({
+    title: '',
+    type: '',
+    status: 0,
+    uid: 0
+  }, object);
 };
 
 /**
