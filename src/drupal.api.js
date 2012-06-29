@@ -155,8 +155,8 @@ drupal.api = function() {
       // Normalize the arguments based on the different schemes of calling this.
       var type = (typeof endpoint);
       if (type === 'object') {
-        query = endpoint;
         callback = query;
+        query = endpoint;
         endpoint = '';
       }
       else if (type === 'function') {
