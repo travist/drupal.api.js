@@ -606,13 +606,54 @@ drupal.api = function() {
     /**
      * API function to get any results from the drupal API.
      *
+     * Return the object.
+     *
+     *  drupal.api.get(entity, function(object) {
+     *    console.log(object);
+     *  });
+     *
+     * Return a list of events within an entity.
+     *
+     *  drupal.api.get(entity, 'events', function(events) {
+     *    console.log(events);
+     *  });
+     *
+     * Return a list of nodes with type='page'.
+     *
+     *  drupal.api.get({}, {type:'page'}, function(object) {
+     *
+     *  });
+     *
+     * Return a list of events provided a query within a node.
+     *
+     *  drupal.api.get(entity, 'events', {month: 6}, functoin(events) {
+     *    console.log(events);
+     *  });
+     *
+     *
      * @this {object} The drupal.api object.
      * @param {object} object The object of the item we are getting..
+     * @param {string} endpoint An additional endpoint to add onto the resource.
      * @param {object} query key-value pairs to add to the query of the URL.
      * @param {function} callback The callback function.
      */
-    get: function(object, query, callback) {
+    get: function(object, endpoint, query, callback) {
+
+      // Normalize the arguments based on the different schemes of calling this.
+      var type = (typeof endpoint);
+      if (type === 'object') {
+        query = endpoint;
+        callback = query;
+        endpoint = '';
+      }
+      else if (type === 'function') {
+        callback = endpoint;
+        endpoint = '';
+      }
+
+      // Get the url for this object.
       var url = this.getURL(object);
+      url += (endpoint) ? ('/' + endpoint) : '';
       url += '.jsonp';
       url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
       this.call(url, 'jsonp', 'GET', null, callback);
