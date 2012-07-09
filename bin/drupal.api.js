@@ -1221,6 +1221,9 @@ drupal.node.prototype.set = function(object) {
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
 
+  /** Set the NID. */
+  this.nid = object.nid || this.nid || 0;
+
   // Set the values for this entity.
   this.setValues({
     title: '',
@@ -1237,6 +1240,7 @@ drupal.node.prototype.set = function(object) {
  */
 drupal.node.prototype.get = function() {
   return jQuery.extend(drupal.entity.prototype.get.call(this), {
+    nid: this.nid,
     title: this.title,
     type: this.type,
     status: this.status,
