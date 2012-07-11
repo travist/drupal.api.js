@@ -58,10 +58,10 @@ drupal.api = function() {
     loading: function(loading) {
       if (this.isMobile) {
         if (loading) {
-          jQuery.mobile.showPageLoadingMsg();
+          jQuery('body').addClass('ui-loading');
         }
         else {
-          jQuery.mobile.hidePageLoadingMsg();
+          jQuery('body').removeClass('ui-loading');
         }
       }
     },
