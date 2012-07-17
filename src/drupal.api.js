@@ -1,6 +1,72 @@
 /** The drupal namespace. */
 var drupal = drupal || {};
 
+/** Determine if we have storage. */
+drupal.hasStorage = (typeof(Storage) !== 'undefined');
+drupal.hasStorage &= (typeof(JSON) !== 'undefined');
+
+/**
+ * Retrieve an item out of local storage.
+ *
+ * @param {string} key The key for the object to retrieve.
+ * @return {object} The object that was retrieved.
+ */
+drupal.retrieve = function(key) {
+  var object = null;
+
+  // Check to see if we have storage.
+  if (key && drupal.hasStorage) {
+
+    // Get it out of localStorage.
+    if (object = JSON.parse(localStorage.getItem(key))) {
+
+      // Make sure this object hasn't expired.
+      if ((new Date()).getTime() > object.expires) {
+
+        // Clear it if it has.
+        localStorage.removeItem(key);
+        object = {};
+      }
+    }
+  }
+
+  return object;
+};
+
+/**
+ * Store an object with an expiration.
+ *
+ * @param {string} key The key for the object to store.
+ * @param {object} object They object to store.
+ * @param {number} expires The expiration (in seconds) for this object.
+ */
+drupal.store = function(key, object, expires) {
+
+  // Default the expiration if it wasn't provided.
+  expires = expires || 3600;
+
+  // Make sure we can store.
+  if (key && drupal.hasStorage) {
+
+    // Set an expiration date for this object.
+    object.expires = (expires * 1000) + (new Date()).getTime();
+
+    // Store this object in localStorage.
+    localStorage.setItem(key, JSON.stringify(object));
+  }
+};
+
+/**
+ * Clears an object out of storage.
+ *
+ * @param {string} key The key for this object to clear.
+ */
+drupal.clear = function(key) {
+  if (key && drupal.hasStorage) {
+    localStorage.removeItem(key);
+  }
+};
+
 /**
  * The Drupal API class.  This is a static class helper
  * to assist in communication between javascript and
