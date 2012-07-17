@@ -566,6 +566,7 @@ drupal.api = function() {
 
     /** The resource within this endpoint */
     resource: '',
+    cacheId: '',
 
     /** See if we are dealing with jQuery Mobile applications. */
     isMobile: jQuery.hasOwnProperty('mobile'),
@@ -702,9 +703,9 @@ drupal.api = function() {
      * @param {string} endpoint An additional endpoint to add onto the resource.
      * @param {object} query key-value pairs to add to the query of the URL.
      * @param {function} callback The callback function.
+     * @param {boolean} cache cache/get the results in/from localStorage.
      */
-    get: function(object, endpoint, query, callback) {
-
+    get: function(object, endpoint, query, callback, cache) {
       // Normalize the arguments based on the different schemes of calling this.
       var type = (typeof endpoint);
       if (type === 'object') {
@@ -722,7 +723,30 @@ drupal.api = function() {
       url += (endpoint) ? ('/' + endpoint) : '';
       url += '.jsonp';
       url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
-      this.call(url, 'jsonp', 'GET', null, callback);
+
+      // See if we should cache the result.
+      if (cache) {
+        this.cacheId = this.cacheId || url.replace(/[^A-z0-9]/g, '');
+        var storage = drupal.retrieve(cacheId);
+        if (storage) {
+          callback(storage);
+          return;
+        }
+      }
+
+      // No cache exists, so make the server call.
+      this.call(url, 'jsonp', 'GET', null, (function(api) {
+        return function(data) {
+
+          // Store this in cache...
+          if (cache) {
+            drupal.store(api.cacheId, data);
+          }
+
+          // Store the result.
+          callback(data);
+        }
+      })(this));
     },
 
     /**
@@ -762,6 +786,13 @@ drupal.api = function() {
      * @param {function} callback The callback function.
      */
     remove: function(object, callback) {
+
+      // Remove the storage if the cacheID exists.
+      if (this.cacheId) {
+        drupal.clear(this.cacheId);
+      }
+
+      // Call to delete the resource.
       this.call(this.getURL(object), 'json', 'DELETE', null, callback);
     }
   };
@@ -809,7 +840,7 @@ drupal.entity.index = function(object, query, callback, options) {
 
   // Set the default options.
   options = jQuery.extend({
-    store: false
+    store: true
   }, options || {});
 
   // Don't require a query...
@@ -824,12 +855,11 @@ drupal.entity.index = function(object, query, callback, options) {
     var i = entities.length;
     while (i--) {
       entities[i] = new object(entities[i], null, options);
-      entities[i].store();
     }
     if (callback) {
       callback(entities);
     }
-  });
+  }, options.store);
 };
 
 /**
@@ -857,50 +887,10 @@ drupal.entity.prototype.update = function(object, callback) {
     this.set(object);
   }
 
-  // Now store the object.
-  this.store();
-
   // Now callback that this object has been updated.
   if (callback) {
     callback.call(this, this);
   }
-};
-
-/**
- * Gets the storage key.
- *
- * @return {string} The storage name for this entity.
- */
-drupal.entity.prototype.getStoreKey = function() {
-  return this.entityName + '-' + this.id;
-};
-
-/**
- * Stores the object in local storage.
- */
-drupal.entity.prototype.store = function() {
-  if (this.id && this.options.store) {
-    drupal.store(this.getStoreKey(), this.get(), this.options.expires);
-  }
-};
-
-/**
- * Retrieves an object from local storage.
- *
- * @return {object} The object in local storage.
- */
-drupal.entity.prototype.retrieve = function() {
-  var object = null, key = '', value = '';
-  if (this.id && this.options.store) {
-
-    // Get the object from the store.
-    if (object = drupal.retrieve(this.getStoreKey())) {
-
-      // Set the object if it was retrieved.
-      this.set(object);
-    }
-  }
-  return object;
 };
 
 /**
@@ -971,12 +961,7 @@ drupal.entity.prototype.load = function(callback) {
     callback(null);
   }
 
-  // Declare the object to load...
-  var object = null;
-  if (object = this.retrieve()) {
-    this.update(object, callback);
-  }
-  else if (this.api) {
+  if (this.api) {
 
     // Call the API.
     this.api.get(this.get(), {}, (function(entity) {
@@ -990,7 +975,7 @@ drupal.entity.prototype.load = function(callback) {
         // Update the object.
         entity.update(object, callback);
       };
-    })(this));
+    })(this), this.options.store);
   }
 };
 
@@ -1025,7 +1010,6 @@ drupal.entity.prototype.remove = function(callback) {
 
     // Call the API.
     this.api.remove(this.get(), callback);
-    drupal.clear(this.getStoreKey());
   }
 };
 // The drupal namespace.

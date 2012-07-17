@@ -41,7 +41,7 @@ drupal.entity.index = function(object, query, callback, options) {
 
   // Set the default options.
   options = jQuery.extend({
-    store: false
+    store: true
   }, options || {});
 
   // Don't require a query...
@@ -56,12 +56,11 @@ drupal.entity.index = function(object, query, callback, options) {
     var i = entities.length;
     while (i--) {
       entities[i] = new object(entities[i], null, options);
-      entities[i].store();
     }
     if (callback) {
       callback(entities);
     }
-  });
+  }, options.store);
 };
 
 /**
@@ -89,50 +88,10 @@ drupal.entity.prototype.update = function(object, callback) {
     this.set(object);
   }
 
-  // Now store the object.
-  this.store();
-
   // Now callback that this object has been updated.
   if (callback) {
     callback.call(this, this);
   }
-};
-
-/**
- * Gets the storage key.
- *
- * @return {string} The storage name for this entity.
- */
-drupal.entity.prototype.getStoreKey = function() {
-  return this.entityName + '-' + this.id;
-};
-
-/**
- * Stores the object in local storage.
- */
-drupal.entity.prototype.store = function() {
-  if (this.id && this.options.store) {
-    drupal.store(this.getStoreKey(), this.get(), this.options.expires);
-  }
-};
-
-/**
- * Retrieves an object from local storage.
- *
- * @return {object} The object in local storage.
- */
-drupal.entity.prototype.retrieve = function() {
-  var object = null, key = '', value = '';
-  if (this.id && this.options.store) {
-
-    // Get the object from the store.
-    if (object = drupal.retrieve(this.getStoreKey())) {
-
-      // Set the object if it was retrieved.
-      this.set(object);
-    }
-  }
-  return object;
 };
 
 /**
@@ -203,12 +162,7 @@ drupal.entity.prototype.load = function(callback) {
     callback(null);
   }
 
-  // Declare the object to load...
-  var object = null;
-  if (object = this.retrieve()) {
-    this.update(object, callback);
-  }
-  else if (this.api) {
+  if (this.api) {
 
     // Call the API.
     this.api.get(this.get(), {}, (function(entity) {
@@ -222,7 +176,7 @@ drupal.entity.prototype.load = function(callback) {
         // Update the object.
         entity.update(object, callback);
       };
-    })(this));
+    })(this), this.options.store);
   }
 };
 
@@ -257,6 +211,5 @@ drupal.entity.prototype.remove = function(callback) {
 
     // Call the API.
     this.api.remove(this.get(), callback);
-    drupal.clear(this.getStoreKey());
   }
 };
