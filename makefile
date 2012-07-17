@@ -32,7 +32,13 @@ js: ${files}
 	@echo "Generating aggregated bin/drupal.api.js file"
 	@cat > bin/drupal.api.js $^
 	@echo "Generating compressed bin/drupal.api.compressed.js file"
-	@java -jar tools/compiler.jar --js bin/drupal.api.js --js_output_file bin/drupal.api.compressed.js
+	curl -s \
+	  -d compilation_level=SIMPLE_OPTIMIZATIONS \
+	  -d output_format=text \
+	  -d output_info=compiled_code \
+	  --data-urlencode "js_code@bin/drupal.api.js" \
+	  http://closure-compiler.appspot.com/compile \
+	  > bin/drupal.api.compressed.js
 
 # Create the documentation from source code.
 jsdoc: ${files}
@@ -47,9 +53,6 @@ fixjsstyle: ${files}
 tools:
 	apt-get install python-setuptools
 	apt-get install unzip
-	wget http://closure-compiler.googlecode.com/files/compiler-latest.zip -P tools
-	unzip tools/compiler-latest.zip -d tools
-	rm tools/compiler-latest.zip tools/COPYING tools/README
 	easy_install http://closure-linter.googlecode.com/files/closure_linter-latest.tar.gz
 	wget http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-2.4.0.zip -P tools
 	unzip tools/jsdoc_toolkit-2.4.0.zip -d tools
