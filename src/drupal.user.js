@@ -57,11 +57,13 @@ drupal.user.prototype.set = function(object) {
   /** Set the ID based on the uid. */
   this.id = object.uid || this.id || 0;
 
-  // Set the values for this entity.
-  this.setValues({
+  /** Set the password. */
+  this.pass = object.pass || this.pass || '';
+
+  // Set the properties for this entity.
+  this.setProperties({
     name: '',
     mail: '',
-    pass: '',
     status: 1
   }, object);
 };
@@ -155,17 +157,4 @@ drupal.user.prototype.getPOST = function() {
   var post = drupal.entity.prototype.getPOST.call(this);
   post.pass = this.pass;
   return post;
-};
-
-/**
- * Returns the object to send to Services.
- *
- * @return {object} The object to send to the Services endpoint.
- */
-drupal.user.prototype.get = function() {
-  return jQuery.extend(drupal.entity.prototype.get.call(this), {
-    name: this.name,
-    mail: this.mail,
-    status: this.status
-  });
 };

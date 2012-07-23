@@ -164,7 +164,7 @@ drupal.api = function() {
         error: (function(api) {
           return function(xhr, ajaxOptions, thrownError) {
             api.loading(false);
-            console.log(xhr.responseText);
+            console.log(xhr.statusText);
             if (callback) {
               callback(null);
             }

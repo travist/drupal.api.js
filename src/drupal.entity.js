@@ -20,6 +20,7 @@ drupal.entity = function(object, callback, options) {
 
   // If the object is valid, then set it...
   if (object) {
+    this.properties = {};
     this.set(object);
   }
 
@@ -64,14 +65,19 @@ drupal.entity.index = function(object, query, callback, options) {
 };
 
 /**
- * Sets the defaults for an entities properties.
+ * Sets the defaults for an entities properties, and also defines
+ * what the public properties are when GET is performed on this
+ * object.
  *
  * @param {object} defaults The defaults for the properties being set.
  * @param {object} object The object used to set the properties.
  */
-drupal.entity.prototype.setValues = function(defaults, object) {
-  for (var name in defaults) {
-    this[name] = object[name] || this[name] || defaults[name];
+drupal.entity.prototype.setProperties = function(defaults, object) {
+  if (defaults) {
+    for (var name in defaults) {
+      this[name] = object[name] || this[name] || defaults[name];
+      this.properties[name] = name;
+    }
   }
 };
 
@@ -104,8 +110,8 @@ drupal.entity.prototype.set = function(object) {
   /** The API for this entity */
   this.api = this.api || null;
 
-  // Set the values for this entity.
-  this.setValues({
+  // Set the properties for this entity.
+  this.setProperties({
     id: '',
     uri: ''
   }, object);
@@ -120,10 +126,13 @@ drupal.entity.prototype.set = function(object) {
  * @return {object} The object representation of this entity.
  */
 drupal.entity.prototype.get = function() {
-  return {
-    id: this.id,
-    uri: this.uri
-  };
+  var object = {};
+  if (this.properties) {
+    for (var name in this.properties) {
+      object[name] = this[name];
+    }
+  }
+  return object;
 };
 
 /**

@@ -54,31 +54,14 @@ drupal.node.prototype.set = function(object) {
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
 
-  /** Set the NID. */
-  this.nid = object.nid || this.nid || 0;
-
-  // Set the values for this entity.
-  this.setValues({
+  // Set the properties for this entity.
+  this.setProperties({
+    nid: 0,
     title: '',
     type: '',
     status: 0,
     uid: 0
   }, object);
-};
-
-/**
- * Returns the object to send to Services.
- *
- * @return {object} The object to send to the Services endpoint.
- */
-drupal.node.prototype.get = function() {
-  return jQuery.extend(drupal.entity.prototype.get.call(this), {
-    nid: this.nid,
-    title: this.title,
-    type: this.type,
-    status: this.status,
-    uid: this.uid
-  });
 };
 
 /**

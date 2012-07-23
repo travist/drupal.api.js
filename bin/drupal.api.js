@@ -651,7 +651,7 @@ drupal.api = function() {
         error: (function(api) {
           return function(xhr, ajaxOptions, thrownError) {
             api.loading(false);
-            console.log(xhr.responseText);
+            console.log(xhr.statusText);
             if (callback) {
               callback(null);
             }
@@ -819,6 +819,7 @@ drupal.entity = function(object, callback, options) {
 
   // If the object is valid, then set it...
   if (object) {
+    this.properties = {};
     this.set(object);
   }
 
@@ -863,14 +864,19 @@ drupal.entity.index = function(object, query, callback, options) {
 };
 
 /**
- * Sets the defaults for an entities properties.
+ * Sets the defaults for an entities properties, and also defines
+ * what the public properties are when GET is performed on this
+ * object.
  *
  * @param {object} defaults The defaults for the properties being set.
  * @param {object} object The object used to set the properties.
  */
-drupal.entity.prototype.setValues = function(defaults, object) {
-  for (var name in defaults) {
-    this[name] = object[name] || this[name] || defaults[name];
+drupal.entity.prototype.setProperties = function(defaults, object) {
+  if (defaults) {
+    for (var name in defaults) {
+      this[name] = object[name] || this[name] || defaults[name];
+      this.properties[name] = name;
+    }
   }
 };
 
@@ -903,8 +909,8 @@ drupal.entity.prototype.set = function(object) {
   /** The API for this entity */
   this.api = this.api || null;
 
-  // Set the values for this entity.
-  this.setValues({
+  // Set the properties for this entity.
+  this.setProperties({
     id: '',
     uri: ''
   }, object);
@@ -919,10 +925,13 @@ drupal.entity.prototype.set = function(object) {
  * @return {object} The object representation of this entity.
  */
 drupal.entity.prototype.get = function() {
-  return {
-    id: this.id,
-    uri: this.uri
-  };
+  var object = {};
+  if (this.properties) {
+    for (var name in this.properties) {
+      object[name] = this[name];
+    }
+  }
+  return object;
 };
 
 /**
@@ -1240,31 +1249,14 @@ drupal.node.prototype.set = function(object) {
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
 
-  /** Set the NID. */
-  this.nid = object.nid || this.nid || 0;
-
-  // Set the values for this entity.
-  this.setValues({
+  // Set the properties for this entity.
+  this.setProperties({
+    nid: 0,
     title: '',
     type: '',
     status: 0,
     uid: 0
   }, object);
-};
-
-/**
- * Returns the object to send to Services.
- *
- * @return {object} The object to send to the Services endpoint.
- */
-drupal.node.prototype.get = function() {
-  return jQuery.extend(drupal.entity.prototype.get.call(this), {
-    nid: this.nid,
-    title: this.title,
-    type: this.type,
-    status: this.status,
-    uid: this.uid
-  });
 };
 
 /**
@@ -1340,11 +1332,13 @@ drupal.user.prototype.set = function(object) {
   /** Set the ID based on the uid. */
   this.id = object.uid || this.id || 0;
 
-  // Set the values for this entity.
-  this.setValues({
+  /** Set the password. */
+  this.pass = object.pass || this.pass || '';
+
+  // Set the properties for this entity.
+  this.setProperties({
     name: '',
     mail: '',
-    pass: '',
     status: 1
   }, object);
 };
@@ -1438,17 +1432,4 @@ drupal.user.prototype.getPOST = function() {
   var post = drupal.entity.prototype.getPOST.call(this);
   post.pass = this.pass;
   return post;
-};
-
-/**
- * Returns the object to send to Services.
- *
- * @return {object} The object to send to the Services endpoint.
- */
-drupal.user.prototype.get = function() {
-  return jQuery.extend(drupal.entity.prototype.get.call(this), {
-    name: this.name,
-    mail: this.mail,
-    status: this.status
-  });
 };
