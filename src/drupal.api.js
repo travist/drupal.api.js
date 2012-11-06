@@ -234,13 +234,12 @@ drupal.api = function() {
       // Get the url for this object.
       var url = this.getURL(object);
       url += (endpoint) ? ('/' + endpoint) : '';
-      var cacheId = url;
       url += '.jsonp';
       url += query ? ('?' + decodeURIComponent(jQuery.param(query, true))) : '';
 
       // See if we should cache the result.
       if (cache) {
-        this.cacheId = this.cacheId || cacheId.replace(/[^A-z0-9\-]/g, '');
+        this.cacheId = url.replace(/[^A-z0-9\-]/g, '');
         var storage = drupal.retrieve(this.cacheId);
         if (storage && (storage.url === url)) {
           callback(storage.data);
