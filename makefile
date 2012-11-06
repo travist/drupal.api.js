@@ -21,7 +21,7 @@ files =	lib/json2.js\
 
 .DEFAULT_GOAL := all
 
-all: jslint js jsdoc
+all: jslint js
 
 # Perform a jsLint on all the files.
 jslint: ${lintfiles}
