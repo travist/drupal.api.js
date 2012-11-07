@@ -856,9 +856,11 @@ drupal.entity.index = function(object, query, callback, options) {
   // Get the list of entities.
   var instance = new object({});
   instance.api.get({}, instance.getQuery(query), function(entities) {
-    var i = entities.length;
-    while (i--) {
-      entities[i] = new object(entities[i], null, options);
+    if (entities) {
+      var i = entities.length;
+      while (i--) {
+        entities[i] = new object(entities[i], null, options);
+      }
     }
     if (callback) {
       callback(entities);
