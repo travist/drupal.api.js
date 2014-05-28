@@ -113,24 +113,25 @@ var userRegisterLogoutLogin = function(uname, passwd, callback) {
 
         system.set_variable('user_email_verification', 0, function() {
 
-          // Logout of the current user.
-          system.user.logout(function() {
+          // Register a new user.
+          var checkUser = randomUser();
+          var newUser = new drupal.user(checkUser).register(function(user) {
+            ok(user.name == checkUser.name, "User name was set correctly");
+            ok(user.mail == checkUser.mail, "User mail was set correctly");
+            ok(!!user.id, "User ID was set.");
 
-            // Register a new user.
-            var checkUser = randomUser();
-            var newUser = new drupal.user(checkUser).register(function(user) {
-              ok(user.name == checkUser.name, "User name was set correctly");
-              ok(user.mail == checkUser.mail, "User mail was set correctly");
-              ok(!!user.id, "User ID was set.");
+            checkUser.id = user.id;
 
-              checkUser.id = user.id;
+            // Save the user again to set the password.
+            user.save(function() {
 
-              // Logout of the current user.
-              user.logout(function() {
+              // Logout of the admin user.
+              system.user.logout(function() {
 
                 // Login to the registered user.
                 new drupal.user(checkUser).login(function(user) {
 
+                  // Perform some checks.
                   ok(user.name == checkUser.name, "User name was verified.");
                   ok(user.mail == checkUser.mail, "User mail was verified.");
                   ok(user.id == checkUser.id, "User ID was verified.");

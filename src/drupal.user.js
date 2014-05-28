@@ -106,6 +106,9 @@ drupal.user.prototype.login = function(callback) {
     }, (function(user) {
       return function(object) {
 
+        // Set the token to the new one.
+        drupal.token = object.token;
+
         // Update this object.
         user.update(object.user);
 

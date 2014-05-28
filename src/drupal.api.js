@@ -4,6 +4,7 @@ var drupal = drupal || {};
 /** Determine if we have storage. */
 drupal.hasStorage = (typeof(Storage) !== 'undefined');
 drupal.hasStorage &= (typeof(JSON) !== 'undefined');
+drupal.token = '';
 
 /**
  * Retrieve an item out of local storage.
@@ -95,6 +96,30 @@ drupal.api = function() {
     },
 
     /**
+     * Return the baseURL of the site.
+     *
+     * @returns {*}
+     */
+    baseURL: function() {
+
+      // If they provided the basePath, use it.
+      if (
+        typeof Drupal !== 'undefined' &&
+        typeof Drupal.settings.basePath == 'string'
+      ) {
+        return location.origin + Drupal.settings.basePath;
+      }
+      else if (drupal.baseURL) {
+        return drupal.baseURL + '/';
+      }
+      else {
+
+        // Guess that it is the endpoint minus the last path.
+        return this.endpoint().replace(/\/[^\/]*$/, '/')
+      }
+    },
+
+    /**
      * Helper function to get the Services URL for this resource.
      *
      * @this {object} The drupal.api object.
@@ -142,8 +167,9 @@ drupal.api = function() {
      * @param {string} type The type of HTTP request.  GET, POST, PUT, etc.
      * @param {object} data The data to send to the server.
      * @param {function} callback The function callback.
+     * @param {bool} requireToken If this method requires a token.
      */
-    call: function(url, dataType, type, data, callback) {
+    call: function(url, dataType, type, data, callback, requireToken) {
       var request = {
         url: url,
         dataType: dataType,
@@ -179,8 +205,33 @@ drupal.api = function() {
       // Show a loading cursor.
       this.loading(true);
 
-      // Make the request.
-      jQuery.ajax(request);
+      // Send the request.
+      var sendRequest = function(request) {
+
+        // Add the token to the request if it exists.
+        if (drupal.token) {
+          request.beforeSend = function(req) {
+            req.setRequestHeader("X-CSRF-Token", drupal.token);
+          };
+        }
+
+        // Send the request.
+        jQuery.ajax(request);
+      };
+
+      // If we need a token, then request it here.
+      var needsToken = requireToken || (type == 'POST' || type == 'PUT' || type == 'DELETE');
+      if (!drupal.token && needsToken) {
+        jQuery.get(this.baseURL() + 'services/session/token', function(token) {
+          drupal.token = token;
+          sendRequest(request);
+        });
+      }
+      else {
+
+        // Go ahead and send the request.
+        sendRequest(request);
+      }
     },
 
     /**
@@ -275,7 +326,7 @@ drupal.api = function() {
      */
     execute: function(action, object, callback) {
       var url = this.getURL(object) + '/' + action;
-      this.call(url, 'json', 'POST', object, callback);
+      this.call(url, 'json', 'POST', object, callback, true);
     },
 
     /**
@@ -291,7 +342,7 @@ drupal.api = function() {
      */
     save: function(object, callback) {
       var type = object.id ? 'PUT' : 'POST';
-      this.call(this.getURL(object), 'json', type, object, callback);
+      this.call(this.getURL(object), 'json', type, object, callback, true);
     },
 
     /**
@@ -309,7 +360,7 @@ drupal.api = function() {
       }
 
       // Call to delete the resource.
-      this.call(this.getURL(object), 'json', 'DELETE', null, callback);
+      this.call(this.getURL(object), 'json', 'DELETE', null, callback, true);
     }
   };
 };
