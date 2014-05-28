@@ -494,6 +494,7 @@ var drupal = drupal || {};
 drupal.hasStorage = (typeof(Storage) !== 'undefined');
 drupal.hasStorage &= (typeof(JSON) !== 'undefined');
 drupal.token = '';
+drupal.useToken = true;
 
 /**
  * Retrieve an item out of local storage.
@@ -699,7 +700,7 @@ drupal.api = function() {
       var sendRequest = function(request) {
 
         // Add the token to the request if it exists.
-        if (drupal.token) {
+        if (drupal.useToken && drupal.token) {
           request.beforeSend = function(req) {
             req.setRequestHeader("X-CSRF-Token", drupal.token);
           };
@@ -710,7 +711,7 @@ drupal.api = function() {
       };
 
       // If we need a token, then request it here.
-      var needsToken = requireToken || (type == 'POST' || type == 'PUT' || type == 'DELETE');
+      var needsToken = drupal.useToken && (requireToken || (type == 'POST' || type == 'PUT' || type == 'DELETE'));
       if (!drupal.token && needsToken) {
         jQuery.get(this.baseURL() + 'services/session/token', function(token) {
           drupal.token = token;
@@ -1443,8 +1444,12 @@ drupal.user.prototype.login = function(callback) {
     }, (function(user) {
       return function(object) {
 
-        // Set the token to the new one.
-        drupal.token = object.token;
+        // If we should use the token.
+        if (drupal.useToken) {
+
+          // Set the token to the new one.
+          drupal.token = object.token;
+        }
 
         // Update this object.
         user.update(object.user);
