@@ -1,0 +1,25 @@
+{
+  "name": "drupal.api.js",
+  "version": "2.0.0",
+  "description": "An object oriented JavaScript API Library for RESTful Drupal CMS.",
+  "author": {
+    "name": "Travis Tidwell",
+    "email": "travist349@gmail.com",
+    "url": "http://github.com/travist"
+  },
+  "homepage": "https://github.com/travist/drupal.api.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/travist/drupal.api.js.git"
+  },
+  "bugs": {
+    "url": "http://github.com/travist/drupal.api.js/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.4",
+    "grunt-jsdoc": "~0.5.4",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-concat": "~0.4.0"
+  }
+}
