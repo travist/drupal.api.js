@@ -10,6 +10,28 @@ server.
 A great use case for this library is to use it along with the <a href="http://phonegap.com/">PhoneGap</a> platform
 when building a mobile application that may need to interact with your Drupal CMS backend.
 
+Usage
+---------------------------------
+Note: This module currently requires jQuery.
+To use this library, simply add the ```bin/drupal.api.min.js``` file to your HTML page.
+
+      <script type='text/javascript' src='bin/drupal.api.min.js'></script>
+
+Next, you will now need to tell the library about your endpoint URL.
+
+      <script type="text/javascript">
+        drupal.endpoint = 'http://drupal.org/api';
+      </script>
+
+You can then start using the following API provided from the Examples below.
+
+__For Drupal Services versions below 3.5__: For older versions of services, you must also tell this library
+to not use the Token authentication.
+
+      <script type="text/javascript">
+        drupal.useToken = false;
+      </script>
+
 Examples
 ----------------------------------
 
