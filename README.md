@@ -138,5 +138,5 @@ Running Tests
 ----------------------
 This library is tested with QUnit.  You can run the tests by typing the folling in the console.
 
-  npm install
-  grunt test
+    npm install
+    grunt test
