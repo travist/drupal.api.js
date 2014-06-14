@@ -3,72 +3,18 @@
   <head>
     <title>drupal.api.js Unit Tests</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel='stylesheet' type='text/css' href='tests/qunit-1.10.0.css' />
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
-    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
-    <script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js'></script>
-    <script type='text/javascript' src='tests/qunit-1.10.0.js'></script>
+    <link rel='stylesheet' type='text/css' href='//code.jquery.com/qunit/qunit-1.14.0.css' />
+    <script type='text/javascript' src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     <!-- Include the drupal.api.js files. -->
-    <script type='text/javascript' src='bin/drupal.api.min.js'></script>
+    <script type='text/javascript' src='src/drupal.api.js'></script>
+    <script type='text/javascript' src='src/drupal.entity.js'></script>
+    <script type='text/javascript' src='src/drupal.system.js'></script>
+    <script type='text/javascript' src='src/drupal.node.js'></script>
+    <script type='text/javascript' src='src/drupal.user.js'></script>
 
-    <!-- Include the tests. -->
-    <script type='text/javascript' src='tests/drupal.system.test.js'></script>
-    <script type='text/javascript' src='tests/drupal.node.test.js'></script>
-    <script type='text/javascript' src='tests/drupal.user.test.js'></script>
-
-    <script type="text/javascript">
-      $(function() {
-        $("input#submit").click(function(event) {
-          event.preventDefault();
-          var endpoint = $("input#endpoint").val();
-          if (endpoint.indexOf('http') !== 0) {
-            endpoint = 'http://' + endpoint;
-          }
-
-          var username = $("input#username").val();
-          var password = $("input#password").val();
-          if (username && password) {
-
-            var runTests = function(uname, passwd) {
-              runSystemTests();
-              runNodeTests();
-              runUserTests(uname, passwd);
-            };
-
-            // The endpoint for this drupal.
-            drupal.endpoint = endpoint;
-
-            // Connect to the system.
-            new drupal.system(function(system) {
-
-              // If the user is already user 1, then run tests...
-              if (system.user.id == 1) {
-                runTests(username, password);
-              }
-              else {
-
-                // If the user is anonymous, then just login as admin.
-                if (system.user.id == 0) {
-                  new drupal.user({name:username,pass:password}).login(function() {
-                    runTests(username, password);
-                  });
-                }
-                else {
-
-                  // If the user is someone else, logout, then login as admin.
-                  system.user.logout(function() {
-                    new drupal.user({name:username,pass:password}).login(function() {
-                      runTests(username, password);
-                    });
-                  });
-                }
-              }
-            });
-          }
-        });
-      });
-    </script>
+    <!-- Include async.js to cleanup callback hell. -->
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/async/0.9.0/async.js'></script>
   </head>
   <body>
     <form>
@@ -80,11 +26,34 @@
       <input type="password" id="password" name="pass" size="15" maxlength="60" value=""><br/>
       <input type="submit" id="submit" name="op" value="Run Tests">
     </form>
-    <h1 id="qunit-header">QUnit example</h1>
-    <h2 id="qunit-banner"></h2>
-    <div id="qunit-testrunner-toolbar"></div>
-    <h2 id="qunit-userAgent"></h2>
-    <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">test markup, will be hidden</div>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+
+    <!-- Include the tests. -->
+    <script type='text/javascript' src='//code.jquery.com/qunit/qunit-1.14.0.js'></script>
+    <script type='text/javascript' src='tests/test.js'></script>
+    <script type='text/javascript' src='tests/drupal.system.test.js'></script>
+    <script type='text/javascript' src='tests/drupal.node.test.js'></script>
+    <script type='text/javascript' src='tests/drupal.user.test.js'></script>
+    <script type="text/javascript">
+      var username = tester.getParam('user');
+      var password = tester.getParam('pass');
+      var endpoint = tester.getEndpoint(tester.getParam('endpoint'));
+      if (username && password && endpoint) {
+        $("input#username").val(username);
+        $("input#password").val(password);
+        $("input#endpoint").val(endpoint);
+        tester.start(username, password, endpoint);
+      }
+      else {
+        $("input#submit").click(function(event) {
+          event.preventDefault();
+          username = $("input#username").val();
+          password = $("input#password").val();
+          endpoint = getEndpoint($("input#endpoint").val());
+          tester.start(username, password, endpoint);
+        });
+      }
+    </script>
   </body>
 </html>

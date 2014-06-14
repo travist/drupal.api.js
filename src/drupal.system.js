@@ -104,8 +104,8 @@ drupal.system.prototype.set = function(object) {
   this.api = drupal.system.api;
 
   /** Set current user. */
-  this.user = new drupal.user(object.user);
-  this.user.setSession(object.session_name, object.sessid);
+  drupal.current_user = new drupal.user(object.user);
+  drupal.current_user.setSession(object.session_name, object.sessid);
 };
 
 /**
@@ -115,7 +115,7 @@ drupal.system.prototype.set = function(object) {
  */
 drupal.system.prototype.get = function() {
   return jQuery.extend(drupal.entity.prototype.get.call(this), {
-    user: this.user.get()
+    user: drupal.current_user.get()
   });
 };
 
@@ -125,13 +125,10 @@ drupal.system.prototype.get = function() {
  * @param {function} callback The callback function.
  */
 drupal.system.prototype.load = function(callback) {
-
-  // Connect to the server.
-  this.api.execute('connect', null, (function(system) {
-    return function(object) {
-      system.update(object, callback);
-    };
-  })(this));
+  var self = this;
+  this.api.execute('connect', null, function(object) {
+    self.update(object, callback);
+  });
 };
 
 /**

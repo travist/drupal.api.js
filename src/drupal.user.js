@@ -2,7 +2,7 @@
 var drupal = drupal || {};
 
 /** The current logged in user. */
-drupal.current_user = null;
+drupal.current_user = {uid: 0, name: '', token: ''};
 
 /**
  * @constructor
@@ -60,10 +60,14 @@ drupal.user.prototype.set = function(object) {
   /** Set the password. */
   this.pass = object.pass || this.pass || '';
 
+  /** Set the user token. */
+  this.token = '';
+
   // Set the properties for this entity.
   this.setProperties({
     name: '',
     mail: '',
+    token: '',
     status: 1
   }, object);
 };
@@ -99,31 +103,53 @@ drupal.user.prototype.setSession = function(name, sessid) {
  * @param {function} callback The callback function.
  */
 drupal.user.prototype.login = function(callback) {
+  var self = this;
   if (this.api) {
-    this.api.execute('login', {
-      username: this.name,
-      password: this.pass
-    }, (function(user) {
-      return function(object) {
 
-        // If we should use the token.
-        if (drupal.useToken) {
+    // If the person they wish to log in is the current
+    // user, then just return immediately.
+    if (this.name == drupal.current_user.name) {
+      if (callback) {
+        callback.call(this, this);
+        return;
+      }
+    }
 
-          // Set the token to the new one.
-          drupal.token = object.token;
-        }
+    var __login = function(name, pass) {
+      this.api.execute('login', {
+        username: this.name,
+        password: this.pass
+      }, (function(user) {
+        return function(object) {
 
-        // Update this object.
-        user.update(object.user);
+          // Only update if the object is valid.
+          if (object) {
 
-        // Set the session.
-        user.setSession(object.session_name, object.sessid);
+            // Update this object.
+            user.update(object.user);
 
-        if (callback) {
-          callback.call(user, user);
-        }
-      };
-    })(this));
+            // Set the session.
+            user.setSession(object.session_name, object.sessid);
+
+            if (callback) {
+              callback.call(user, user);
+            }
+          }
+          else if (callback) {
+            callback.call(user, null);
+          }
+        };
+      })(this));
+    };
+
+    if (drupal.current_user.name) {
+      this.logout(function() {
+        __login.call(self);
+      });
+    }
+    else {
+      __login.call(this);
+    }
   }
 };
 
@@ -149,7 +175,12 @@ drupal.user.prototype.register = function(callback) {
  */
 drupal.user.prototype.logout = function(callback) {
   if (this.api) {
-    this.api.execute('logout', null, callback);
+    this.api.execute('logout', null, function() {
+      drupal.current_user = {uid: 0, name: '', token: ''};
+      if (callback) {
+        callback();
+      }
+    });
   }
 };
 

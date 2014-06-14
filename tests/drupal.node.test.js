@@ -106,46 +106,40 @@ var updateNode = function(node, callback) {
   });
 };
 
-var createNode = function(callback) {
-  asyncTest("Create a new node", function() {
-
-    // Create a new node.
-    var rand = Math.floor(Math.random()*10000000000000);
-    var randomTitle = "test_" + rand;
-
-    // Define a new node, then save it.
-    new drupal.node({
-      title:randomTitle,
-      type:'page'
-    }).save(function(node) {
-
-      // Start the unit test.
-      start();
-      expect(3);
-
-      // There should be an nid.
-      ok(node.id, "Node ID is present.");
-
-      // The node title should be the same as what we set.
-      ok(node.title == randomTitle, "Node Title is correct");
-
-      // The node type should be correct.
-      ok(node.type == 'page', "Node Type is correct");
-
-      // Call the callback...
-      if (callback) {
-        callback(node);
+var createNode = function(done) {
+  var testNode = null;
+  QUnit.asyncTest("Create a new node", function() {
+    QUnit.expect(5);
+    async.series([
+      tester.systemConnect(),
+      tester.login('admin'),
+      tester.createNode(function(node, title) {
+        ok(node.id, "Node ID is present.");
+        ok(node.title == title, "Node Title is correct");
+        ok(node.type == 'page', "Node Type is correct");
+        testNode = node;
+      }),
+      tester.getNode(function() {
+        return testNode.nid;
+      }, function(node) {
+        ok(node.title == testNode.title, 'Get node title is correct');
+        ok(node.type == testNode.type, 'Get node type is correct');
+      })
+    ], function() {
+      QUnit.start();
+      if (done) {
+        done(testNode);
       }
     });
   });
 };
 
-var runNodeTests = function(callback) {
+var runNodeTests = function(done) {
   // perform the tests in a specific order.
   createNode(function(node) {
     updateNode(node, function(updatedNode) {
       listNodes(function() {
-        deleteNode(updatedNode, callback);
+        deleteNode(updatedNode, done);
       });
     });
   });
