@@ -54,6 +54,25 @@ module.exports = function(grunt) {
           destination: 'doc'
         }
       }
+    },
+    qunit: {
+      all: {
+        options: {
+          'timeout': 20000,
+          '--web-security': 'no',
+          urls: [
+            'http://localhost:4000/index.html?user=admin&pass=123testing&endpoint=1.3.3.7/api'
+          ]
+        }
+      }
+    },
+    connect: {
+      server: {
+        options: {
+          port: 4000,
+          base: '.'
+        }
+      }
     }
   });
 
@@ -62,7 +81,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'jsdoc']);
+  grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'jsdoc', 'connect', 'qunit']);
+  grunt.registerTask('test', ['connect', 'qunit']);
 };

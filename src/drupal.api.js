@@ -4,7 +4,6 @@ var drupal = drupal || {};
 /** Determine if we have storage. */
 drupal.hasStorage = (typeof(Storage) !== 'undefined');
 drupal.hasStorage &= (typeof(JSON) !== 'undefined');
-drupal.token = '';
 drupal.useToken = true;
 
 /**
@@ -211,9 +210,9 @@ drupal.api = function() {
       var sendRequest = function(request) {
 
         // Add the token to the request if it exists.
-        if (drupal.useToken && drupal.token) {
+        if (drupal.useToken && drupal.current_user.token) {
           request.beforeSend = function(req) {
-            req.setRequestHeader("X-CSRF-Token", drupal.token);
+            req.setRequestHeader("X-CSRF-Token", drupal.current_user.token);
           };
         }
 
@@ -223,9 +222,9 @@ drupal.api = function() {
 
       // If we need a token, then request it here.
       var needsToken = drupal.useToken && (requireToken || (type == 'POST' || type == 'PUT' || type == 'DELETE'));
-      if (!drupal.token && needsToken) {
+      if (!drupal.current_user.token && needsToken) {
         jQuery.get(this.baseURL() + 'services/session/token', function(token) {
-          drupal.token = token;
+          drupal.current_user.token = token;
           sendRequest(request);
         });
       }
