@@ -50,7 +50,7 @@
           event.preventDefault();
           username = $("input#username").val();
           password = $("input#password").val();
-          endpoint = getEndpoint($("input#endpoint").val());
+          endpoint = tester.getEndpoint($("input#endpoint").val());
           tester.start(username, password, endpoint);
         });
       }
