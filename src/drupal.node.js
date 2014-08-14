@@ -54,6 +54,12 @@ drupal.node.prototype.set = function(object) {
   /** Set the ID based on the nid. */
   this.id = object.nid || this.id || 0;
 
+  /** Set the body. */
+  this.body = object.body;
+
+  /** Set the fields. */
+  this.fields = object.fields;
+
   // Set the properties for this entity.
   this.setProperties({
     nid: 0,
@@ -62,6 +68,32 @@ drupal.node.prototype.set = function(object) {
     status: 0,
     uid: 0
   }, object);
+};
+
+/**
+ * Gets a POST object.
+ *
+ * @return {object} The filtered object.
+ */
+drupal.node.prototype.getPOST = function() {
+
+  // Get the post for the fields.
+  var post = drupal.entity.prototype.getPOST.call(this);
+
+  // Set the body of the POST.
+  if (this.body) {
+    post.body = {'und': [{value: this.body}]};
+  }
+
+  // Iterate through the fields and translate them into a post.
+  if (this.fields) {
+    for (var name in this.fields) {
+      post[name] = {'und': [this.fields[name]]};
+    }
+  }
+
+  // Return the post.
+  return post;
 };
 
 /**
