@@ -132,11 +132,11 @@ new drupal.system(function(system) {
  - To create a new user.
 
 ```javascript
-      (new drupal.user({
-        name:"travist":
-        pass:"testing":
-        mail:"travis@allplayers.com"
-      })).save();
+(new drupal.user({
+  name:"travist":
+  pass:"testing":
+  mail:"travis@allplayers.com"
+})).save();
 ```
 
  - To load an existing user.
