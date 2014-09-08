@@ -58,81 +58,120 @@ to not use the Token authentication.
 Examples
 ----------------------------------
 
-  1.)  To create a new node.
+ - To create a new node.
+ 
+```javascript
+(new drupal.node({
+  title:"My new Node"
+})).save();
+```
+      
+ - To create a new node with fields. Use the "fields" parameter in the JSON object.
 
-      (new drupal.node({title:"My new Node"})).save();
+```javascript  
+(new drupal.node({
+  title: "My fielded node.",
+  fields: {
+    field_a: {
+      'value': 'The value of this field.'  // <-- maps to node.field_a['und'][0]['value']
+    },
+    field_b: {
+      'value': 'The value of this field.'  // <-- maps to node.field_b['und'][0]['value']
+    }
+  }
+})).save();
+```
 
-  2.)  To update an existing node.
+  - To update an existing node.
 
-      new drupal.node({nid:10}, function(node) {
+```javascript
+new drupal.node({nid:10}, function(node) {
 
-        // Change title then save.
-        node.title = "Change the Title";
-        node.save();
-      });
+  // Change title then save.
+  node.title = "Change the Title";
+  node.save();
+});
+```
 
-   3.) To get a list of nodes of type='page'
+ - To get a list of nodes of type='page'
 
-      drupal.node.index({type:'page'}, function(nodes) {
+```javascript
+drupal.node.index({type:'page'}, function(nodes) {
 
-        // This is a list of nodes of type 'page'.
-        console.log(nodes);
-      });
+  // This is a list of nodes of type 'page'.
+  console.log(nodes);
+});
+```
 
-   4.) To delete a node on the server.
+ - To delete a node on the server.
 
-      (new drupal.node({nid:10})).remove();
+```javascript
+(new drupal.node({nid:10})).remove();
+```
 
-   5.) To connect to the drupal server.
+ - To connect to the drupal server.
 
-      new drupal.system(function(system) {
+```javascript
+new drupal.system(function(system) {
 
-        // The currently logged in user.
-        console.log(system.user);
-      });
+  // The currently logged in user.
+  console.log(system.user);
+});
+```
 
-   6.) To create a new user.
+ - To create a new user.
 
+```javascript
       (new drupal.user({
         name:"travist":
         pass:"testing":
         mail:"travis@allplayers.com"
       })).save();
+```
 
-   7.) To load an existing user.
+ - To load an existing user.
 
-      new drupal.user({uid:10}, function(user) {
+```javascript
+new drupal.user({uid:10}, function(user) {
 
-        // The logged in user.
-        console.log(user);
-      });
+  // The logged in user.
+  console.log(user);
+});
+```
 
-   8.) To delete a user.
+ - To delete a user.
 
-      (new drupal.user({uid:10})).remove();
+```javascript
+(new drupal.user({uid:10})).remove();
+```
 
+ - To get a variable on Drupal.
 
-   9.) To get a variable on Drupal.
+```javascript
+(new drupal.system()).get_variable("variable", "default", function(value) {
 
-      (new drupal.system()).get_variable("variable", "default", function(value) {
+  // The value of the variable.
+  console.log(value);
+});
+```
 
-        // The value of the variable.
-        console.log(value);
-      });
+ - To set a variable on Drupal.
 
-  10.) To set a variable on Drupal.
+```javascript
+(new drupal.system()).set_variable("variable", "value", function() {
 
-      (new drupal.system()).set_variable("variable", "value", function() {
+  console.log("done");
+});
+```
 
-        console.log("done");
-      });
+ - To delete a variable on Drupal.
 
-  11.) To delete a variable on Drupal.
+```javascript
+(new drupal.system()).del_variable("variable", function() {
 
-      (new drupal.system()).del_variable("variable", function() {
-
-        console.log("done");
-      });
+  console.log("done");
+});
+```
 
 Running Tests
 ----------------------
