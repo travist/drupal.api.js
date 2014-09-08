@@ -25,13 +25,17 @@ Installation & Configuration
   * Click on the "Server" tab, and then enable "jsonp" and then check "application/x-www-form-urlencoded" for application parsing and then press "Save".
   * Now go edit your CORS configuration @ admin/config/services/cors, and put the following in your CORS configuration.
 
-      rest|*|POST,GET,PUT,OPTIONS,DELETE|Content-Type,Authorization,X-CSRF-Token|true
+```
+rest|*|POST,GET,PUT,OPTIONS,DELETE|Content-Type,Authorization,X-CSRF-Token|true
+```
 
   * Save the CORS configuration.
   * Now run the tests by simply typing the following in the command line.
 
-      npm install
-      grunt test
+```
+npm install
+grunt test
+```
 
 Usage
 ---------------------------------
@@ -177,5 +181,7 @@ Running Tests
 ----------------------
 This library is tested with QUnit.  You can run the tests by typing the folling in the console.
 
-    npm install
-    grunt test
+```
+npm install
+grunt test
+```
