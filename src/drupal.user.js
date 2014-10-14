@@ -22,10 +22,10 @@ drupal.user = function(object, callback, options) {
 drupal.user.prototype = new drupal.entity();
 
 /** Reset the constructor. */
-drupal.user.prototype.constructor = drupal.user;
+drupal.user.prototype..constructor = drupal.user;
 
 /** Declare the user api. */
-drupal.user.api = jQuery.extend(new drupal.api(), {
+drupal.user.prototype.api = jQuery.extend(new drupal.api(), {
   resource: 'user'
 });
 
